@@ -15,8 +15,8 @@ security:
         in_memory:
             memory:
                 users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    user:  { password: "%providers_memory_users_user%", roles: [ 'ROLE_USER' ] }
+                    admin: { password: "%providers_memory_users_admin%", roles: [ 'ROLE_ADMIN' ] }
 
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
