@@ -1,0 +1,82 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+{% block title %}Ajout d'une nouvelle dépense{% endblock %}
+
+{% block modal %}
+<div class="modal" id="date">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
+
+{% block contenu %}
+<h1 class="page-header">{% block titre_contenu %}Ajout d'une nouvelle dépense{% endblock %}</h1>
+
+	{{ set_bootstrap_form_presentation("horizontal") }}
+	
+	{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }}
+	{{ set_bootstrap_widget_grid({"sm":8,"md":6}) }}
+	{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}
+	{{ set_bootstrap_reset_grid({"sm":4, "md":3,"xs":6}) }}
+	{{ set_bootstrap_submit_grid({"sm":4, "sm-offset": 3, "md":3, "md-offset":3, "xs":6}) }}
+	
+	{{ form(form) }}
+{% endblock %}
+
+
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
+<style>
+.datepicker.dropdown-menu th,
+.datepicker.datepicker-inline th,
+.datepicker.dropdown-menu td,
+.datepicker.datepicker-inline td {
+  padding: 4px 15px;
+}
+.modal-content
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 342px;
+}
+</style>
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<script>
+$('#fgs_gestioncomptesbundle_mouvement_financier_type_date').datepicker({
+		orientation: "auto right",
+	    autoclose: true,
+	    todayHighlight: true,
+	    language: "fr",
+}).on('show',function(e){
+
+	if ($(document).width() < 480)
+	{	
+		$(this).datepicker('hide');
+		$('#date .modal-content').datepicker({
+			orientation: "auto right",
+		    autoclose: true,
+		    todayHighlight: true,
+		    language: "fr",
+		}).on('changeDate',function(e){
+			$('#fgs_gestioncomptesbundle_mouvement_financier_type_date').datepicker('setDate', $(this).datepicker('getDate'));
+			$('#date').modal('hide');
+		});
+		$('#date').modal('show');
+	}
+});
+</script>
+{% endblock %}

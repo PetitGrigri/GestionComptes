@@ -1,0 +1,67 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+	
+{% block contenu %}
+{{ set_bootstrap_form_presentation("horizontal") }}
+
+{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }} {# ne fonctionne que lorsqu'utilisé avec form_row #}
+{{ set_bootstrap_widget_grid({"sm":8,"md":6}) }}				{# ne fonctionne que lorsqu'utilisé avec form_row #}
+{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}		{# ne fonctionne que lorsqu'utilisé avec form_row #}
+{{ set_bootstrap_reset_grid({"sm":4, "md":3,"xs":5}) }}			{# ne fonctionne que lorsqu'utilisé avec form_row #}
+{{ set_bootstrap_button_grid({"sm-offset":3, "sm":6}) }}		{# fonctionne avec form_row ou form_widget #}
+{{ set_bootstrap_submit_grid({"sm":4, "sm-offset": 3, "md":3, "md-offset":3, "xs":7}) }}
+
+{{ form_start(form) }}
+
+<h1 class="page-header">{% block titre_contenu %}Ajout d'une nouvelle Catégorie{% endblock %}</h1>
+
+<div class='form-group'>
+	{{ form_label(form.libelle,'',{ 'label_attr':{'class':'col-sm-3 col-md-2 col-md-offset-1 control-label'} }) }}
+	<div class='col-sm-8 col-md-6'>
+		<div class='input-group'>
+			{{ form_widget(form.libelle, { 'attr':{'class':'form-control'} }) }}
+			<div class="input-group-btn">
+				{{ form_widget(form.icone, {'button_grid':{'':''}}) }} {# reset des données du bouton "icone" #}
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ form_end(form) }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/bootstrap-iconpicker.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+	<style>
+	.table-icons .btn i
+	{
+		font-size:18px;
+
+	}
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('bundles/fgsgestioncomptes/js/iconset/iconset-daily-life.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/fgsgestioncomptes/js/bootstrap-iconpicker.min.js') }}"></script>
+	<script>
+		$('#fgs_gestioncomptesbundle_compte_type_effacer').click(function(){
+			$('form input[type="text"], form select').each(function(){$(this).val('')});
+		})
+		var icone = $('#fgs_gestioncomptesbundle_categorie_mouvement_financier_type_icone').val();
+
+		$('#fgs_gestioncomptesbundle_categorie_mouvement_financier_type_icone').iconpicker()
+			.iconpicker('setPlacement', 'left')
+			.iconpicker('setPlacement', 'bottom')
+			.iconpicker('setCols', 6)
+			.iconpicker('setSearch', false)
+			.iconpicker('setLabelHeader', 'Page {0} de {1}')
+			.iconpicker('setIconset', $.iconset_daily_life )
+			.iconpicker('setIcon', icone ? icone : '')
+			.on('change', function(e){
+				$('#fgs_gestioncomptesbundle_categorie_mouvement_financier_type_icone').val(e.icon)
+			});
+	</script>
+{% endblock %}

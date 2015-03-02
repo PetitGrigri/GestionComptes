@@ -1,0 +1,96 @@
+{% set page_courante = app.request.attributes.get('_route') %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	 	<meta name="viewport" content="width=320px, initial-scale=1, maximum-scale=1" />
+		<title>{% block title %}Gestion Comptes{% endblock %}</title>
+
+		{% block stylesheets %}
+		<link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/bootstrap.min.css') }}">
+		
+		{% endblock %}
+	</head>
+
+	<body>
+	
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="active navbar-brand" href="{{ path('fgs_gestion_comptes_homepage') }}">Gestion Compte</a>
+				</div>
+		
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						{#
+						<li class="col-xs-6 visible-xs-block">
+							<a href="{{ path('fgs_gestion_comptes_homepage') }}">Mes comptes</a>
+						</li>
+
+						
+						<li class="hidden-xs">
+							<a href="{{ path('fgs_gestion_comptes_homepage') }}">Mes comptes</a>
+						</li>
+						
+						#}
+						<li {% if page_courante == 'fgs_gestion_comptes_ajouter_compte' or page_courante == 'fgs_gestion_comptes_gerer_compte' %}class='active'{% endif %}>
+							<a href="#" data-toggle="dropdown">Mes comptes</a>
+							<ul class="dropdown-menu">
+								<li {% if page_courante == 'fgs_gestion_comptes_ajouter_compte' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_ajouter_compte') }}">Ajouter un compte</a></li>
+								<li {% if page_courante == 'fgs_gestion_comptes_gerer_compte' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_gerer_compte') }}">Gérer mes comptes</a></li>
+							</ul>
+						</li>
+						<li {% if page_courante == 'fgs_gestion_comptes_ajouter_categorie' or page_courante == 'fgs_gestion_comptes_gerer_categories' %}class='active'{% endif %}>
+							<a href="#" data-toggle="dropdown">Categories</a>
+							<ul class="dropdown-menu">
+								<li {% if page_courante == 'fgs_gestion_comptes_ajouter_categorie' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_ajouter_categorie') }}">Ajouter une catégorie</a></li>
+								<li {% if page_courante == 'fgs_gestion_comptes_gerer_categories' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_gerer_categories') }}">Gerer mes categories</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="{{ path('fgs_gestion_comptes_ajouter_depense') }}">Dépense</a>
+						</li>
+						<li>
+							<a href="{{ path('fgs_gestion_comptes_ajouter_revenu') }}">Revenu</a>
+						</li>
+
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		{% block modal %}
+		{% endblock %}
+		  
+		<div class="container" style="margin-top: 50px;">
+		{% for message in app.session.flashbag.get("success") %}
+			<div class="alert alert-success alert-dismissible fade in" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<span class="glyphicon glyphicon-ok"></span> {{ message }}
+			</div>
+		{% endfor %}
+		
+		{% for message in app.session.flashbag.get("error") %}
+			<div class="alert alert-danger alert-dismissible fade in" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<span class="glyphicon glyphicon-warning-sign"></span> {{ message }}
+			</div>
+		{% endfor %}
+		
+		{% block contenu %}
+		{% endblock %}
+		</div>
+		{% block javascripts %}
+		<script src="{{ asset('bundles/fgsbootstrap/js/jquery-1.11.1.min.js') }}"></script>
+		<script src="{{ asset('bundles/fgsbootstrap/js/bootstrap.min.js') }}"></script>
+		{% endblock %}
+	
+	</body>
+</html>

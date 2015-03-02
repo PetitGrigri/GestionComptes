@@ -1,0 +1,3 @@
+fgs_gestion_comptes:
+    resource: "@FGSGestionComptesBundle/Resources/config/routing.yml"
+    prefix:   /

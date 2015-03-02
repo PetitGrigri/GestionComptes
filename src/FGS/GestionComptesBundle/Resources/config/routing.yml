@@ -1,0 +1,88 @@
+fgs_gestion_comptes_homepage:
+    path:     /mes-comptes
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:index }
+    
+fgs_gestion_comptes_ajouter_compte: 
+    path:     /ajouter-compte
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:ajouterCompte }
+    
+fgs_gestion_comptes_gerer_compte: 
+    path:     /gerer-compte
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:gererCompte }
+    
+fgs_gestion_comptes_supprimer_compte: 
+    path:     /supprimer-compte/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:supprimerCompte }
+    requirements:
+        id:    \d+
+
+fgs_gestion_comptes_modifier_compte: 
+    path:     /modifier-compte/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:modifierCompte }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_gerer_categories:
+    path:     /gerer-categories-compte
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:gererCategories }
+    
+fgs_gestion_comptes_ajouter_categorie:
+    path:     /ajouter-categorie
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:ajouterCategorie }
+    
+fgs_gestion_comptes_modifier_categorie:
+    path:     /modifier-categorie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:modifierCategorie }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_supprimer_categorie:
+    path:     /supprimer-categorie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:supprimerCategorie }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_monter_categorie:
+    path:     /monter-categorie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:monterCategorie }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_descendre_categorie:
+    path:     /descendre-categorie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:descendreCategorie }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_ajouter_depense:
+    path:     /ajouter-depense
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:ajouterDepense }
+    
+fgs_gestion_comptes_ajouter_revenu:
+    path:     /ajouter-revenu
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:ajouterRevenu }
+    
+fgs_gestion_comptes_supprimer_mouvement_financier:
+    path:     /supprimer-mouvement-financier/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:supprimerMouvementFinancier }
+    requirements:
+        id:    \d+
+        
+fgs_gestion_comptes_modifier_mouvement_financier:
+    path:     /modifier-mouvement-financier/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:modifierMouvementFinancier }
+    requirements:
+        id:    \d+    
+        
+fgs_gestion_comptes_visualiser_mouvement_financier_compte:
+    path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:voirMouvementFinancierCompte, debut:0, longueur:30 }
+    requirements:
+        id:       \d+
+        debut:    \d+
+
+fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
+    path:     /visualiser-mouvement-financiers-compte-mois/{id}
+    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:voirMouvementFinancierCompteMois }    
+    requirements:
+        id:       \d+

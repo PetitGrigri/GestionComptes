@@ -1,0 +1,144 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+{% block modal %}
+<div class="modal" id="confirmation">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h4 class="modal-title">Attention</h4>
+			</div>
+			<div class="modal-body">
+			<p>
+				Vous êtes sur le point de supprimer cette Catégorie : <strong id="ma_categorie"></strong> ?
+			</p>
+			<p>
+				Tout les mouvements financiers lié à cette Catégorie seront transféré à la catégorie <strong id="son_parent"></strong>
+			</p>
+			<p>
+				Cette Action ne pourra pas être annulé.
+			</p>
+			</div>
+			<div class="modal-footer">
+			<a class="btn btn-danger" id="valider_suppression" href="#">
+				<span class="glyphicon glyphicon-trash"></span> 
+				Supprimer cette catégorie
+			</a>
+			<a href="" class="btn btn-info" data-dismiss="modal" >
+				Annuler
+			</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% macro generer_enfants(enfants) %}
+<ul class='media-list' style='margin-top: 20px;'>
+	{% for children in enfants %}
+	
+	{% set lien_supprimer 	= children.parent is empty ? '#' : path('fgs_gestion_comptes_supprimer_categorie', {"id":children.id})  %}
+	{% set lien_modifier	= path('fgs_gestion_comptes_modifier_categorie', {"id":children.id}) %}
+	{% set lien_monter		= loop.first ? '#' : path('fgs_gestion_comptes_monter_categorie', {'id': children.id}) %}
+	{% set lien_descendre	= loop.last ? '#' :path('fgs_gestion_comptes_descendre_categorie', {'id': children.id}) %}
+
+	<li class='media''>
+		<div class='media-left'>
+			<div>
+				<span class=' img-circle bg-primary text-center glyphicon {{ children.icone }}'> </span>
+			</div>
+		</div>
+		<div class='media-body' style='width: 10000px;'>
+			
+			<div style='line-height: 34px; vertical-align: middle;'>
+	{#{{children.ordre}} : #}{{ children.libelle }} 
+				
+
+
+				<div class='pull-right' >
+
+					<a  href="{{ lien_modifier }}" class="btn btn-info ">
+						<span class="glyphicon glyphicon-pencil"></span><span class='hidden-xs'> Modifier</span>
+					</a>
+					
+					<a href="{% if children.parent is not empty %}{{ lien_supprimer }}{% endif %}" class="btn btn-danger {% if children.parent is  empty %}disabled{% endif %}" {% if children.parent is not empty %}data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}"{% endif %}>
+						<span class="glyphicon glyphicon-trash"></span><span class='hidden-xs'> Supprimer</span>
+					</a>
+					<div class='btn-group'>
+						<a  href="{{ lien_monter }}" class="btn btn-success{% if loop.first %} disabled{% endif %}">
+							<span class="glyphicon glyphicon-arrow-up"></span>
+						</a>
+						<a  href="{{ lien_descendre }}" class="btn btn-success{% if loop.last %} disabled {% endif %}">
+							<span class="glyphicon glyphicon-arrow-down"></span>
+						</a>
+					</div>
+					
+				</div>
+			</div>
+			
+			{% if children.childrens is not empty %}
+			{{ _self.generer_enfants(children.childrens) }}
+			{% endif %}
+			
+		</div>
+		
+	</li>
+	{% endfor %}
+</ul>
+{% endmacro %}
+
+
+{% block contenu %}
+<h1 class="page-header">Gérer mes catégories</h1>
+
+<div class='row'>
+	<div class='col-md-offset-1 col-md-10'>
+	{{ _self.generer_enfants(listeCategories) }}
+	</div>
+</div>
+{% endblock %}
+
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<style>
+.media-left .glyphicon{
+	padding: 	10px;
+}
+.media-left{
+padding-right: 0px;
+}
+.media-left > div, .media-body > div{
+	/*border-bottom: 	1px solid #eee;*/
+	padding: 		0px 0px 15px 10px;
+}
+</style>
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+	$('a[data-categorie]').click(function(e)
+	{
+		//stop de la propagation de l'évènement
+		e.preventDefault();
+
+		//récupération de l'évènement courant
+		$this = $(this);
+
+		//modification de la fenêtre de confirmation
+		$('#ma_categorie').html($this.attr('data-categorie'));
+		$('#son_parent').html($this.attr('data-parent'));
+		$('#valider_suppression').attr('href', $this.attr('href'));
+		
+		//affichage de la fenêtre de confirmation
+		$('#confirmation').modal('show');
+	});
+});
+</script>
+{% endblock %}

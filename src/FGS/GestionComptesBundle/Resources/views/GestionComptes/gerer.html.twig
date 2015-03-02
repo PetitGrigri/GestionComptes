@@ -1,0 +1,107 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+
+{% block modal %}
+<div class="modal" id="confirmation">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h4 class="modal-title">Attention</h4>
+			</div>
+			<div class="modal-body">
+			<p>
+				Etes vous certains de vouloir supprimer le compte : <strong id="nom_compte"></strong> ?
+			</p>
+			<p>
+				Cette Action ne pourra pas être annulé.
+			</p>
+			</div>
+			<div class="modal-footer">
+			<a class="btn btn-danger" id="valider_suppression" href="#">
+				<span class="glyphicon glyphicon-trash"></span> 
+				Supprimer ce compte
+			</a>
+			<a href="" class="btn btn-info" data-dismiss="modal" >
+				Annuler
+			</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block title %}Visualisation de vos comptes{% endblock %}
+
+{% block contenu %}
+<h1 class="page-header">Gerer mes comptes</h1>
+
+	{% if listeComptes is empty %}
+	<div class="alert alert-warning alert-dismissible fade in" role="alert">
+		<p><span class="glyphicon glyphicon-warning-sign"></span> Vous n'avez pas encore ajouté de compte.</p>
+	</div>
+	{% endif %}
+	
+	{% for compte in listeComptes %}
+		<div class="row" style="height:38px">
+			<div class="col-md-offset-1 col-md-1 col-xs-2" class="height: 38px;">
+				<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 30px; margin: 4px;" />
+			</div>
+			<div class="col-md-5 col-xs-10"><h4>{{ compte.nom }} <span class="label  {{ compte.montantActuel < 0 ? 'label-danger':'label-success' }} pull-right">{{ compte.montantActuel }} €</span></h4></div>
+			<div class="col-md-4 col-xs-12">
+				<div class="row">
+					<div class="col-xs-6">
+						<a href="{{ path('fgs_gestion_comptes_modifier_compte', {"id":compte.id}) }}" class="btn btn-info btn-block">
+							<span class="glyphicon glyphicon-pencil"></span> Modifier
+						</a>
+					</div>
+					<div class="col-xs-6">
+						<a data-compte="{{ compte.nom }}" href="{{ path('fgs_gestion_comptes_supprimer_compte', {"id":compte.id}) }}" class="btn btn-danger btn-block" data-toggle="modal">
+							<span class="glyphicon glyphicon-trash"></span> Supprimer
+						</a>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="clearfix"></div>
+		{% if loop.last != true %}
+		<hr class="col-md-10 col-md-offset-1" style="margin-top: 10px; margin-bottom: 10px;"/>
+		{% endif %}
+	{% endfor %}
+	<hr class="col-md-10 col-md-offset-1" style="margin-top: 10px; margin-bottom: 10px;"/>
+	<div class="row">
+		<div class="col-md-offset-9 col-md-2 col-xs-12">
+			<a href="{{ path('fgs_gestion_comptes_ajouter_compte') }}" class="btn btn-success btn-block">
+				<span class="glyphicon glyphicon-plus"></span> Ajouter
+			</a>
+		</div>
+	</div>
+{% endblock %}
+
+
+
+
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+	$('a[data-compte]').click(function(e)
+	{
+		//stop de la propagation de l'évènement
+		e.preventDefault();
+
+		//récupération de l'évènement courant
+		$this = $(this);
+
+		//modification de la fenêtre de confirmation
+		$('#nom_compte').html($this.attr('data-compte'));
+		$('#valider_suppression').attr('href', $this.attr('href'));
+		
+		//affichage de la fenêtre de confirmation
+		$('#confirmation').modal('show');
+	});
+});
+</script>
+{% endblock %}

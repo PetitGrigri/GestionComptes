@@ -1,0 +1,5 @@
+services:     
+    fgs_bootstrap.bootstrap_form_extension: 
+        class: FGS\BootstrapBundle\Twig\BootstrapFormExtension 
+        tags:
+            - { name: twig.extension }

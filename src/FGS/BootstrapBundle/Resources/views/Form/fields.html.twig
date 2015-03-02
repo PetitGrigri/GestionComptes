@@ -1,0 +1,149 @@
+{#
+{% for key,value in form.vars.attr %}
+{{- key -}} - {{- value -}}
+{% endfor %}
+#}
+
+{% block form_row -%}
+	{# Gestion des class bootstrap pour le label #}
+	{% set bootstrap_class_label	= bootstrap_grid(label_grid|default())|default(bootstrap_grid(get_bootstrap_label_grid())) %}
+	{% set bootstrap_class_label	= bootstrap_class_label is not empty ? bootstrap_class_label~' control-label' %}
+
+	{# Gestion des class bootstrap pour le widget#}
+	{% set bootstrap_class_widget	= bootstrap_grid(widget_grid|default())|default(bootstrap_grid(get_bootstrap_widget_grid())) %}
+	
+	{# Gestion des class bootstrap pour les erreurs#}
+	{% set bootstrap_class_error	= bootstrap_grid(error_grid|default())|default(bootstrap_grid(get_bootstrap_error_grid())) %}
+
+	<div class="form-group {{ form.vars.errors|length > 0 ? 'has-error' }}">
+		{{- form_label(form, label|default(), {'label_attr':{'class' : bootstrap_class_label }}) -}}
+		
+		{% if bootstrap_class_widget is not empty %}
+		<div class="{{ bootstrap_class_widget }}">
+		{% endif %}
+		{{- form_widget(form, {"attr": {"class":"form-control"}}) -}}
+		{% if bootstrap_class_widget is not empty %}
+		</div>
+		{% endif %}
+		
+		{% if form.vars.errors|length > 0 %}
+			{% if bootstrap_class_error is not empty %}
+			<div class="{{ bootstrap_class_error }}">
+			{% endif %}
+			{{- form_errors(form) -}}
+			{% if bootstrap_class_error is not empty %}
+			</div>
+			{% endif %}
+		{% endif %}
+	</div>
+{%- endblock form_row %}
+
+{% block money_widget -%}
+<div class="input-group">
+	{{ money_pattern|replace({ '{{ widget }}': block('form_widget_simple')~'<div class="input-group-addon">' })|raw }}
+	</div>
+</div>
+{%- endblock money_widget %}
+
+{% block button_widget -%}
+	{# récupération des infos de la grid bootstrap #}
+
+	{% set bootstrap_button_grid	= bootstrap_grid(bootstrap_submit_or_reset_grid|default(button_grid|default(get_bootstrap_button_grid()))) %}
+
+    {% if label is empty -%}
+        {% set label = name|humanize %}
+    {%- endif -%}
+    
+    {% if bootstrap_button_grid is not empty %}
+    <div class="{{ bootstrap_button_grid }}">
+    {% endif %}
+    
+   	<button class="{{ button_style|default('btn btn-default') }} {{ bootstrap_button_grid ? ' btn-block' }}" type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+	
+    {% if bootstrap_button_grid is not empty %}
+    </div>
+    {% endif %}
+{%- endblock button_widget %}
+
+
+{% block submit_widget -%}
+	{% set bootstrap_submit_or_reset_grid = submit_grid|default(get_bootstrap_submit_grid()) %}
+	{% set button_style = 'btn btn-primary' %}
+	{% set type = type|default('submit') %}
+    {{- block('button_widget') -}}
+{%- endblock submit_widget %}
+
+{% block reset_widget -%}
+	{% set bootstrap_submit_or_reset_grid = reset_grid|default(get_bootstrap_reset_grid()) %}
+    {{- block('button_widget') -}}
+{%- endblock reset_widget %}
+
+{% block button_row -%}
+	{{- form_widget(form) -}}
+{%- endblock button_row %}
+
+{% block form_start -%}
+	{% set attr = attr|merge({'class':'form-'~presentation|default(get_bootstrap_form_presentation())~' '~(attr.class)|default('')}) %}
+
+	{% set method = method|upper %}
+    {%- if method in ["GET", "POST"] -%}
+        {% set form_method = method %}
+    {%- else -%}
+        {% set form_method = "POST" %}
+    {%- endif -%}
+    <form name="{{ name }}" method="{{ form_method|lower }}" action="{{ action }}"{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if multipart %} enctype="multipart/form-data"{% endif %}>
+    {%- if form_method != method -%}
+        <input type="hidden" name="_method" value="{{ method }}" />
+    {%- endif -%}
+{%- endblock form_start %}
+
+{% block choice_widget_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+        	{% autoescape false %}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+        	{% endautoescape %}
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options %}
+
+{% block button_text_widget %}
+{# récupération des infos de la grid bootstrap #}
+
+	{% set bootstrap_button_grid	= bootstrap_grid(bootstrap_submit_or_reset_grid|default(button_grid|default(get_bootstrap_button_grid()))) %}
+
+    {% if label is empty -%}
+        {% set label = name|humanize %}
+    {%- endif -%}
+    
+    {% if bootstrap_button_grid is not empty %}
+    <div class="{{ bootstrap_button_grid }}">
+    {% endif %}
+    
+   	<button class="{{ button_style|default('btn btn-default') }} {{ bootstrap_button_grid ? ' btn-block' }}" value="{{ value }}" type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+	
+    {% if bootstrap_button_grid is not empty %}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block date_widget -%}
+    {% if widget == 'single_text' %}
+    <div class="input-group">
+        {{- (block('form_widget_simple')~'<div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>')|raw -}}
+		</div>
+    {% else -%}
+        <div {{ block('widget_container_attributes') }}>
+            {{- date_pattern|replace({
+                '{{ year }}':  form_widget(form.year),
+                '{{ month }}': form_widget(form.month),
+                '{{ day }}':   form_widget(form.day),
+            })|raw -}}
+        </div>
+    {%- endif %}
+{%- endblock date_widget %}
