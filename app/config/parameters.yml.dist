@@ -22,3 +22,6 @@ parameters:
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true
+    
+    providers_memory_users_user: userpass
+    providers_memory_users_admin: adminpass
