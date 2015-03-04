@@ -1,5 +1,5 @@
 fgs_gestion_comptes_homepage:
-    path:     /mes-comptes
+    path:     /
     defaults: { _controller: FGSGestionComptesBundle:GestionComptes:index }
     
 fgs_gestion_comptes_ajouter_compte: 

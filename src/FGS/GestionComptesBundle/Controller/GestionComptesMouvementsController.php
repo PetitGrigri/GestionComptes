@@ -188,7 +188,7 @@ class GestionComptesMouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id)
 	{
-		$date 		= new \DateTime("2015-02-05");
+		$date 		= new \DateTime("now");
 		$anneeMois	= $date->format('Y-m');
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
 		
@@ -206,8 +206,8 @@ class GestionComptesMouvementsController extends Controller
 				'id'					=> $id,
 				'date'					=> $date,
 				'totauxParCategorie'	=> $montantCategorie,
-				'totalDepense'			=> $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE],
-				'totalRevenu'			=> $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU],
+				'totalDepense'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
+				'totalRevenu'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU] : 0,
 		));
 	}
 }

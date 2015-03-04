@@ -3,6 +3,9 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+//default time zone
+date_default_timezone_set('Europe/Paris');
+
 class AppKernel extends Kernel
 {
     public function registerBundles()
@@ -16,11 +19,13 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new FGS\GestionComptesBundle\FGSGestionComptesBundle(),
         	new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-        	//on ne l'utilise pas pour le moment
-        	//new FOS\UserBundle\FOSUserBundle(),
+        	
+        	new FOS\UserBundle\FOSUserBundle(),
+        		
             new FGS\BootstrapBundle\FGSBootstrapBundle(),
+        	new FGS\GestionComptesBundle\FGSGestionComptesBundle(),
+            new FGS\UserBundle\FGSUserBundle(), 
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

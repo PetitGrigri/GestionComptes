@@ -1,0 +1,20 @@
+security: 
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+        
+    firewalls: 
+        dev:
+            pattern:    ^/(_(wdt|profiler))/
+            security:   false
+        main:
+            pattern: ^/
+            form_login:
+                check_path: fos_user_security_check
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider             
+            logout:       true
+            anonymous:    true
