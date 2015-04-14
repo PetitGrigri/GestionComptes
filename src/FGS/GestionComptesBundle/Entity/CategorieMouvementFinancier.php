@@ -3,6 +3,7 @@
 namespace FGS\GestionComptesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FGS\GestionComptesBundle\Model\UtilisateurInterface;
 
 /**
  * CategorieMouvementFinancier
@@ -77,9 +78,13 @@ class CategorieMouvementFinancier
      */
     private $type;
     
-    
-    
-    
+    /**
+     * @ORM\ManyToOne(targetEntity="FGS\GestionComptesBundle\Model\UtilisateurInterface")
+     * @ORM\JoinColumn(nullable=false)
+     * @var UtilisateurInterface
+     */
+    private $utilisateur;
+
     
     protected $level;
     
@@ -208,6 +213,13 @@ class CategorieMouvementFinancier
         $this->type = $type;
         return $this;
 	}
-
+	
+	public function getUtilisateur() {
+		return $this->utilisateur;
+	}
+	public function setUtilisateur($utilisateur) {
+		$this->utilisateur = $utilisateur;
+		return $this;
+	}
 	
 }

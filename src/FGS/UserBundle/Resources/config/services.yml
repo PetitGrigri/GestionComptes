@@ -1,0 +1,6 @@
+services:
+    user.new_utilisateur:
+        class: FGS\UserBundle\EventListener\NewUtilisateurListener
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: kernel.event_subscriber}

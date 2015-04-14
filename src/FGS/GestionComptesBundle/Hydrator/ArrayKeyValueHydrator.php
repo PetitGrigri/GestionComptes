@@ -12,10 +12,9 @@ class ArrayKeyValueHydrator extends AbstractHydrator
     protected function hydrateAllData()
     {
         $result = [];
-        $cache  = [];
- 
+
         while ($data = $this->_stmt->fetch(\PDO::FETCH_NUM)) {
-            $this->hydrateRowData($data, $cache, $result);
+            $this->hydrateRowData($data, $result);
         }
  
         asort($result);
@@ -26,7 +25,7 @@ class ArrayKeyValueHydrator extends AbstractHydrator
     /**
      * {@inheritdoc}
      */
-    protected function hydrateRowData(array $data, array &$cache, array &$result)
+    protected function hydrateRowData(array $data, array &$result)
     {
         $result[$data[0]] = $data[1];
     }

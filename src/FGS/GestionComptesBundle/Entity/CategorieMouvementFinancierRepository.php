@@ -12,24 +12,28 @@ use Doctrine\ORM\EntityRepository;
 class CategorieMouvementFinancierRepository extends EntityRepository
 {
 
-	public function getTreeCategories($cmf=null, $allowCmfId = false)
+	/*
+	 * Cette méthode permet de récupérer les catégories d'un utilisateur, sous la forme d'une liste pouvant contenir
+	 * des enfants 
+	 */
+	public function getTreeCategoriesForUtilisateur($utilisateurId, $cmf=null, $allowCmfId = false)
 	{
 
-		$queryBuilder	=	$this->getCategories();
+		$queryBuilder	=	$this->getCategoriesForUtilisateur($utilisateurId);
 		
 		
 		if (($cmf != null) && ( in_array($cmf->getType(), array(CategorieMouvementFinancier::TYPE_DEPENSE, CategorieMouvementFinancier::TYPE_REVENU))))
 		{
 			$queryBuilder
-				->andWhere('cmf.type = ?1')
-				->setParameter('1', $cmf->getType());
+				->andWhere('cmf.type = ?2')
+				->setParameter('2', $cmf->getType());
 		}
 		
 		if (($cmf != null) && ($cmf->getId() != null) && (!$allowCmfId))
 		{
 			$queryBuilder
-				->andWhere('cmf.id != ?2')
-				->setParameter('2', $cmf->getId());
+				->andWhere('cmf.id != ?3')
+				->setParameter('3', $cmf->getId());
 		}
 		/*
 		\Doctrine\Common\Util\Debug::dump($cmf);
@@ -97,10 +101,13 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			return $this->addParentCondition($queryBuilder, $cmf)->getQuery()->execute();
 	}
 	
-	
-	public function getFlatTreeCategories($cmf=null, $allowCmfId=false)
+	/*
+	 * Cette méthode permet de renvoyer les catégories d'un utilisateur sous la forme d'une liste (array).
+	 * Ici les catégories n'auront pas d'enfant, mais plus on "s'enfoncera dans l'arborscence, et plus le level de la catégorie sera élevé
+	 */
+	public function getFlatTreeCategories($utilisateurId, $cmf=null, $allowCmfId=false)
 	{
-		return $this->flatChildren($this->getTreeCategories($cmf, $allowCmfId));
+		return $this->flatChildren($this->getTreeCategoriesForUtilisateur($utilisateurId, $cmf, $allowCmfId));
 	}
 	
 	/**
@@ -127,13 +134,18 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 	}
 	
 
-	private function getCategories()
+	private function getCategoriesForUtilisateur($utilisateurId)
 	{
-		return 	$this->_em->createQueryBuilder()
+		
+		return $this->_em->createQueryBuilder()
 			->select('cmf')
 			->from('FGSGestionComptesBundle:CategorieMouvementFinancier', 'cmf')
+			->leftJoin('cmf.utilisateur', 'u')
 			->addOrderBy('cmf.parent', 'ASC')
-			->addOrderBy('cmf.ordre', 'DESC');
+			->addOrderBy('cmf.ordre', 'DESC')
+			->andWhere('u.id = ?1')
+			->setParameter('1', $utilisateurId);
+
 	}
 
 	private function flatChildren($treeCategorie, $level = 0)

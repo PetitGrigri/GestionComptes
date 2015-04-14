@@ -19,9 +19,10 @@ class MouvementFinancierType extends AbstractType
 	/* (non-PHPdoc)
 	 * @see \Symfony\Component\Form\AbstractType::buildForm()
 	 */
-	public function __construct(RegistryInterface $doctrine)
+	public function __construct(RegistryInterface $doctrine, $utilisateurId)
 	{
-		$this->doctrine	=	$doctrine;
+		$this->doctrine			= $doctrine;
+		$this->utilisateurId	= $utilisateurId;
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) 
@@ -36,6 +37,9 @@ class MouvementFinancierType extends AbstractType
 			))
 			->add('compte', 	'entity', 	array(
 					'class'			=>	'FGSGestionComptesBundle:Compte',
+					'choices'		=>	$this->doctrine->getManager()
+											->getRepository('FGSGestionComptesBundle:Compte')
+											->getComptesForUtilisateur($this->utilisateurId),
 					'empty_value'	=>	'Selectionnez le compte cible',
 			))
 			->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event)
@@ -49,7 +53,7 @@ class MouvementFinancierType extends AbstractType
 						'class'			=>	'FGSGestionComptesBundle:CategorieMouvementFinancier',
 						'choices'		=>	$this->doctrine->getManager()
 												->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-												->getFlatTreeCategories($cmf, true),
+												->getFlatTreeCategories($this->utilisateurId, $cmf, true),
 						'label'			=>	'Catégorie',
 						'empty_value'	=>	'Aucune catégorie',
 						'required'		=>	true,

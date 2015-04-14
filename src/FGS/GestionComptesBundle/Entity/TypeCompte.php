@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TypeCompte
  *
  * @ORM\Table(name="type_compte")
- * @ORM\Entity(repositoryClass="FGS\GestionComptesBundle\Entity\TypeCompteRepository")
+ * @ORM\Entity
  */
 class TypeCompte
 {

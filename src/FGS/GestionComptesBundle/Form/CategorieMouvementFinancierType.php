@@ -18,9 +18,10 @@ class CategorieMouvementFinancierType extends AbstractType
 	/* (non-PHPdoc)
 	 * @see \Symfony\Component\Form\AbstractType::buildForm()
 	 */
-	public function __construct(RegistryInterface $doctrine)
+	public function __construct(RegistryInterface $doctrine, $utilisateurId)
 	{
-		$this->doctrine	=	$doctrine;
+		$this->doctrine			= $doctrine;
+		$this->utilisateurId	= $utilisateurId;	
 	}
 
 	/*
@@ -70,7 +71,7 @@ class CategorieMouvementFinancierType extends AbstractType
 								'class'			=>	'FGSGestionComptesBundle:CategorieMouvementFinancier',
 								'choices'		=>	$this->doctrine->getManager()
 									->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-									->getFlatTreeCategories($cmf),
+									->getFlatTreeCategories($this->utilisateurId, $cmf),
 								'label'			=>	'Catégorie parente',
 								'empty_value'	=>	'Aucune catégorie parente',
 								'required'		=>	true,			

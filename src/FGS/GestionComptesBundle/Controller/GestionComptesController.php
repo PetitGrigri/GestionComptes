@@ -21,9 +21,16 @@ class GestionComptesController extends Controller
 {
     public function indexAction()
     {
+		//récupération du manager
     	$em		= $this->getDoctrine()->getManager();
-    	
-    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanque();
+
+    	//récupération de l'utilisateur
+		$utilisateur	= $this->getUser();
+
+		//\Doctrine\Common\Util\Debug::dump($utilisateur);
+		//\Doctrine\Common\Util\Debug::dump($utilisateur->getId());
+		
+    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($utilisateur->getId());
     	
     	//\Doctrine\Common\Util\Debug::dump($listeComptes);
     	return $this->render('FGSGestionComptesBundle:GestionComptes:index.html.twig', array(
@@ -45,6 +52,7 @@ class GestionComptesController extends Controller
     	
     	if ($form->isValid())
     	{
+    		$compte->setUtilisateur($this->getUser());
 			$em	=	$this->getDoctrine()->getManager();
 
 			$em->persist($compte);
@@ -64,9 +72,11 @@ class GestionComptesController extends Controller
     
     public function gererCompteAction()
     {
+    	$utilisateur	= $this->getUser();
+    	
     	$em		= $this->getDoctrine()->getManager();
     	
-    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanque();
+    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($utilisateur->getId());
     	
     	return $this->render('FGSGestionComptesBundle:GestionComptes:gerer.html.twig', array(
     			'listeComptes'=> $listeComptes

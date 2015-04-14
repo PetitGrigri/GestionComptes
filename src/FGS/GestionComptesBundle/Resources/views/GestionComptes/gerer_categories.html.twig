@@ -93,7 +93,13 @@
 
 <div class='row'>
 	<div class='col-md-offset-1 col-md-10'>
-	{{ _self.generer_enfants(listeCategories) }}
+	{% if listeCategories is not empty %}
+		{{ _self.generer_enfants(listeCategories) }}
+	{% else %}
+		<div class="alert alert-warning alert-dismissible fade in" role="alert">
+			<p><span class="glyphicon glyphicon-warning-sign"></span> Vous n'avez pas encore de catégories.</p>
+		</div>
+	{% endif %}
 	</div>
 </div>
 {% endblock %}

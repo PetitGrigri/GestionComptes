@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: "@FGSBootstrapBundle/Resources/config/services.yml" }
     - { resource: "@FGSBootstrapBundle/Resources/config/config.yml" }
+    - { resource: "@FGSUserBundle/Resources/config/services.yml" }
 framework:
     #esi:             ~
     translator:      { fallback: "%locale%" }
@@ -62,9 +63,14 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        #custom hydrator
         hydrators:
             array_key_value_hydrator: "FGS\\GestionComptesBundle\\Hydrator\\ArrayKeyValueHydrator"
             
+        #permet d'éviter d'avoir les anontations de fosUserBundle dans le FGSGestionComptesBundle
+        resolve_target_entities:
+            FGS\GestionComptesBundle\Model\UtilisateurInterface: FGS\UserBundle\Entity\User
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -72,7 +78,7 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-    
+
 services:
     twig.extension.intl:
         class: Twig_Extensions_Extension_Intl

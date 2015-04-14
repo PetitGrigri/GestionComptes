@@ -25,9 +25,9 @@ class GestionComptesMouvementsController extends Controller
 {
 	public function ajouterDepenseAction(Request $request)
 	{
-		$mf		= new MouvementFinancier();
-		$cmf	= new CategorieMouvementFinancier();
-
+		$mf				= new MouvementFinancier();
+		$cmf			= new CategorieMouvementFinancier();
+		$utilisateur	= $this->getUser();
 		
 		
 		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
@@ -40,7 +40,7 @@ class GestionComptesMouvementsController extends Controller
 		
 		$mf->setCategorieMouvementFinancier($cmf);
 
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine()), $mf);
+		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
 		
 		$form->handleRequest($request);
 		
@@ -67,9 +67,9 @@ class GestionComptesMouvementsController extends Controller
 	
 	public function ajouterRevenuAction(Request $request)
 	{
-		$mf		= new MouvementFinancier();
-		$cmf	= new CategorieMouvementFinancier();
-	
+		$mf				= new MouvementFinancier();
+		$cmf			= new CategorieMouvementFinancier();
+		$utilisateur	= $this->getUser();
 	
 	
 		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
@@ -82,7 +82,7 @@ class GestionComptesMouvementsController extends Controller
 	
 		$mf->setCategorieMouvementFinancier($cmf);
 	
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine()), $mf);
+		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
 	
 		$form->handleRequest($request);
 	
@@ -190,16 +190,20 @@ class GestionComptesMouvementsController extends Controller
 	{
 		$date 		= new \DateTime("now");
 		$anneeMois	= $date->format('Y-m');
+
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
 		
 		$compte		= $repository->getCompteMouvementAndCategorieMois($id, $anneeMois);
+		
+
+		//\Doctrine\Common\Util\Debug::dump($compte);
 		
 		$montantCategorie	= $repository->getMontantForEachCategorie($id, $anneeMois);
 		
 		$totalDepenseAndRevenu	= $repository->getDepenseAndRevenu($id, $anneeMois);
 		
 		
-		//\Doctrine\Common\Util\Debug::dump($totalDepenseAndRevenu);
+		//\Doctrine\Common\Util\Debug::dump($compte);
 		
 		return $this->render('FGSGestionComptesBundle:GestionComptes:visualiser_mouvements_compte_mois.html.twig', array(
 				'compte'				=> $compte[0],
@@ -208,6 +212,59 @@ class GestionComptesMouvementsController extends Controller
 				'totauxParCategorie'	=> $montantCategorie,
 				'totalDepense'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
 				'totalRevenu'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+		));
+	}
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * A FINIR  !! ! ! ! ! méthode qui sera à ajouter et qui permettra d'éviter d'avoir de la dupplication de code
+	 * pour AjouterDepense et AjouterRevenu
+	 * 
+	 * 
+	 * 
+	 * @param FGS\GestionCompteBundle\Entity\MouvementFinancier $mf
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
+	private function ajouterMouvementFinancier(FGS\GestionCompteBundle\Entity\MouvementFinancier $mf)
+	{
+		$utilisateur	= $this->getUser();
+	
+	
+		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+				'type'		=>	CategorieMouvementFinancier::TYPE_DEPENSE,
+				'parent'	=>	null
+		));
+	
+		$cmf->setType(CategorieMouvementFinancier::TYPE_DEPENSE);
+		$cmf->setParent($cmf_parent);
+	
+		$mf->setCategorieMouvementFinancier($cmf);
+	
+		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
+	
+		$form->handleRequest($request);
+	
+		if ($form->isValid())
+		{
+			$em	=	$this->getDoctrine()->getManager();
+				
+			//il s'agit d'une dépense donc focément négative
+			$mf->setMontant(-abs($mf->getMontant()));
+				
+			$em->persist($mf);
+			$em->flush();
+				
+			$session	=	new Session();
+			$session->getFlashBag()->add('success', 'La dépense a été prise en compte!');
+				
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+		}
+		return $this->render('FGSGestionComptesBundle:GestionComptes:ajouter_depense.html.twig', array(
+				'form'	=>	$form->createView(),
 		));
 	}
 }

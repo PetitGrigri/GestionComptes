@@ -26,7 +26,9 @@ class GestionComptesCategoriesController extends Controller
     public function gererCategoriesAction()
     {
     	$em					= $this->getDoctrine()->getManager();
-    	$listeCategories	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getTreeCategories();
+    	$utilisateur		= $this->getUser();
+    	
+    	$listeCategories	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getTreeCategoriesForUtilisateur($utilisateur->getId());
 
     	
     	return $this->render('FGSGestionComptesBundle:GestionComptes:gerer_categories.html.twig', array(
@@ -38,9 +40,10 @@ class GestionComptesCategoriesController extends Controller
 	
 	public function ajouterCategorieAction(Request $request)
 	{
-		$cmf	=	new CategorieMouvementFinancier();
+		$cmf			= new CategorieMouvementFinancier();
+		$utilisateur	= $this->getUser();
 		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine()), $cmf);
+		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $cmf);
 		
 		$form->handleRequest($request);
 
