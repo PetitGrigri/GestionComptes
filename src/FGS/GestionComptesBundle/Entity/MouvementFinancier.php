@@ -10,7 +10,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
  * MouvementFinancier
  *
  * @ORM\Table(name="mouvement_financier")
- * @ORM\Entity(repositoryClass="FGS\GestionComptesBundle\Entity\MouvementFinancierRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
 class MouvementFinancier

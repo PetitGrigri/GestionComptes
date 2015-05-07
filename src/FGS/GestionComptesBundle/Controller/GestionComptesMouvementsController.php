@@ -133,13 +133,18 @@ class GestionComptesMouvementsController extends Controller
 	
 	public function modifierMouvementFinancierAction($id,Request $request)
 	{
+		$em					= $this->getDoctrine()->getManager();
+		
 		//récupération du mouvement financier que l'on veut modifier, et sa catégorie
-		$mf		= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
+		$mf 	= $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 		$cmf	= $mf->getCategorieMouvementFinancier();
-
+		$user	= $this->getUser();
+		
+		//\Doctrine\Common\Util\Debug::dump($user);
+		\Doctrine\Common\Util\Debug::dump($mf);
 		//mémorisation des informations avant l'update
 		
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine()), $mf);
+		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $user->getId()), $mf);
 	
 		$form->handleRequest($request);
 	

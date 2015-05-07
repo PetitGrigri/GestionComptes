@@ -61,9 +61,10 @@
 						<span class="glyphicon glyphicon-pencil"></span><span class='hidden-xs'> Modifier</span>
 					</a>
 					
-					<a href="{% if children.parent is not empty %}{{ lien_supprimer }}{% endif %}" class="btn btn-danger {% if children.parent is  empty %}disabled{% endif %}" {% if children.parent is not empty %}data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}"{% endif %}>
+					<a href="{% if children.parent is not empty %}{{ lien_supprimer }}{% else %}#{% endif %}" class="btn btn-danger {% if children.parent is  empty %}disabled{% endif %}" {% if children.parent is not empty %}data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}"{% endif %}>
 						<span class="glyphicon glyphicon-trash"></span><span class='hidden-xs'> Supprimer</span>
 					</a>
+					
 					<div class='btn-group'>
 						<a  href="{{ lien_monter }}" class="btn btn-success{% if loop.first %} disabled{% endif %}">
 							<span class="glyphicon glyphicon-arrow-up"></span>

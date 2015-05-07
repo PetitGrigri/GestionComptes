@@ -21,8 +21,8 @@ class MouvementFinancierType extends AbstractType
 	 */
 	public function __construct(RegistryInterface $doctrine, $utilisateurId)
 	{
-		$this->doctrine			= $doctrine;
-		$this->utilisateurId	= $utilisateurId;
+		$this->doctrine				= $doctrine;
+		$this->utilisateurId		= $utilisateurId;
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) 
@@ -47,6 +47,8 @@ class MouvementFinancierType extends AbstractType
 				//récupération du formulaire en cours de création et de l'objet à hydrater
 				$form 	= $event->getForm();
 				$mf		= $event->getData();
+				
+				//\Doctrine\Common\Util\Debug::dump($mf);
 				$cmf	= $mf->getCategorieMouvementFinancier();
 
 				$form->add(	'categorieMouvementFinancier', 'entity', array(

@@ -43,10 +43,16 @@ class GestionComptesCategoriesController extends Controller
 		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
 		
+		
+		
 		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $cmf);
 		
 		$form->handleRequest($request);
 
+		//\Doctrine\Common\Util\Debug::dump($cmf);
+		
+		$cmf->setUtilisateur($utilisateur);
+		
 		if ($cmf->getParent() != null) {
 			$cmf->setOrdre(count($cmf->getParent()->getChildrens())+1);
 			$cmf->setType($cmf->getParent()->getType());
@@ -81,7 +87,15 @@ class GestionComptesCategoriesController extends Controller
 		 
 		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
 	
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine()), $cmf);
+		if ($cmf->getUtilisateur()->getId() != $this->getUser()->getId())
+		{
+			$session	=	new Session();
+			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
+			
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
+		}
+		
+		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()), $cmf);
 		
 		$form->handleRequest($request);
 	
@@ -107,6 +121,14 @@ class GestionComptesCategoriesController extends Controller
 		$em		= $this->getDoctrine()->getManager();
 			
 		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
+		
+		if ($cmf->getUtilisateur()->getId() != $this->getUser()->getId())
+		{
+			$session	=	new Session();
+			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
+				
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
+		}
 		
 		if ($cmf != null)
 		{

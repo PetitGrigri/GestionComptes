@@ -33,18 +33,18 @@ class NewUtilisateurListener implements EventSubscriberInterface
 		$revenu		= new CategorieMouvementFinancier();
 		
 		$depense
-		->setType(CategorieMouvementFinancier::TYPE_DEPENSE)
-		->setLibelle('Dépense')
-		->setIcone('icon-arrow-graph-down-right')
-		->setOrdre('1')
-		->setUtilisateur($user);
+			->setType(CategorieMouvementFinancier::TYPE_DEPENSE)
+			->setLibelle('Dépense')
+			->setIcone('icon-arrow-graph-down-right')
+			->setOrdre('1')
+			->setUtilisateur($user);
 		
 		$revenu
-		->setType(CategorieMouvementFinancier::TYPE_REVENU)
-		->setLibelle('Revenu')
-		->setIcone('icon-arrow-graph-up-right')
-		->setOrdre('2')
-		->setUtilisateur($user);
+			->setType(CategorieMouvementFinancier::TYPE_REVENU)
+			->setLibelle('Revenu')
+			->setIcone('icon-arrow-graph-up-right')
+			->setOrdre('2')
+			->setUtilisateur($user);
 		
 		$this->_em->persist($depense);
 		$this->_em->flush();
