@@ -1,88 +1,88 @@
 fgs_gestion_comptes_homepage:
     path:     /
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:index }
+    defaults: { _controller: FGSGestionComptesBundle:Comptes:index }
     
 fgs_gestion_comptes_ajouter_compte: 
     path:     /ajouter-compte
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:ajouterCompte }
+    defaults: { _controller: FGSGestionComptesBundle:Comptes:ajouterCompte }
     
 fgs_gestion_comptes_gerer_compte: 
     path:     /gerer-compte
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:gererCompte }
+    defaults: { _controller: FGSGestionComptesBundle:Comptes:gererCompte }
     
 fgs_gestion_comptes_supprimer_compte: 
     path:     /supprimer-compte/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:supprimerCompte }
+    defaults: { _controller: FGSGestionComptesBundle:Comptes:supprimerCompte }
     requirements:
         id:    \d+
 
 fgs_gestion_comptes_modifier_compte: 
     path:     /modifier-compte/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptes:modifierCompte }
+    defaults: { _controller: FGSGestionComptesBundle:Comptes:modifierCompte }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_gerer_categories:
     path:     /gerer-categories-compte
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:gererCategories }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:gererCategories }
     
 fgs_gestion_comptes_ajouter_categorie:
     path:     /ajouter-categorie
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:ajouterCategorie }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:ajouterCategorie }
     
 fgs_gestion_comptes_modifier_categorie:
     path:     /modifier-categorie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:modifierCategorie }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:modifierCategorie }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_supprimer_categorie:
     path:     /supprimer-categorie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:supprimerCategorie }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:supprimerCategorie }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_monter_categorie:
     path:     /monter-categorie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:monterCategorie }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:monterCategorie }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_descendre_categorie:
     path:     /descendre-categorie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesCategories:descendreCategorie }
+    defaults: { _controller: FGSGestionComptesBundle:Categories:descendreCategorie }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_ajouter_depense:
     path:     /ajouter-depense
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:ajouterDepense }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterDepense }
     
 fgs_gestion_comptes_ajouter_revenu:
     path:     /ajouter-revenu
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:ajouterRevenu }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterRevenu }
     
 fgs_gestion_comptes_supprimer_mouvement_financier:
     path:     /supprimer-mouvement-financier/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:supprimerMouvementFinancier }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancier }
     requirements:
         id:    \d+
         
 fgs_gestion_comptes_modifier_mouvement_financier:
     path:     /modifier-mouvement-financier/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:modifierMouvementFinancier }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:modifierMouvementFinancier }
     requirements:
         id:    \d+    
         
 fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:voirMouvementFinancierCompte, debut:0, longueur:30 }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompte, debut:0, longueur:30 }
     requirements:
         id:       \d+
         debut:    \d+
 
 fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
     path:     /visualiser-mouvement-financiers-compte-mois/{id}
-    defaults: { _controller: FGSGestionComptesBundle:GestionComptesMouvements:voirMouvementFinancierCompteMois }    
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompteMois }    
     requirements:
         id:       \d+

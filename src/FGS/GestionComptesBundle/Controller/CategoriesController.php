@@ -21,7 +21,7 @@ use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancie
 
 
 
-class GestionComptesCategoriesController extends Controller
+class CategoriesController extends Controller
 {   
     public function gererCategoriesAction()
     {
@@ -31,7 +31,7 @@ class GestionComptesCategoriesController extends Controller
     	$listeCategories	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getTreeCategoriesForUtilisateur($utilisateur->getId());
 
     	
-    	return $this->render('FGSGestionComptesBundle:GestionComptes:gerer_categories.html.twig', array(
+    	return $this->render('FGSGestionComptesBundle:Categories:gerer_categories.html.twig', array(
 			'listeCategories'	=> $listeCategories,
 
     	));
@@ -41,17 +41,14 @@ class GestionComptesCategoriesController extends Controller
 	public function ajouterCategorieAction(Request $request)
 	{
 		$cmf			= new CategorieMouvementFinancier();
-		$utilisateur	= $this->getUser();
 		
-		
-		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $cmf);
+		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()->getId()), $cmf);
 		
 		$form->handleRequest($request);
 
 		//\Doctrine\Common\Util\Debug::dump($cmf);
 		
-		$cmf->setUtilisateur($utilisateur);
+		$cmf->setUtilisateur($this->getUser());
 		
 		if ($cmf->getParent() != null) {
 			$cmf->setOrdre(count($cmf->getParent()->getChildrens())+1);
@@ -76,7 +73,7 @@ class GestionComptesCategoriesController extends Controller
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 		}		
 		
-		return $this->render('FGSGestionComptesBundle:GestionComptes:ajouter_categorie.html.twig', array(
+		return $this->render('FGSGestionComptesBundle:Categories:ajouter_categorie.html.twig', array(
 				'form'	=> $form->createView(),
 		));
 	}
@@ -111,7 +108,7 @@ class GestionComptesCategoriesController extends Controller
 		}
 	
 	
-		return $this->render('FGSGestionComptesBundle:GestionComptes:modifier_categorie.html.twig', array(
+		return $this->render('FGSGestionComptesBundle:Categories:modifier_categorie.html.twig', array(
 				"form"=> $form->createView(),
 		));
 	}

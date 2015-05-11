@@ -17,23 +17,18 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use FGS\GestionComptesBundle\Exceptions\GestionComptesException;
 use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
 
-class GestionComptesController extends Controller
+class ComptesController extends Controller
 {
     public function indexAction()
     {
 		//récupération du manager
     	$em		= $this->getDoctrine()->getManager();
 
-    	//récupération de l'utilisateur
-		$utilisateur	= $this->getUser();
-
-		//\Doctrine\Common\Util\Debug::dump($utilisateur);
-		//\Doctrine\Common\Util\Debug::dump($utilisateur->getId());
-		
-    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($utilisateur->getId());
+    	//récupération de la liste des comptes et des derniers mouvements liés à ce compte (les deux derniers)
+    	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($this->getUser()->getId());
     	
-    	//\Doctrine\Common\Util\Debug::dump($listeComptes);
-    	return $this->render('FGSGestionComptesBundle:GestionComptes:index.html.twig', array(
+		//génération de la vue
+    	return $this->render('FGSGestionComptesBundle:Comptes:index.html.twig', array(
     			'listeComptes'=> $listeComptes
     	));
 
@@ -43,7 +38,6 @@ class GestionComptesController extends Controller
     {
     	$compte	=	new Compte();
     	
-
     	$form = $this->createForm(new CompteType(), $compte)
     				->add('sauver', 'submit', array('label'=>'Ajouter ce compte'))
     				->add('effacer','reset');
@@ -64,7 +58,7 @@ class GestionComptesController extends Controller
     		return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
     	}
     	
-    	return $this->render('FGSGestionComptesBundle:GestionComptes:ajouter.html.twig', array(
+    	return $this->render('FGSGestionComptesBundle:Comptes:ajouter.html.twig', array(
     			"form"=> $form->createView(),
     	));
     
@@ -78,7 +72,7 @@ class GestionComptesController extends Controller
     	
     	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($utilisateur->getId());
     	
-    	return $this->render('FGSGestionComptesBundle:GestionComptes:gerer.html.twig', array(
+    	return $this->render('FGSGestionComptesBundle:Comptes:gerer.html.twig', array(
     			'listeComptes'=> $listeComptes
     	));
 
@@ -130,7 +124,7 @@ class GestionComptesController extends Controller
     		return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
     	}
     	 
-    	return $this->render('FGSGestionComptesBundle:GestionComptes:modifier.html.twig', array(
+    	return $this->render('FGSGestionComptesBundle:Comptes:modifier.html.twig', array(
     			"form"=> $form->createView(),
     	));
     }
