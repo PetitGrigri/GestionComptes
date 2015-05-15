@@ -143,6 +143,7 @@ class CompteRepository extends EntityRepository
 		$rsm->addFieldResult('mf', 'mf_montant', 'montant');
 		$rsm->addFieldResult('mf', 'mf_commentaire', 'commentaire');
 		$rsm->addFieldResult('mf', 'mf_date', 'date');
+		$rsm->addFieldResult('mf', 'mf_check_banque', 'checkBanque');
 	
 		$rsm->addJoinedEntityResult('FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier', 'cmf', 'mf', 'categorieMouvementFinancier' );
 		$rsm->addFieldResult('cmf', 'cmf_id', 'id');
@@ -161,6 +162,7 @@ class CompteRepository extends EntityRepository
 									        tempo_mf.montant		as mf_montant,
 											tempo_mf.date			as mf_date,
 											tempo_mf.commentaire	as mf_commentaire,
+											tempo_mf.check_banque	as mf_check_banque,
 									        cmf.id					as cmf_id,
 									        cmf.libelle				as cmf_libelle,
 									        cmf.icone				as cmf_icone
@@ -172,6 +174,7 @@ class CompteRepository extends EntityRepository
 									    		compte_id,
 												date,
 												commentaire,
+												check_banque,
 									    		categorie_mouvement_financier_id,
 									            @num := if(`compte_id`=@compte, @num+1, 1) as row_number,
 									            @compte := `compte_id` as var_compte
@@ -188,7 +191,6 @@ class CompteRepository extends EntityRepository
 									AND compte.utilisateur_id = ?', $rsm)
 										->setParameter('1', $utilisateurId)
 										->execute();
-		//voir pourquoi, mais ma requête contient un ? et non pas un ?1 qui plantait... why ? it's the question
 	}
 	
 	public function getComptesForUtilisateur($utilisateurId)

@@ -26,7 +26,7 @@ class ComptesController extends Controller
 
     	//récupération de la liste des comptes et des derniers mouvements liés à ce compte (les deux derniers)
     	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($this->getUser()->getId());
-    	
+ 
 		//génération de la vue
     	return $this->render('FGSGestionComptesBundle:Comptes:index.html.twig', array(
     			'listeComptes'=> $listeComptes

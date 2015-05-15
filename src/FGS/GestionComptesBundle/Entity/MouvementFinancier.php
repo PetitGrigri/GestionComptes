@@ -68,6 +68,14 @@ class MouvementFinancier
      */
     private $compte;
     
+    /**
+     * @ORM\Column(name="check_banque", type="boolean", options={"default":0})
+     * 
+     */
+    private $checkBanque;
+    
+    
+    
     private $oldMontant;
     private $oldCompte;
     
@@ -154,7 +162,14 @@ class MouvementFinancier
 		$this->compte = $compte;
 		return $this;
 	}
-
+	public function getCheckBanque() {
+		return $this->checkBanque;
+	}
+	public function setCheckBanque($checkBanque) {
+		$this->checkBanque = $checkBanque;
+		return $this;
+	}
+	
 	/**
 	 * @ORM\PostPersist
 	 */
@@ -228,4 +243,7 @@ class MouvementFinancier
 			$em->flush();
 		}
 	}
+
+	
+
 }

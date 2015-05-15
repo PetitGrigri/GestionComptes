@@ -72,8 +72,14 @@ fgs_gestion_comptes_modifier_mouvement_financier:
     path:     /modifier-mouvement-financier/{id}
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:modifierMouvementFinancier }
     requirements:
-        id:    \d+    
-        
+        id:    \d+   
+         
+fgs_gestion_comptes_check_mouvement_financier:
+    path:     /check-mouvement-financier/{id}
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:checkMouvementFinancier }
+    requirements:
+        id:    \d+ 
+              
 fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompte, debut:0, longueur:30 }

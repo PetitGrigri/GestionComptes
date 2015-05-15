@@ -21,4 +21,17 @@ class MouvementFinancierRepository extends EntityRepository
 			->getQuery()
 			->execute();
 	}
+	
+	public function getMouvementFinancierAndCompteAndUser($id)
+	{
+		return $this->_em->createQueryBuilder()
+			->select('mf','c','u')
+			->from('FGSGestionComptesBundle:MouvementFinancier', 'mf')
+			->leftJoin('mf.compte', 'c')
+			->leftJoin('c.utilisateur', 'u')
+			->where('mf.id = :id')
+			->setParameter('id', $id)
+			->getQuery()
+			->getSingleResult();
+	}
 }

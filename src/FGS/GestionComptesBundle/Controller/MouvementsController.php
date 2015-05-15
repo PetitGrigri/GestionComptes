@@ -208,7 +208,7 @@ class MouvementsController extends Controller
 		$totalDepenseAndRevenu	= $repository->getDepenseAndRevenu($id, $anneeMois);
 		
 		
-		//\Doctrine\Common\Util\Debug::dump($compte);
+		//;
 		
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_mois.html.twig', array(
 				'compte'				=> $compte[0],
@@ -218,5 +218,29 @@ class MouvementsController extends Controller
 				'totalDepense'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
 				'totalRevenu'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU] : 0,
 		));
+	}
+	
+	public function checkMouvementFinancierAction($id)
+	{
+		$em 	= $this->getDoctrine()->getEntityManager();
+		
+		//la recherche via repository est moins rapide que l'utilisation de find... incompréhensible :(
+		//$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->getMouvementFinancierAndCompte($id);
+		$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
+		
+		if ($mf->getCompte()->getUtilisateur()->getId() != $this->getUser()->getId())
+		{
+			$session	= $this->getRequest()->getSession();
+			$session->getFlashBag()->add('error', 'Vous ne pouvez pas checker ce mouvement financier !');
+		}
+		else
+		{
+			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
+	
+			$em->persist($mf);
+			$em->flush();
+		}
+
+		return $this->redirect($this->getRequest()->headers->get('referer'));
 	}
 }
