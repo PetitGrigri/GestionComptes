@@ -163,6 +163,12 @@ class CategorieMouvementFinancier
 		$this->parent = $parent;
 		return $this;
 	}
+	
+	public  function hasParent()
+	{
+		return  $this->parent != null;
+	}
+	
 	public function getChildrens() {
 		return $this->childrens;
 	}

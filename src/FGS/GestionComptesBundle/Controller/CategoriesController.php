@@ -115,38 +115,46 @@ class CategoriesController extends Controller
 	
 	public function supprimerCategorieAction($id)
 	{
-		$em		= $this->getDoctrine()->getManager();
-			
-		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
-		
-		if ($cmf->getUtilisateur()->getId() != $this->getUser()->getId())
-		{
-			$session	=	new Session();
-			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
-				
-			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
-		}
-		
-		if ($cmf != null)
-		{
-			$em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->decreaseOrdreAfter($cmf->getParent(), $cmf->getOrdre());
-			
-			$em->remove($cmf);
+		$em					= $this->getDoctrine()->getManager();
+		$listeCmfIdImpacte	= array();
+		$session			=	new Session();
 
-			$em->flush();
+		//récupération de la catégorie à supprimer
+		$cmfASupprimer = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
+		
+		//Vérification du propriétaire du Cmf et de l'existance d'un parent
+		if (($cmfASupprimer->getUtilisateur()->getId() != $this->getUser()->getId()) || (!$cmfASupprimer->hasParent())) 
+		{
+			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
+		}
+		else 
+		{
+			//récupération de la liste des Cmf impactés par la suppression de la catégorie (cmf, cmf enfants...)
+			$listeCmfImpacte	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+				->getFlatTreeCategoriesForCmf($cmfASupprimer);
 	
+			//récupération de tout les mf de la liste récupérés
+			foreach ($listeCmfImpacte as $cmf)
+			{
+				$listeCmfIdImpacte[]	= $cmf->getId();
+			}
+	
+			//mise à jour des mouvements financiers lié au cmf à supprimer (tout les mf prendront la cmf parente de la cmf à supprimer)
+			$em->getRepository('FGSGestionComptesBundle:MouvementFinancier')
+				->updateMouvementFiancierWithCmfFromList($cmfASupprimer->getParent(), $listeCmfIdImpacte);
+	
+			//suppression de la liste des Cmf
+			$em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+				->removeCmfFromIdList($listeCmfIdImpacte);
+
 			$session	=	new Session();
 			$session->getFlashBag()->add('success', 'La catégorie a bien été supprimé !');
 		}
-		else
-		{
-			$session	=	new Session();
-			$session->getFlashBag()->add('error', 'Erreur lors de la tentative de suppression.');
-		}
 	
 		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
-	
 	}
+	
+	
 	
 	public function monterCategorieAction($id)
 	{

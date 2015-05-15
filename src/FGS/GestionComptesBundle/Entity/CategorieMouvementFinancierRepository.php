@@ -35,14 +35,7 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 				->andWhere('cmf.id != ?3')
 				->setParameter('3', $cmf->getId());
 		}
-		/*
-		\Doctrine\Common\Util\Debug::dump($cmf);
-		echo "\n type : ".$cmf->getType();
-		echo "\n autorisation : ".$allowCmfId;
-		echo "\n id : ".$cmf->getId()."\n";
-		die($queryBuilder->getDQL());
-		*/
-		
+
 		$resultat	= $queryBuilder->getQuery()->getResult();
 
 		for ($key= count($resultat)-1; $key >=0; $key--)
@@ -101,14 +94,79 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			return $this->addParentCondition($queryBuilder, $cmf)->getQuery()->execute();
 	}
 	
+	
 	/*
 	 * Cette méthode permet de renvoyer les catégories d'un utilisateur sous la forme d'une liste (array).
 	 * Ici les catégories n'auront pas d'enfant, mais plus on "s'enfoncera dans l'arborscence, et plus le level de la catégorie sera élevé
+	 * allowCmfId permet d'éviter qu'une Cmf apparaisse dans une liste
 	 */
 	public function getFlatTreeCategories($utilisateurId, $cmf=null, $allowCmfId=false)
 	{
 		return $this->flatChildren($this->getTreeCategoriesForUtilisateur($utilisateurId, $cmf, $allowCmfId));
 	}
+	
+	
+	
+	
+
+
+	/**
+	 * Permet de récupérer la CatégorieMouvementFinancier recherchée ainsi que tout ses enfants (en récursif) dans une seule liste
+	 * L'array renvoyé permettra d'éviter de parcourir les enfants du Cmf recherché dans le controlleur en récursif
+	 */
+	public function getFlatTreeCategoriesForCmf($cmf)
+	{
+		//Récupération de la Catégorie et de tout ses enfants (en récursif)
+		$searchCmf	= $this->getCmfAndChildrensFor($this->getTreeCategoriesForUtilisateur($cmf->getUtilisateur()->getId()), $cmf);
+		
+		//rénvoie une liste contenant le Cmf recherche et tout ses enfants
+		return ($searchCmf != null) ? $this->flatChildren(array($searchCmf)) : null;
+	}
+	
+	
+	/**
+	 * Cette méthode permet de supprimer les CatégoriesMouvementFinancier à partir d'une liste d'identifiant 
+	 * de CategorieMouvementFinancier. (Méthode plus rapide que l'utilisation d'un cascade remove)
+	 * 
+	 * @param array $listeCmfIdASupprimer
+	 * @return \Doctrine\ORM\mixed
+	 */
+	public function removeCmfFromIdList(array $listeCmfIdASupprimer)
+	{
+		$qb			= $this->_em->createQueryBuilder();
+		$conditions	= $qb->expr()->in('cmf.id', $listeCmfIdASupprimer);
+		
+		$qb->update('FGSGestionComptesBundle:CategorieMouvementFinancier', 'cmf')
+			->set('cmf.parent', 'NULL')
+			->where($conditions)
+			->getQuery()
+			->getResult();
+		
+		$qb->delete('FGSGestionComptesBundle:CategorieMouvementFinancier', 'cmf')
+			->where($conditions);
+		
+		return $qb->getQuery()->getResult();
+	}
+	
+	private function getCmfAndChildrensFor($listeCmf, $searchCmf)
+	{
+		foreach($listeCmf as $cmf)
+		{
+			if ($cmf->getId() == $searchCmf->getId())
+			{
+				return $cmf;
+			}
+			
+			$searchCmfInChildren	= $this->getCmfAndChildrensFor($cmf->getChildrens(), $searchCmf);
+			
+			if ($searchCmfInChildren != null)
+			{
+				return $searchCmfInChildren;
+			}
+		}
+	}
+
+	
 	
 	/**
 	 * Permet d'ajouter en condition le parent d'une CatégorieMouvementFinancier
@@ -134,9 +192,12 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 	}
 	
 
+	
+
+	
+
 	private function getCategoriesForUtilisateur($utilisateurId)
 	{
-		
 		return $this->_em->createQueryBuilder()
 			->select('cmf')
 			->from('FGSGestionComptesBundle:CategorieMouvementFinancier', 'cmf')
@@ -145,13 +206,12 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			->addOrderBy('cmf.ordre', 'DESC')
 			->andWhere('u.id = ?1')
 			->setParameter('1', $utilisateurId);
-
 	}
 
 	private function flatChildren($treeCategorie, $level = 0)
 	{
 		$futurResultat = array();
-		
+
 		foreach ($treeCategorie as $categorie)
 		{
 			if ($categorie->hasChildren())
@@ -162,8 +222,6 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 				
 				$futurResultat = array_merge($futurResultat, array($categorie));
 				$futurResultat = array_merge($futurResultat, $this->flatChildren($categorie->getChildrens(), $level+1));
-				
-				
 				
 			}
 			else
@@ -177,8 +235,6 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 	}
 
 
-	
-	
 	private function addChildrenAndSetParent(&$resultat, &$enfant)
 	{
 		foreach ($resultat as $categorie)
@@ -191,4 +247,6 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			}
 		}
 	}
+	
+
 }
