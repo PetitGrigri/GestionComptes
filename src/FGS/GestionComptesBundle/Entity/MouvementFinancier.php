@@ -19,6 +19,7 @@ class MouvementFinancier
 	{
 		$this->oldCompte	= null;
 		$this->oldMontant	= null;
+		$this->checkBanque	= false;
 	}
     /**
      * @var integer
@@ -69,7 +70,7 @@ class MouvementFinancier
     private $compte;
     
     /**
-     * @ORM\Column(name="check_banque", type="boolean", options={"default":0})
+     * @ORM\Column(name="check_banque", type="boolean")
      * 
      */
     private $checkBanque;
