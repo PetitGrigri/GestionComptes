@@ -65,7 +65,7 @@ class MouvementFinancier
     
     /**
      * @ORM\ManyToOne(targetEntity="FGS\GestionComptesBundle\Entity\Compte", inversedBy="mouvementFinanciers" )
-     * @ORM\JoinColumn(name="compte_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="compte_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $compte;
     
