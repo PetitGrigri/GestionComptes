@@ -14,11 +14,11 @@ Gestion compte (nom non définitif) est une application de gestion de comptes ba
 * Visualiser de manière plus précise un compte :
   * Opérations réalisées ;
   * Mois en cours.
+* Indiquer qu’une opération bancaire est prise en compte par sa banque  (cela peut prendre plusieurs jours chez certaines banques) ;
+* Rendre des "opérations financières" répétitive afin d'anticiper son budget (mensualités...) ;
 
 ##Prochaines actions réalisables :
 * Indiquer une opération de type "virement" (d'un compte à l'autre) ;
-* Indiquer qu’une opération bancaire est prise en compte par sa banque  (cela peut prendre plusieurs jours chez certaines banques) ;
-* Rendre des "opérations financières" répétitive afin d'anticiper son budget (mensualités...) ;
 * Visualisation des mois précédent ;
 * Visualisation par catégorie
 
