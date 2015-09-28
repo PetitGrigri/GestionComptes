@@ -1,0 +1,159 @@
+DELIMITER |
+DROP PROCEDURE IF EXISTS procedure_insertion_mfp_mensuel|
+DROP PROCEDURE IF EXISTS procedure_update_mf_et_compte_quotidien|
+DROP PROCEDURE IF EXISTS procedure_lancement_quotidien|
+DELIMITER ;
+
+
+DELIMITER |
+CREATE PROCEDURE procedure_insertion_mfp_mensuel()
+BEGIN
+	DECLARE 	v_mfp_id 				INT;
+	DECLARE 	v_mfp_cmf_id 			INT;
+	DECLARE 	v_mfp_compte_id			INT;
+	DECLARE 	v_mfp_libelle			VARCHAR(255);
+	DECLARE 	v_mfp_montant			DECIMAL(20,2);
+	DECLARE 	v_mfp_date_initiale 	DATE;
+	DECLARE 	v_mfp_interval_type 	VARCHAR(7);
+	DECLARE 	v_mfp_interval_valeur	INT unsigned;
+	DECLARE 	v_mfp_derniere_date		DATE;
+
+	DECLARE		date_suivante 			DATE;
+	DECLARE		calcul_date_suivante	DATE;
+	
+	/*
+	 * déclaration d'un curseur qui va récupérer les mouvements financier planifiés qui doivent être insérés dans la table mouvement_financier_planife
+	 */
+	DECLARE 	curseur_mouvement_planifie CURSOR
+	FOR
+		SELECT 	id, categorie_mouvement_financier_id, compte_id, libelle, montant, date_initiale, interval_type, interval_valeur, derniere_date 
+		FROM 	mouvement_financier_planifie
+		-- WHERE 	COALESCE(derniere_date, date_initiale) < CURRENT_DATE;
+		WHERE 	COALESCE(derniere_date, date_initiale) < ADDDATE(CURRENT_DATE, INTERVAL 1 MONTH);
+		
+	DECLARE		EXIT HANDLER FOR NOT FOUND SELECT 'Plus d''enregistrement à gérer'; -- permettra d'indiquer que l'on doit quitter la boucle du curseur
+
+
+	/*
+	 * analyse de tout les mouvement planifiés aui doivent être insérés jusqu'à la fin du mois en cours
+	 */
+	OPEN curseur_mouvement_planifie;
+	
+	loop_curseur_mouvement_planifie : LOOP
+		-- initialisation des variables qui seront utilisées pour chaque boucle
+		SET calcul_date_suivante = NULL;
+		SET date_suivante = NULL;
+		
+		-- On "FETCH" le mouvement_planifie dans les variables liés à chaque colonne de la table mouvement_financier_planifie
+		FETCH 	curseur_mouvement_planifie 
+		INTO 	v_mfp_id, v_mfp_cmf_id, v_mfp_compte_id, v_mfp_libelle, v_mfp_montant, v_mfp_date_initiale, v_mfp_interval_type, v_mfp_interval_valeur, v_mfp_derniere_date;
+
+		
+		/*
+		 * Ici on va insérer au mouvement planifié l'interval qui a été configuré par l'utilisateur (MONTH, WEEK...)
+		 * On inserera ensuite ces mouvements à partir du moment qu'il se trouve entre la date comprise entre maintenant et maintenant + 1 mois
+		 * Ajout : 
+		 * 
+		 */
+		loop_insert_mf : LOOP
+			-- Ajout de l'interval décidé par l'utilisateur	à la date_initiale en bdd, ou la dernière_date en bdd ou à la date_suivante 
+			IF (v_mfp_interval_type = 'MONTH') THEN
+				SET calcul_date_suivante = ADDDATE(COALESCE(date_suivante, v_mfp_derniere_date,  ADDDATE(v_mfp_date_initiale, INTERVAL -v_mfp_interval_valeur MONTH)), INTERVAL v_mfp_interval_valeur MONTH);
+			ELSEIF (v_mfp_interval_type = 'WEEK') THEN
+				SET calcul_date_suivante = ADDDATE(COALESCE(date_suivante, v_mfp_derniere_date, ADDDATE(v_mfp_date_initiale, INTERVAL -v_mfp_interval_valeur WEEK)), INTERVAL v_mfp_interval_valeur WEEK);
+			ELSE
+				SET calcul_date_suivante = NULL;
+			END IF;
+		
+			-- Si l'interval_type n'est n'y 'MONTH', ni 'WEEK', on sort
+			IF (calcul_date_suivante = NULL) THEN LEAVE loop_insert_mf; END IF;
+			
+			
+			-- gestion des insert ou des sortie de boucle en fonction de la plage de date
+			IF (calcul_date_suivante < CURRENT_DATE) THEN
+				SET date_suivante = calcul_date_suivante;
+				ITERATE loop_insert_mf;
+			ELSEIF (calcul_date_suivante >= CURRENT_DATE) AND (calcul_date_suivante < ADDDATE(CURRENT_DATE, INTERVAL 1 MONTH)) THEN
+				SET date_suivante = calcul_date_suivante;
+				INSERT INTO mouvement_financier (categorie_mouvement_financier_id, compte_id, libelle, date, check_banque, montant, is_planified, was_planified)
+				VALUES (	v_mfp_cmf_id, v_mfp_compte_id, v_mfp_libelle, date_suivante, 0, v_mfp_montant, 1, 0);	
+				ITERATE loop_insert_mf;
+			ELSE
+				LEAVE loop_insert_mf;
+			END IF;
+
+		END LOOP;
+
+		IF (date_suivante IS NOT NULL) THEN
+			UPDATE 	`mouvement_financier_planifie` 
+			SET		 derniere_date = date_suivante
+			WHERE	 id = v_mfp_id;
+		END IF;
+	
+
+				
+	END LOOP;
+END |
+DELIMITER ;
+
+
+DELIMITER |
+CREATE PROCEDURE procedure_update_mf_et_compte_quotidien()
+BEGIN
+	DECLARE `_rollback` BOOL DEFAULT 0;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET `_rollback` = 1;
+    
+	start transaction;
+	UPDATE 	compte
+	JOIN 	(	SELECT 	SUM(montant) AS total, compte_id
+				FROM 	mouvement_financier 
+				WHERE 	is_planified = 1
+				AND 	date = CURRENT_DATE
+				GROUP BY compte_id) AS total_mouvement_financier_compte
+			ON total_mouvement_financier_compte.compte_id = compte.id
+	SET 	montant_actuel = montant_actuel + total_mouvement_financier_compte.total;
+	
+	UPDATE 	mouvement_financier 
+	SET  	is_planified 	= 0,
+			was_planified 	= 1
+	WHERE 	is_planified 	= 1
+	AND 	date = CURRENT_DATE; 
+
+	IF `_rollback` THEN
+        ROLLBACK;
+    ELSE
+        COMMIT;
+    END IF;
+    
+END |
+DELIMITER ;
+
+
+DELIMITER |
+CREATE PROCEDURE procedure_lancement_quotidien()
+BEGIN
+	INSERT into log_execution_procedure  (`id`, `date`, `action`) VALUES (NULL, NOW(), 'Lancement de la procédure : procedure_insert_mfp_mensuel.');
+    CALL procedure_insertion_mfp_mensuel();
+    	
+    INSERT into log_execution_procedure  (`id`, `date`, `action`) VALUES (NULL, NOW(), 'Lancement de la procédure : procedure_update_mf_et_compte_quotidien.');
+    CALL procedure_update_mf_et_compte_quotidien();
+    	
+    INSERT into log_execution_procedure  (`id`, `date`, `action`) VALUES (NULL, NOW(), 'Fin des exécutions.');
+
+END |
+DELIMITER ;
+
+
+
+
+DROP EVENT IF EXISTS lancement_hebdomadaire;
+CREATE EVENT lancement_hebdomadaire
+    ON SCHEDULE EVERY 1 DAY
+    STARTS CURRENT_DATE + INTERVAL 1 DAY + INTERVAL 1 SECOND
+    DO CALL procedure_lancement_quotidien();
+
+
+
+
+CALL procedure_lancement_quotidien();
+

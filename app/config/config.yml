@@ -6,7 +6,7 @@ imports:
     - { resource: "@FGSUserBundle/Resources/config/services.yml" }
 framework:
     #esi:             ~
-    translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%" } #fr
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -67,7 +67,7 @@ doctrine:
         hydrators:
             array_key_value_hydrator: "FGS\\GestionComptesBundle\\Hydrator\\ArrayKeyValueHydrator"
             
-        #permet d'éviter d'avoir les anontations de fosUserBundle dans le FGSGestionComptesBundle
+        #permet d'éviter d'avoir les anotations de fosUserBundle dans le FGSGestionComptesBundle
         resolve_target_entities:
             FGS\GestionComptesBundle\Model\UtilisateurInterface: FGS\UserBundle\Entity\User
 

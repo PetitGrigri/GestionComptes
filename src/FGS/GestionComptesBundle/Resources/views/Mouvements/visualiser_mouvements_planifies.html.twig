@@ -1,0 +1,63 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+{% block title %}Visualisations des planifications{% endblock %}
+
+{% block contenu %}
+	<h1 class="page-header">{% block titre_contenu %}Visualisations des planifications{% endblock %}</h1>
+
+	{% if liste_mouvements_financiers_planifies is not empty %}
+	
+		<table class="table table-striped ">
+			<thead>
+				<tr>
+					<th>
+						Nom du Compte
+					</th>
+					<th>
+						Libelle
+					</th>
+					<th>
+						Montant
+					</th>
+					<th>
+						Date Initiale
+					</th>
+					<th>
+						Récurence
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for mouvementFinancierPlanifie in liste_mouvements_financiers_planifies %}
+				<tr>
+					<td style='line-height: 24px; vertical-align:middle;'>
+						<img src="{{ asset('bundles/fgsgestioncomptes/'~mouvementFinancierPlanifie.compte.banque.urlImage) }}" style="height: 20px;" /> 
+						{{ mouvementFinancierPlanifie.compte.nom }}
+					</td>
+					<td>{{ mouvementFinancierPlanifie.libelle }}</td>
+					<td>{{ mouvementFinancierPlanifie.montant }}</td>
+					<td>{{ mouvementFinancierPlanifie.dateInitiale|date("d/m/Y") }}</td>
+					<td>
+						{{ 'recurence.valeur'|transchoice(mouvementFinancierPlanifie.intervalValeur) }}
+						{{ mouvementFinancierPlanifie.intervalType|transchoice(mouvementFinancierPlanifie.intervalValeur) }}
+					</td>
+					<td>
+						<a href='{{ path('fgs_gestion_comptes_modifier_mouvements_planifies', {'id':mouvementFinancierPlanifie.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
+						<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier_planifie', {'id':mouvementFinancierPlanifie.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}	
+{% endblock %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "FGSGestionComptesBundle:Mouvements:ajouter_depense_planifiee.html.twig" %}
+
+{% if type == constant('FGS\\GestionComptesBundle\\Entity\\CategorieMouvementFinancier::TYPE_DEPENSE') %}
+	{% set titre_page = "Modification d'une dépense planifiée" %}
+{% else %}
+	{% set titre_page = "Modification d'une revenu planifié" %}
+{% endif %}
+
+{% block title %}{{ titre_page }}{% endblock %}
+
+{% block titre_contenu %}{{ titre_page }}{% endblock %}

@@ -56,13 +56,20 @@
 								<li {% if page_courante == 'fgs_gestion_comptes_gerer_categories' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_gerer_categories') }}">Gerer mes categories</a></li>
 							</ul>
 						</li>
-						<li>
+						<li {% if page_courante == 'fgs_gestion_comptes_ajouter_depense'%}class='active'{% endif %}>
 							<a href="{{ path('fgs_gestion_comptes_ajouter_depense') }}">Dépense</a>
 						</li>
-						<li>
-							<a href="{{ path('fgs_gestion_comptes_ajouter_revenu') }}">Revenu</a>
+						<li {% if page_courante == 'fgs_gestion_comptes_ajouter_revenu'%}class='active'{% endif %}>
+							<a href="{{ path('fgs_gestion_comptes_ajouter_revenu') }}" >Revenu</a>
 						</li>
-
+						<li {% if page_courante == 'fgs_gestion_comptes_ajouter_depense_planifiee' or page_courante == 'fgs_gestion_comptes_ajouter_revenu_planifie'  or page_courante == 'fgs_gestion_comptes_voir_mouvements_planifies' %}class='active'{% endif %}>
+							<a href="#" data-toggle="dropdown">Planifier</a>
+							<ul class="dropdown-menu">
+								<li {% if page_courante == 'fgs_gestion_comptes_ajouter_depense_planifiee' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_ajouter_depense_planifiee') }}">Ajouter une dépense planifiée</a></li>
+								<li {% if page_courante == 'fgs_gestion_comptes_ajouter_revenu_planifie' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_ajouter_revenu_planifie') }}">Ajouter un revenu planifié</a></li>
+								<li {% if page_courante == 'fgs_gestion_comptes_voir_mouvements_planifies' %}class='active'{% endif %}><a href="{{ path('fgs_gestion_comptes_voir_mouvements_planifies') }}">Visualiser mes planifications</a></li>
+							</ul>
+						</li>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">

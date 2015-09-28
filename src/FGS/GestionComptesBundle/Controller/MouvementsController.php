@@ -19,6 +19,8 @@ use FGS\GestionComptesBundle\Exceptions\GestionComptesException;
 use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Form\MouvementFinancierType;
+use FGS\GestionComptesBundle\Entity\MouvementFinancierPlanifie;
+use FGS\GestionComptesBundle\Form\MouvementFinancierPlanifieType;
 
 
 class MouvementsController extends Controller
@@ -28,11 +30,11 @@ class MouvementsController extends Controller
 		$mf				= new MouvementFinancier();
 		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
-		
-		
+
 		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
 			'type'		=>	CategorieMouvementFinancier::TYPE_DEPENSE,
-			'parent'	=>	null
+			'parent'	=>	null,
+			'utilisateur'	=>	$utilisateur
 		));
 		
 		$cmf->setType(CategorieMouvementFinancier::TYPE_DEPENSE);
@@ -46,17 +48,15 @@ class MouvementsController extends Controller
 		
 		if ($form->isValid())
 		{
-			$em	=	$this->getDoctrine()->getManager();
+			$em			=	$this->getDoctrine()->getManager();
+			$session	=	new Session();
 			
-			//il s'agit d'une dépense donc focément négative
-			$mf->setMontant(-abs($mf->getMontant()));
-			
+			$this->checkCoherenceMouvementFinancier($mf);
+			$session->getFlashBag()->add('success', ($mf->isPlanified())? 'La dépense est prise en compte. Elle sera effective le : '.$mf->getDate()->format('d/m/Y').' !':'La dépense est prise en compte!');
+
 			$em->persist($mf);
 			$em->flush();
-			
-			$session	=	new Session();
-			$session->getFlashBag()->add('success', 'La dépense a été prise en compte!');
-			
+
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
 		}
     	return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_depense.html.twig', array(
@@ -70,11 +70,11 @@ class MouvementsController extends Controller
 		$mf				= new MouvementFinancier();
 		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
-	
-	
+
 		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
-				'type'		=>	CategorieMouvementFinancier::TYPE_REVENU,
-				'parent'	=>	null
+				'type'			=>	CategorieMouvementFinancier::TYPE_REVENU,
+				'parent'		=>	null,
+				'utilisateur'	=>	$utilisateur
 		));
 	
 		$cmf->setType(CategorieMouvementFinancier::TYPE_REVENU);
@@ -86,19 +86,18 @@ class MouvementsController extends Controller
 	
 		$form->handleRequest($request);
 	
+		
 		if ($form->isValid())
 		{
-			$em	=	$this->getDoctrine()->getManager();
-				
-			//il s'agit d'une dépense donc focément négative
-			$mf->setMontant(abs($mf->getMontant()));
-				
+			$em			=	$this->getDoctrine()->getManager();
+			$session	=	new Session();
+			
+			$this->checkCoherenceMouvementFinancier($mf);
+			$session->getFlashBag()->add('success', ($mf->isPlanified())? 'Le revenu est pris en compte. Il sera effectif le : '.$mf->getDate()->format('d/m/Y').' !':'Le revenu est pris en compte!');
+
 			$em->persist($mf);
 			$em->flush();
-				
-			$session	=	new Session();
-			$session->getFlashBag()->add('success', 'Le revenu a été prise en compte!');
-				
+
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
 		}
 		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_revenu.html.twig', array(
@@ -109,8 +108,7 @@ class MouvementsController extends Controller
 	
 	public function supprimerMouvementFinancierAction($id)
 	{
-	
-		$em					= $this->getDoctrine()->getManager();
+		$em		= $this->getDoctrine()->getManager();
 	
 		$mf = $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 		
@@ -128,21 +126,19 @@ class MouvementsController extends Controller
 			$session	=	new Session();
 			$session->getFlashBag()->add('error', 'TODO.');
 		}
-		return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+		return $this->redirect($this->getRequest()->headers->get('referer'));
 	}
 	
 	public function modifierMouvementFinancierAction($id,Request $request)
 	{
-		$em					= $this->getDoctrine()->getManager();
+
+		$em			= $this->getDoctrine()->getManager();
+		$session	= new Session();
 		
 		//récupération du mouvement financier que l'on veut modifier, et sa catégorie
 		$mf 	= $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 		$cmf	= $mf->getCategorieMouvementFinancier();
 		$user	= $this->getUser();
-		
-		//\Doctrine\Common\Util\Debug::dump($user);
-
-		//mémorisation des informations avant l'update
 		
 		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $user->getId()), $mf);
 	
@@ -150,23 +146,12 @@ class MouvementsController extends Controller
 	
 		if ($form->isValid())
 		{
-			$em	=	$this->getDoctrine()->getManager();
-			
-			if ($cmf->getType()== CategorieMouvementFinancier::TYPE_DEPENSE ) {
-				$mf->setMontant(- abs($mf->getMontant()));
-			}
-			else {
-				$mf->setMontant(abs($mf->getMontant()));
-			}	
-			
-			$em->persist($mf);
+			$this->checkCoherenceMouvementFinancier($mf);
 			$em->flush();
-
-			$session	=	new Session();
+			//\Doctrine\Common\Util\Debug::dump($mf);
 			$session->getFlashBag()->add('success', 'La modification de votre '.$cmf->getType().' a été modifié !');
 				
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
-			
 		}
 		
 		return $this->render('FGSGestionComptesBundle:Mouvements:modifier_mouvement_financier.html.twig', array(
@@ -198,25 +183,24 @@ class MouvementsController extends Controller
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
 		
-		$compte		= $repository->getCompteMouvementAndCategorieMois($id, $anneeMois);
-		
-
+		$compte			= $repository->getCompteMouvementAndCategorieMois($id, $anneeMois);
 		//\Doctrine\Common\Util\Debug::dump($compte);
 		
 		$montantCategorie	= $repository->getMontantForEachCategorie($id, $anneeMois);
 		
-		$totalDepenseAndRevenu	= $repository->getDepenseAndRevenu($id, $anneeMois);
-		
-		
-		//;
+		$totalDepenseAndRevenuNotPlanified		= $repository->getDepenseAndRevenuNotPlanified($id, $anneeMois);
+		$totalDepenseAndRevenuPlanified			= $repository->getDepenseAndRevenuPlanified($id, $anneeMois);
 		
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_mois.html.twig', array(
-				'compte'				=> $compte[0],
-				'id'					=> $id,
-				'date'					=> $date,
-				'totauxParCategorie'	=> $montantCategorie,
-				'totalDepense'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
-				'totalRevenu'			=> isset($totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenu[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+				'compte'					=> $compte[0],
+				'id'						=> $id,
+				'date'						=> $date,
+				'totauxParCategorie'		=> $montantCategorie,
+				'totalDepensePlanified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
+				'totalRevenuPlanified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+				'totalDepenseNotPlanified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
+				'totalRevenuNotPlanified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+				
 		));
 	}
 	
@@ -236,11 +220,242 @@ class MouvementsController extends Controller
 		else
 		{
 			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
-	
-			$em->persist($mf);
 			$em->flush();
 		}
 
 		return $this->redirect($this->getRequest()->headers->get('referer'));
+	}
+	
+	public function addDepensePLanifieeAction(Request $request)
+	{
+		$mfp			= new MouvementFinancierPlanifie();
+		$cmf			= new CategorieMouvementFinancier();
+		$utilisateur	= $this->getUser();
+		$today			= new \DateTime('today');
+		
+		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+				'type'			=>	CategorieMouvementFinancier::TYPE_DEPENSE,
+				'parent'		=>	null,
+				'utilisateur'	=>	$utilisateur
+		));
+		
+		$cmf->setType(CategorieMouvementFinancier::TYPE_DEPENSE);
+		$cmf->setParent($cmf_parent);
+		
+		$mfp->setCategorieMouvementFinancier($cmf);
+		
+		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		
+		$form->handleRequest($request);
+		
+		if ($form->isValid())
+		{
+			$em	=	$this->getDoctrine()->getManager();
+			
+			$this->checkCoherenceMouvementFinancierPlanifie($mfp);
+
+			//dans le cas ou le mouvement financier planifié commence le jour même on crée aussi le mouvement financier
+			if ($mfp->getDateInitiale() == $today)
+			{
+				$mf	= $this->createMouvementFinancierFromMouvementFinanciePlanifie($mfp);
+				$em->persist($mf);
+			}
+			
+			$em->persist($mfp);
+			$em->flush();
+
+			$session	=	new Session();
+			$session->getFlashBag()->add('success', 'La dépense planifié a été prise en compte!');
+		
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+		}
+		
+		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_depense_planifiee.html.twig', array(
+				'form'	=>	$form->createView(),
+		));
+		
+		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_depense_planifiee.html.twig');
+	}
+	
+	public function addRevenuPLanifieAction(Request $request)
+	{
+		$mfp			= new MouvementFinancierPlanifie();
+		$cmf			= new CategorieMouvementFinancier();
+		$utilisateur	= $this->getUser();
+		$today			= new \DateTime('today');
+		
+		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+				'type'			=>	CategorieMouvementFinancier::TYPE_REVENU,
+				'parent'		=>	null,
+				'utilisateur'	=>	$utilisateur
+		));
+		
+		$cmf->setType(CategorieMouvementFinancier::TYPE_REVENU);
+		$cmf->setParent($cmf_parent);
+		
+		$mfp->setCategorieMouvementFinancier($cmf);
+		
+		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		
+		$form->handleRequest($request);
+		
+		if ($form->isValid())
+		{
+			$em	=	$this->getDoctrine()->getManager();
+			
+			$this->checkCoherenceMouvementFinancierPlanifie($mfp);
+
+			//dans le cas ou le mouvement financier planifié commence le jour même on crée aussi le mouvement financier
+			if ($mfp->getDateInitiale() == $today)
+			{
+				$mf	= $this->createMouvementFinancierFromMouvementFinanciePlanifie($mfp);
+				$em->persist($mf);
+			}
+			
+			$em->persist($mfp);
+			$em->flush();
+
+			$session	=	new Session();
+			$session->getFlashBag()->add('success', 'Le revenu planifié a été prise en compte!');
+		
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+		}
+		
+		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_revenu_planifie.html.twig', array(
+				'form'	=>	$form->createView(),
+		));
+		
+		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_revenu_planifie.html.twig');
+	}
+	
+	public function voirMouvementFinancierPlanifieAction()
+	{
+		$utilisateur	= $this->getUser();
+
+		$liste_mouvements_planifies	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancierPlanifie')
+			->getMouvementsFinanciersPlanifiesForUtilisateur($utilisateur->getId());
+			
+			
+			
+		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_planifies.html.twig', array(
+				'liste_mouvements_financiers_planifies'	=>	$liste_mouvements_planifies,
+		));
+	}
+	
+	public function modifierMouvementFinancierPlanifieAction($id,Request $request)
+	{
+
+		$utilisateur	= $this->getUser();
+		$today			= new \DateTime('today');
+		
+		$mfp	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancierPlanifie')->find($id);
+		
+		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		
+		$form->handleRequest($request);
+		
+		if ($form->isValid())
+		{
+			$em	=	$this->getDoctrine()->getManager();
+				
+			$this->checkCoherenceMouvementFinancierPlanifie($mfp);
+		
+			//dans le cas ou le mouvement financier planifié commence le jour même on crée aussi le mouvement financier
+			if ($mfp->getDateInitiale() == $today)
+			{
+				$mf	= $this->createMouvementFinancierFromMouvementFinanciePlanifie($mfp);
+				$em->persist($mf);
+			}
+				
+			$em->persist($mfp);
+			$em->flush();
+		
+			$session	=	new Session();
+			$session->getFlashBag()->add('success', 'La dépense planifié a été modifiée !');
+		
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_voir_mouvements_planifies"));
+		}
+
+		return $this->render('FGSGestionComptesBundle:Mouvements:modifier_mouvement_financier_planifie.html.twig', array(
+				'form'	=> $form->createView(),
+				'type' 	=> $mfp->getCategorieMouvementFinancier()->getType(),
+		));
+	}
+	
+	
+	public function supprimerMouvementFinancierPlanifieAction($id)
+	{
+		$em		= $this->getDoctrine()->getManager();
+	
+		$mfp = $em->find('FGSGestionComptesBundle:MouvementFinancierPlanifie', $id);
+	
+		if ($mfp != null)
+		{
+			$em->remove($mfp);
+	
+			$em->flush();
+	
+			$session	=	new Session();
+			$session->getFlashBag()->add('success', 'Votre '.$mfp->getCategorieMouvementFinancier()->getType().' a été supprimé !');
+		}
+		else
+		{
+			$session	=	new Session();
+			$session->getFlashBag()->add('error', 'TODO.');
+		}
+		return $this->redirect($this->getRequest()->headers->get('referer'));
+	}
+	
+	
+	private function checkCoherenceMouvementFinancier(MouvementFinancier $mf)
+	{
+		$today		= new \DateTime('today');
+		
+		//vérification de la date pour savoir si le mouvement financier sera planifié ou pas
+		if ($mf->getDate() > $today)
+		{
+			$mf->setIsPlanified(true);
+		}
+		else
+		{
+			$mf->setIsPlanified(false);
+		}
+		
+		//vérification du type de la categorie du mouvement financier pour avoir un montant cohérent
+		if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
+		{
+			$mf->setMontant(-abs($mf->getMontant()));
+		}
+		if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_REVENU)
+		{
+			$mf->setMontant(abs($mf->getMontant()));
+		}
+	}
+	
+	private function checkCoherenceMouvementFinancierPlanifie(MouvementFinancierPlanifie $mfp)
+	{
+		//vérification du type de la categorie du mouvement financier pour avoir un montant cohérent
+		if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
+		{
+			$mfp->setMontant(-abs($mfp->getMontant()));
+		}
+		if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_REVENU)
+		{
+			$mfp->setMontant(abs($mfp->getMontant()));
+		}
+	}
+	
+	private function createMouvementFinancierFromMouvementFinanciePlanifie(MouvementFinancierPlanifie $mfp)
+	{
+		$mf	= new MouvementFinancier();
+		$mf->setCategorieMouvementFinancier($mfp->getCategorieMouvementFinancier());
+		$mf->setCompte($mfp->getCompte());
+		$mf->setDate($mfp->getDateInitiale());
+		$mf->setLibelle($mfp->getLibelle());
+		$mf->setMontant($mfp->getMontant());
+		$mf->setWasPlanified(true);
+		$mf->setIsPlanified(false);
+		
+		return $mf;
 	}
 }

@@ -17,10 +17,17 @@ class MouvementFinancier
 {
 	public function __construct()
 	{
-		$this->oldCompte	= null;
-		$this->oldMontant	= null;
+		//initialisation dans le constructeur de certaines valeurs par défaut
 		$this->checkBanque	= false;
+		$this->isPlanified 	= false;
+		$this->wasPlanified = false;
+		
+		//paramètres à mémoriser dans le cas d'un update ou d'un delete
+		$this->oldCompte		= null;
+		$this->oldMontant		= null;
+		$this->oldIsPlanified	= null;
 	}
+	
     /**
      * @var integer
      *
@@ -75,10 +82,22 @@ class MouvementFinancier
      */
     private $checkBanque;
     
+    /**
+     * @ORM\Column(name="is_planified", type="boolean", nullable=false)
+     * @var boolean
+     */
+    private $isPlanified;
+    
+    /**
+     * @ORM\Column(name="was_planified", type="boolean", nullable=false)
+     * @var boolean
+     */
+    private $wasPlanified;
     
     
     private $oldMontant;
     private $oldCompte;
+    private $oldIsPlanified;
     
     /**
      * Get id
@@ -156,6 +175,9 @@ class MouvementFinancier
 		$this->categorieMouvementFinancier = $categorieMouvementFinancier;
 		return $this;
 	}
+	/**
+	 * @return Compte
+	 */
 	public function getCompte() {
 		return $this->compte;
 	}
@@ -170,18 +192,38 @@ class MouvementFinancier
 		$this->checkBanque = $checkBanque;
 		return $this;
 	}
+
+	public function isPlanified() {
+		return $this->isPlanified;
+	}
+	
+	public function wasPlanified() {
+		return $this->wasPlanified;
+	}
+	public function setIsPlanified($isPlanified) {
+		$this->isPlanified = $isPlanified;
+		return $this;
+	}
+	public function setWasPlanified($wasPlanified) {
+		$this->wasPlanified = $wasPlanified;
+		return $this;
+	}
+	
 	
 	/**
 	 * @ORM\PostPersist
 	 */
 	public function changeMontantActuelCompteInsert(LifecycleEventArgs $args)
 	{
-		$em	=	$args->getEntityManager();
-		$compte = $this->getCompte();
-		
-		$compte->setMontantActuel($this->getCompte()->getMontantActuel() + $this->getMontant());
-		
-		$em->flush();
+		if (!$this->isPlanified)
+		{
+			$em	=	$args->getEntityManager();
+			$compte = $this->getCompte();
+			
+			$compte->setMontantActuel($this->getCompte()->getMontantActuel() + $this->getMontant());
+			
+			$em->flush();
+		}
 	}
 
 
@@ -190,12 +232,15 @@ class MouvementFinancier
 	 */
 	public function changeMontantActuelCompteDelete(LifecycleEventArgs $args)
 	{
-		$em	=	$args->getEntityManager();
-		$compte = $this->getCompte();
-		
-		$compte->setMontantActuel($compte->getMontantActuel() - $this->montant);
-		
-		$em->flush();
+		if (!$this->isPlanified)
+		{
+			$em	=	$args->getEntityManager();
+			$compte = $this->getCompte();
+			
+			$compte->setMontantActuel($compte->getMontantActuel() - $this->montant);
+			
+			$em->flush();
+		}
 	}
 	
 	/**
@@ -203,16 +248,20 @@ class MouvementFinancier
 	 */
 	public function memorizeOldState (PreUpdateEventArgs $args)
 	{
-
 		if ($args->hasChangedField('compte'))
 		{	
-			$this->oldCompte	= $args->getOldValue('compte');
+			$this->oldCompte		= $args->getOldValue('compte');
 
 		}
 		if ($args->hasChangedField('montant'))
 		{
-			$this->oldMontant	= $args->getOldValue('montant');
+			$this->oldMontant		= $args->getOldValue('montant');
 		}
+		if ($args->hasChangedField('isPlanified'))
+		{
+			$this->oldIsPlanified	= $args->getOldValue('isPlanified');
+		}
+		
 	}
 	
 	/**
@@ -220,31 +269,40 @@ class MouvementFinancier
 	 * @ORM\PostUpdate
 	 */
 	public function changeMontantActuelCompteUpdate (LifecycleEventArgs $args)
-	{
-		$em	=	$args->getEntityManager();
-		
-		//changement du montant uniquement
-		if (($this->oldCompte == null) && ($this->oldMontant != null))
-		{
-			$compte	= $this->getCompte();
-			$compte->setMontantActuel($compte->getMontantActuel() + ($this->montant - $this->oldMontant));
-			$em->flush();
-		}
-		
-		//changement du compte
-		if ($this->oldCompte != null)
-		{
+	{	
 
-			$this->oldCompte
-				->setMontantActuel($this->oldCompte->getMontantActuel() - (($this->oldMontant == null) ? $this->montant : $this->oldMontant ) );
+		$em		= $args->getEntityManager();
+		$compte	= $this->getCompte();
+		
+		//pas de changement de compte
+		if ($this->oldCompte == null)
+		{
+			//suppression de l'impact du mouvement financier (s'il y a) sur le compte lorsque ce dernier avait impacté le compte 
+			if (($this->oldIsPlanified===false)||	(($this->oldIsPlanified===null)&&($this->isPlanified===false)))
+			{
+				$compte->setMontantActuel($compte->getMontantActuel() - (($this->oldMontant == null) ? $this->montant : $this->oldMontant ));
+			}
+			//ajout de l'impact du mouvement financier sur le compte (s'il y a)
+			if ($this->isPlanified===false)
+			{
+				$compte->setMontantActuel($compte->getMontantActuel() + $this->montant);
+			}
+		}
+		//changement de compte
+		else
+		{
+			//suppression de l'impact du mouvement financier (s'il y a) sur l'ancien compte lorsque ce dernier avait impacté le compte
+			if (($this->oldIsPlanified===false)||	(($this->oldIsPlanified===null)&&($this->isPlanified===false)))
+			{
+				$this->oldCompte->setMontantActuel($this->oldCompte->getMontantActuel() - (($this->oldMontant == null) ? $this->montant : $this->oldMontant ));
+			}
+			//ajout de l'impact du mouvement financier sur le compte (s'il y a)
+			if ($this->isPlanified===false)
+			{
+				$compte->setMontantActuel($compte->getMontantActuel() + $this->montant);
+			}
 			
-			$this->compte
-				->setMontantActuel($this->compte->getMontantActuel() + $this->montant );
-
-			$em->flush();
 		}
+		$em->flush();
 	}
-
-	
-
 }

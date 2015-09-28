@@ -56,8 +56,10 @@ class CompteRepository extends EntityRepository
 			->leftJoin('c.banque', 'b')
 			->leftJoin('mf.categorieMouvementFinancier', 'cmf')
 			->andWhere('c.id = ?1')
+			->andWhere('mf.isPlanified = ?2')
 			->orderBy('mf.date', 'DESC')
 			->setParameter('1', $id)
+			->setParameter('2', 0)
 			->setFirstResult($ligneDepart)
 			->setMaxResults($ligneFin)
 			->getQuery()->getResult()
@@ -101,7 +103,7 @@ class CompteRepository extends EntityRepository
 		;
 	}
 	
-	public function getDepenseAndRevenu($id, $date)
+	private function getDepenseAndRevenu($id, $date)
 	{
 		return $this->_em->createQueryBuilder()
 			->select('cmf.type as type')
@@ -114,10 +116,29 @@ class CompteRepository extends EntityRepository
 			->andWhere('SUBSTRING(mf.date, 1, 7) = ?2')
 			->orderBy('mf.date', 'DESC')
 			->setParameter('1', $id)
-			->setParameter('2', $date)
-			->getQuery()->getResult('array_key_value_hydrator');
+			->setParameter('2', $date);
 	}
 	
+	public function getDepenseAndRevenuTotal($id, $date)
+	{
+		return $this->getDepenseAndRevenu($id, $date)
+			->getQuery()->getResult('array_key_value_hydrator');
+	}
+	public function getDepenseAndRevenuPlanified($id, $date)
+	{
+		return $this->getDepenseAndRevenu($id, $date)
+			->andWhere('mf.isPlanified = ?3')
+			->setParameter('3', 1)
+			->getQuery()->getResult('array_key_value_hydrator');
+	}
+	public function getDepenseAndRevenuNotPlanified($id, $date)
+	{
+		return $this->getDepenseAndRevenu($id, $date)
+		->andWhere('mf.isPlanified = ?3')
+		->setParameter('3', 0)
+		->getQuery()->getResult('array_key_value_hydrator');
+	}
+
 	
 	public function getCompteAndBanqueForUtilisateur($utilisateurId)
 	{
@@ -144,7 +165,9 @@ class CompteRepository extends EntityRepository
 		$rsm->addFieldResult('mf', 'mf_commentaire', 'commentaire');
 		$rsm->addFieldResult('mf', 'mf_date', 'date');
 		$rsm->addFieldResult('mf', 'mf_check_banque', 'checkBanque');
-	
+		$rsm->addFieldResult('mf', 'mf_is_planified', 'isPlanified');
+		$rsm->addFieldResult('mf', 'mf_was_planified', 'wasPlanified');
+		
 		$rsm->addJoinedEntityResult('FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier', 'cmf', 'mf', 'categorieMouvementFinancier' );
 		$rsm->addFieldResult('cmf', 'cmf_id', 'id');
 		$rsm->addFieldResult('cmf', 'cmf_libelle', 'libelle');
@@ -163,6 +186,8 @@ class CompteRepository extends EntityRepository
 											tempo_mf.date			as mf_date,
 											tempo_mf.commentaire	as mf_commentaire,
 											tempo_mf.check_banque	as mf_check_banque,
+											tempo_mf.is_planified	as mf_is_planified,
+											tempo_mf.was_planified	as mf_was_planified,
 									        cmf.id					as cmf_id,
 									        cmf.libelle				as cmf_libelle,
 									        cmf.icone				as cmf_icone
@@ -175,10 +200,13 @@ class CompteRepository extends EntityRepository
 												date,
 												commentaire,
 												check_banque,
+												is_planified,
+												was_planified,
 									    		categorie_mouvement_financier_id,
 									            @num := if(`compte_id`=@compte, @num+1, 1) as row_number,
 									            @compte := `compte_id` as var_compte
 									    FROM 	mouvement_financier
+										WHERE	is_planified = 0
 										ORDER BY compte_id, date DESC, id DESC
 									) AS tempo_mf
 									ON compte.id	=	tempo_mf.compte_id

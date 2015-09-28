@@ -92,3 +92,29 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompteMois }    
     requirements:
         id:       \d+
+        
+fgs_gestion_comptes_ajouter_depense_planifiee:
+    path:     /planifier-depense
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:addDepensePLanifiee }
+    
+        
+fgs_gestion_comptes_ajouter_revenu_planifie:
+    path:     /planifier-revenu
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:addRevenuPLanifie }
+    
+    
+fgs_gestion_comptes_voir_mouvements_planifies:
+    path:     /visualiser-mouvements-planifies
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierPlanifie }
+    
+fgs_gestion_comptes_modifier_mouvements_planifies:
+    path:     /modifier-mouvement-financier-planifie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:modifierMouvementFinancierPlanifie }
+    requirements:
+        id:    \d+  
+        
+fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
+    path:     /supprimer-mouvement-financier-planifie/{id}
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancierPlanifie }
+    requirements:
+        id:    \d+

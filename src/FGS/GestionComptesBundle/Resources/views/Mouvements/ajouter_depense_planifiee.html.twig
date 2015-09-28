@@ -1,0 +1,79 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+{% block title %}Ajout d'une dépense Planifiée{% endblock %}
+
+{% block contenu %}
+<section class='container-fluid'>
+	<h1 class="page-header">{% block titre_contenu %}Ajout d'un dépense Planifié{% endblock %}</h1>
+	
+	<div class='col-sm-9'>
+		{{ set_bootstrap_form_presentation("horizontal") }}
+		
+		{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }}
+		{{ set_bootstrap_widget_grid({"sm":9,"md":9}) }}
+		{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}
+		{{ set_bootstrap_reset_grid({"sm":4, "md":4,"xs":6}) }}
+		{{ set_bootstrap_submit_grid({"sm":5, "sm-offset": 3, "md":5,"xs":6}) }}
+		
+		{{ form(form) }}
+	</div>
+	<div class='col-sm-2 text-justify' style='font-size: 12px; font-weight: normal;'>
+		Un revenu planifié est un mouvement financier récurent. <br /> //TODO Finir blabla
+	</div>
+</section>
+{% endblock %}
+
+
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
+<style>
+.datepicker.dropdown-menu th,
+.datepicker.datepicker-inline th,
+.datepicker.dropdown-menu td,
+.datepicker.datepicker-inline td {
+  padding: 4px 15px;
+}
+.modal-content
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 342px;
+}
+</style>
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<script>
+$('#fgs_gestioncomptesbundle_mouvementfinancierplanifie_dateInitiale').datepicker({
+		orientation: "auto right",
+	    autoclose: true,
+	    todayHighlight: true,
+	    language: "fr",
+}).on('show',function(e){
+
+	if ($(document).width() < 480)
+	{	
+		$(this).datepicker('hide');
+		$('#date .modal-content').datepicker({
+			orientation: "auto right",
+		    autoclose: true,
+		    todayHighlight: true,
+		    language: "fr",
+		}).on('changeDate',function(e){
+			$('#fgs_gestioncomptesbundle_mouvementfinancierplanifie_dateInitiale').datepicker('setDate', $(this).datepicker('getDate'));
+			$('#date').modal('hide');
+		});
+		$('#date').modal('show');
+	}
+});
+
+</script>
+{% endblock %}

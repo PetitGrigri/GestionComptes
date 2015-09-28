@@ -59,6 +59,8 @@
 					<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
 					<td class="text-right">{{ mouvementFinancier.montant }} €</td>
 					<td class='text-right'>
+						{% if mouvementFinancier.isPlanified %}<a href='#', {'id':mouvementFinancier.id}) }}' class='btn btn-default btn-xs'><span class='glyphicon glyphicon-time'></span></a>{% endif %}
+						{% if mouvementFinancier.wasPlanified %}<a href='#', {'id':mouvementFinancier.id}) }}' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-time'></span></a>{% endif %}
 						<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
 						<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
 					</td>
@@ -96,4 +98,13 @@
 		font-size:90%; font-weight: normal;
 	}
 	</style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+</script>
 {% endblock %}
