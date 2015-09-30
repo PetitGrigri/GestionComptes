@@ -25,7 +25,11 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
-
+    
+rules:
+  symfony.application_not_bootable:
+    enabled: false
+    
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
