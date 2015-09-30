@@ -28,18 +28,14 @@ class MouvementsController extends Controller
 	public function ajouterDepenseAction(Request $request)
 	{
 		$mf				= new MouvementFinancier();
-		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
 
-		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
 			'type'		=>	CategorieMouvementFinancier::TYPE_DEPENSE,
 			'parent'	=>	null,
 			'utilisateur'	=>	$utilisateur
 		));
-		
-		$cmf->setType(CategorieMouvementFinancier::TYPE_DEPENSE);
-		$cmf->setParent($cmf_parent);
-		
+
 		$mf->setCategorieMouvementFinancier($cmf);
 
 		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
@@ -68,17 +64,13 @@ class MouvementsController extends Controller
 	public function ajouterRevenuAction(Request $request)
 	{
 		$mf				= new MouvementFinancier();
-		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
 
-		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
 				'type'			=>	CategorieMouvementFinancier::TYPE_REVENU,
 				'parent'		=>	null,
 				'utilisateur'	=>	$utilisateur
 		));
-	
-		$cmf->setType(CategorieMouvementFinancier::TYPE_REVENU);
-		$cmf->setParent($cmf_parent);
 	
 		$mf->setCategorieMouvementFinancier($cmf);
 	
@@ -178,6 +170,8 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id)
 	{
+
+		
 		$date 		= new \DateTime("now");
 		$anneeMois	= $date->format('Y-m');
 
@@ -226,21 +220,17 @@ class MouvementsController extends Controller
 		return $this->redirect($this->getRequest()->headers->get('referer'));
 	}
 	
-	public function addDepensePLanifieeAction(Request $request)
+	public function ajouterDepensePLanifieeAction(Request $request)
 	{
 		$mfp			= new MouvementFinancierPlanifie();
-		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
 				'type'			=>	CategorieMouvementFinancier::TYPE_DEPENSE,
 				'parent'		=>	null,
 				'utilisateur'	=>	$utilisateur
 		));
-		
-		$cmf->setType(CategorieMouvementFinancier::TYPE_DEPENSE);
-		$cmf->setParent($cmf_parent);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
@@ -277,22 +267,18 @@ class MouvementsController extends Controller
 		return $this->render('FGSGestionComptesBundle:Mouvements:ajouter_depense_planifiee.html.twig');
 	}
 	
-	public function addRevenuPLanifieAction(Request $request)
+	public function ajouterRevenuPLanifieAction(Request $request)
 	{
 		$mfp			= new MouvementFinancierPlanifie();
-		$cmf			= new CategorieMouvementFinancier();
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf_parent	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
+		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
 				'type'			=>	CategorieMouvementFinancier::TYPE_REVENU,
 				'parent'		=>	null,
 				'utilisateur'	=>	$utilisateur
 		));
-		
-		$cmf->setType(CategorieMouvementFinancier::TYPE_REVENU);
-		$cmf->setParent($cmf_parent);
-		
+
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
 		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);

@@ -95,12 +95,12 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
         
 fgs_gestion_comptes_ajouter_depense_planifiee:
     path:     /planifier-depense
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:addDepensePLanifiee }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterDepensePLanifiee }
     
         
 fgs_gestion_comptes_ajouter_revenu_planifie:
     path:     /planifier-revenu
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:addRevenuPLanifie }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterRevenuPLanifie }
     
     
 fgs_gestion_comptes_voir_mouvements_planifies:
