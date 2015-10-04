@@ -24,7 +24,10 @@
 		</div>
 	</div>
 	<div class='row'>
-		<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':id}) }}" class='btn btn-primary pull-right'><span class='glyphicon glyphicon-calendar'></span> Visualisation du mois en cours</a>
+		<div class='col-xs-12'>
+			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':id}) }}" class='btn btn-primary pull-right' style='margin-left: 10px;'><span class='glyphicon glyphicon-calendar'></span> Visualisation du mois en cours</a>
+			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee',{'id':id}) }}" class='btn btn-primary pull-right'><span class='glyphicon glyphicon-calendar'></span> Visualisation de l'année en cours</a>
+		</div>
 	</div>
 	{% if compte.mouvementFinanciers is not empty %}
 	

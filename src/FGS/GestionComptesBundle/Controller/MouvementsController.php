@@ -168,17 +168,14 @@ class MouvementsController extends Controller
 		));
 	}
 	
-	public function voirMouvementFinancierCompteMoisAction($id)
+	public function voirMouvementFinancierCompteMoisAction($id, $annee, $mois)
 	{
-
-		
-		$date 		= new \DateTime("now");
+		$date		= (($annee != null)&&($mois!=null))? new \DateTime("$annee-$mois"):new \DateTime("now");
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
 		
 		$compte			= $repository->getCompteMouvementAndCategorieMois($id, $anneeMois);
-		//\Doctrine\Common\Util\Debug::dump($compte);
 		
 		$montantCategorie	= $repository->getMontantForEachCategorie($id, $anneeMois);
 		
@@ -196,6 +193,47 @@ class MouvementsController extends Controller
 				'totalRevenuNotPlanified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
 				
 		));
+	}
+	
+	public function voirMouvementFinancierCompteAnneeAction($id, $annee)
+	{
+		$date		= ($annee != null)? new \DateTime("$annee-01"):new \DateTime("now");
+
+		$data_annee_mois	= array();
+		
+		for ($compteurMois =1; $compteurMois<=12; $compteurMois++)
+		{
+			$data_annee_mois[$date->format('Y').'-'.str_pad($compteurMois,2,'0',STR_PAD_LEFT)]	=	array(
+				"montant_depense" => 0,
+				"montant_revenu" => 0,
+				"date" => new \DateTime($date->format('Y').'-'.$compteurMois)
+			);
+		}
+
+		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
+
+		$BilanAnnuelDepensesRevenu		= $repository->getDepenseAndRevenuByTypeForYear($id, $date->format('Y'));
+		$compte							= $repository->find($id);
+		
+		foreach ($BilanAnnuelDepensesRevenu as $data)
+		{
+			if ($data["type"] == CategorieMouvementFinancier::TYPE_DEPENSE)
+			{
+				$data_annee_mois[$data["annee_mois"]]["montant_depense"] = $data["total"];
+			}
+			else 
+			{
+				$data_annee_mois[$data["annee_mois"]]["montant_revenu"] = $data["total"];
+			}
+			//\Doctrine\Common\Util\Debug::dump($data);
+		}
+		
+		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_annee.html.twig', array(
+				'depense_annee'		=> $data_annee_mois,
+				'compte'			=> $compte,
+				'date' 				=> $date,
+		));
+		
 	}
 	
 	public function checkMouvementFinancierAction($id)

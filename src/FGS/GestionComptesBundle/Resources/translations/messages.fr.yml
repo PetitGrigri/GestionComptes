@@ -2,3 +2,5 @@ MONTH:  "mois"
 WEEK:   "[0,1]semaine|]1,Inf[semaines"
 recurence: 
     valeur: "[0,1]Chaque |]1,Inf[Tout les %count%"
+mouvement:
+    valeur: "{0}Aucun mouvement financier réalisé|{1}%count% mouvement financier réalisé|]1,Inf[%count% mouvements financiers réalisés"

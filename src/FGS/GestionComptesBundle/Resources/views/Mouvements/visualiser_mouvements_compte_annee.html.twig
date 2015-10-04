@@ -1,0 +1,181 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+{% set date_plus_1_an 	= date|date_modify("+1 year") %}
+{% set date_moins_1_an 	= date|date_modify("-1 year") %}
+
+{% block title %}Visualisation des données d'un compte{% endblock %}
+
+
+{% block contenu %}
+<div class='row'>
+	<div class="col-md-1 col-xs-2" class="height: 38px;">
+		<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
+	</div>
+	<div class="col-md-11 col-xs-10">
+		<h1>{{ compte.nom }} (Année : {{ date|date('Y') }})</h1>
+	</div>
+</div> 
+
+<div class='row'>		
+		<div class='col-md-8'>
+			<div class="panel panel-primary">
+				<div class="panel-heading ">Graphique des mouvements financiers de l'année</div>
+				<div class="panel-body">
+					<div>
+						<canvas id="canvas-annee-type-bilan" style="width: 100%; height: auto;"/>
+					</div>
+					<ul class='pager'>
+						<li><span class="badge" style="background-color: #83b845"><span class='text-center glyphicon icon-arrow-graph-up-right'></span></span> Revenus</li>
+						<li><span class="badge" style="background-color: #dc1c5d"><span class='text-center glyphicon icon-arrow-graph-down-right'></span></span> Dépenses</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class='col-md-4'>
+			<div class="panel panel-primary">
+				<div class="panel-heading ">Mouvements financiers de l'année</div>
+				<div class="panel-body">
+					<table class='table'>
+						<thead>
+							<tr>
+								<th>
+									Mois
+								</th>
+								<th>
+									Revenus
+								</th>
+								<th>
+									Dépenses
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for bilan_mois in depense_annee %}
+							<tr>
+								<td>
+									<a href=" {{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':compte.id, 'annee':bilan_mois['date']|date('Y'), 'mois':bilan_mois['date']|date('m')  }) }}">{{ bilan_mois['date']|localizeddate('full','none',null, null, 'MMMM')|capitalize }}</a>
+								</td>
+								<td>
+									{{ bilan_mois['montant_revenu'] }} €
+								</td>
+								<td>
+									{{ bilan_mois['montant_depense']|abs }} €
+									
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+</div>
+
+<div class='row'>		
+	<div class='col-md-12'>
+		<nav>
+			<ul class="pager">
+				<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee', {'id':compte.id, 'annee':date_moins_1_an|date('Y') }) }}"><span aria-hidden="true">&larr;</span> Année précédente</a></li>
+				<li class="" id="annee_choix"><a href='{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee', {'id':compte.id})}}'><span class='glyphicon glyphicon-calendar'></span></a></li>
+				<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee', {'id':compte.id, 'annee':date_plus_1_an|date('Y') }) }}">Année suivante <span aria-hidden="true">&rarr;</span></a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/fgsgestioncomptes/js/Chart.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<script>
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+
+
+//sélection du mois à afficher
+$('#annee_choix').datepicker({
+    format: "yyyy",
+    minViewMode: 2,
+    language: "fr",
+    calendarWeeks: true,
+    autoclose: true,
+    orientation: "bottom"
+}).on('changeDate',function(e){
+	var date_selectionnee = $('#annee_choix').datepicker('getDate');
+	var page_lien = $('#annee_choix a').attr('href');
+	window.location = page_lien+'/'+date_selectionnee.getFullYear();
+});
+
+$('#annee_choix').click(function(event){
+	event.preventDefault();
+});
+
+
+//graphique
+var data = {
+    labels: [	{% for bilan_mois in depense_annee %}
+				"{{ bilan_mois['date']|localizeddate('full','none',null, null, 'MMMM')|capitalize }}"
+				{% if loop.last == false %},{% endif %}
+				{% endfor %}],
+    datasets: [
+        {
+            label: "Revenus",
+            fillColor: "rgba(138,194,73,0.2)",
+            strokeColor: "rgba(138,194,73,1)",
+            pointColor: "rgba(138,194,73,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [	{% for bilan_mois in depense_annee %}
+					{{ bilan_mois['montant_revenu'] }}
+					{% if loop.last == false %},{% endif %}
+					{% endfor %}]
+        },
+        {
+            label: "Dépenses",
+            fillColor: "rgba(220,28,93,0.1)",
+            strokeColor: "rgba(220,28,93,1)",
+            pointColor: "rgba(220,28,93,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [	{% for bilan_mois in depense_annee %}
+					{{ bilan_mois['montant_depense']|abs }}
+					{% if loop.last == false %},{% endif %}
+					{% endfor %}]
+        }
+    ]
+};
+
+var confCanvas = 	{	responsive : true,
+						tooltipCornerRadius : 0,
+						tooltipFontFamilly : "'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif",
+						tooltipFontSize: 12,
+						tooltipTitleFontSize: 12,
+						tooltipYPadding: 6,
+						tooltipXPadding: 10,
+					    multiTooltipTemplate: "<%= datasetLabel%> : <%= value + ' €' %>",
+					};
+
+
+
+window.onload = function(){
+	var ctx = document.getElementById("canvas-annee-type-bilan").getContext("2d");
+	var myLineChart = new Chart(ctx).Line(data, confCanvas);
+};
+
+
+</script>
+{% endblock %}

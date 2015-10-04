@@ -232,4 +232,24 @@ class CompteRepository extends EntityRepository
 		
 		return $qb->getQuery()->getResult();
 	}
+	
+	public function getDepenseAndRevenuByTypeForYear($id, $annee)
+	{
+		$qb	= $this->_em->createQueryBuilder();
+		
+		$qb	->select($qb->expr()->substring('mf.date',1,7).' as annee_mois')
+			->addSelect('cmf.type as type')
+			->addSelect('SUM(mf.montant) as total')
+			->from('FGSGestionComptesBundle:MouvementFinancier', 'mf')
+			->leftJoin('mf.categorieMouvementFinancier', 'cmf')
+			->leftJoin('mf.compte', 'c')
+			->groupBy('cmf.type, annee_mois')
+			->andWhere('c.id = ?1')
+			->andWhere('SUBSTRING(mf.date, 1, 4) = ?2')
+			->orderBy('mf.date', 'DESC')
+			->setParameter('1', $id)
+			->setParameter('2', $annee);
+		
+			return $qb->getQuery()->getResult();
+	}
 }

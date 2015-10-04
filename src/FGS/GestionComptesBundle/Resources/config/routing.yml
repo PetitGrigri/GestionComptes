@@ -88,11 +88,20 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte:
         debut:    \d+
 
 fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
-    path:     /visualiser-mouvement-financiers-compte-mois/{id}
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompteMois }    
+    path:     /visualiser-mouvement-financiers-compte-mois/{id}/{annee}/{mois}
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompteMois, annee:null, mois:null }    
     requirements:
         id:       \d+
-        
+        annee:    \d{4}
+        mois:     \d+
+
+fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee:
+    path:     /visualiser-mouvement-financiers-compte-annee/{id}/{annee}
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompteAnnee, annee:null }    
+    requirements:
+        id:       \d+
+        annee:    \d{4}
+
 fgs_gestion_comptes_ajouter_depense_planifiee:
     path:     /planifier-depense
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterDepensePLanifiee }

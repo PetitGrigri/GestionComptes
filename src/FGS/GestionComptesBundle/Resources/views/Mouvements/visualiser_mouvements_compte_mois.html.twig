@@ -1,88 +1,89 @@
 {% extends "FGSGestionComptesBundle::layout.html.twig" %}
+{% set date_plus_1_mois 	= date|date_modify("+1 month") %}
+{% set date_moins_1_mois 	= date|date_modify("-1 month") %}
+
+{% set compteur_mouvements_effectifs	= 0 %}
+{% set compteur_mouvements_planifies	= 0 %}
 
 {% block title %}Visualisation des données d'un compte{% endblock %}
 
+{% block modal %}
+<!-- Boite de dialogue -->
+<div class="modal" id="date">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+{% endblock %}
+
 {% block contenu %}
-	<div class='row'>
-		<div class="col-md-1 col-xs-2" class="height: 38px;">
-			<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
-		</div>
-		<div class="col-md-11 col-xs-10">
-			<h1>{{ compte.nom }} ({{ date|date('M Y') }})</h1>
-		</div>
+<!-- Titre (image, nom et date du mois en cours) -->
+<div class='row'>
+	<div class="col-md-1 col-xs-2" class="height: 38px;">
+		<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
 	</div>
-	<div class='row'>
-		<div class='col-md-4'>
-			<div class='info'>
-				<div class='col-md-6' style='color:#fff; padding:20px; margin:0px; background-color:#8ac249; color:#fff;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Revenu à ce jour</h3>
-					<div style='font-size: 2rem; '>{{ totalRevenuNotPlanified }} €</div>
-				</div>
-				<div class='col-md-6' style='color:#fff; padding:20px; overflow:hidden; margin:0px; background-color:#83b845; color:fff;text-align:right;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Revenu à venir</h3>
-					<div style='font-size: 2rem; '>{{ totalRevenuPlanified }} €</div>
-				</div>
+	<div class="col-md-11 col-xs-10">
+		<h1>{{ compte.nom }} ({{ date|localizeddate('full','none',null, null, 'MMMM YYYY') }})</h1>
+	</div>
+</div>
+
+<!--  Totaux (Revenus, Totaux, Dépenses)-->
+<div class='row'>
+	<!--  Revenus -->
+	<div class='col-md-4'>
+		<div class='gestion-compte-info gestion-compte-info-revenu'>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Revenu à ce jour</h3>
+				<div class='gestion-compte-info-contenu'>{{ totalRevenuNotPlanified }} €</div>
 			</div>
-		</div>
-		
-		<div class='col-md-4'>
-			<div class='info'>
-				<div class='col-md-6' style='color:#fff; padding:20px; margin:0px; background-color:#008cba; color:#fff;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Total à ce jour</h3>
-					<div style='font-size: 2rem; '>{{ compte.montantActuel }} €</div>
-				</div>
-				<div class='col-md-6' style='color:#fff; padding:20px; overflow:hidden; margin:0px; background-color:#008cba; color:fff;text-align:right;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Total planifié</h3>
-					<div style='font-size: 2rem; '>{{ compte.montantActuel + totalRevenuPlanified + totalDepensePlanified }} €</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class='col-md-4'>
-			<div class='info'>
-				<div class='col-md-6' style='color:#fff; padding: 20px;margin:0px; background-color:#dc1c5d; color:fff;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Dépense à ce jour</h3>
-					<div style='font-size: 2rem;'>{{ totalDepenseNotPlanified | abs }} €</div>
-				</div>
-				<div class='col-md-6' style='color:#fff; padding: 20px;margin:0px; background-color:#e81d62; color:fff;text-align:right;'>
-					<h3 style='font-size: 1rem; padding:0px; margin:0px;'>Dépense à venir</h3>
-					<div style='font-size: 2rem;'>{{ totalDepensePlanified | abs }} €</div>
-				</div>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Revenu à venir</h3>
+				<div class='gestion-compte-info-contenu'>{{ totalRevenuPlanified }} €</div>
 			</div>
 		</div>
 	</div>
 	
-	
-	<!--  
-	<div class='row'>
-		<div class='col-md-6'>
-			<div class="panel panel-success">
-				<div class="panel-heading"><i class="glyphicon icon-arrow-graph-up-right"></i> Répartition Mensuelle Revenus</div>
-				<div class="panel-body">
-					<div class='col-md-6'>
-						<canvas id="canvas-revenu" width="2" height="2"/>
-					</div>
-					<div class='col-md-6'>
-						<ul style="list-style: none;">
-							{% for totalCategorie in totauxParCategorie %}
-							{% if totalCategorie['total'] > 0  %}
-							<li>{{ totalCategorie['libelle_categorie'] }} <span class="badge pull-right">{{ totalCategorie['total']|abs  }} €</span></li>
-							{% endif %}
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
+	<!--  Totaux -->
+	<div class='col-md-4'>
+		<div class='gestion-compte-info gestion-compte-info-total'>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Total à ce jour</h3>
+				<div class='gestion-compte-info-contenu'>{{ compte.montantActuel }} €</div>
+			</div>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Total planifié</h3>
+				<div class='gestion-compte-info-contenu'>{{ compte.montantActuel + totalRevenuPlanified + totalDepensePlanified }} €</div>
 			</div>
 		</div>
-	</div>-->
+	</div>
+	
+	<!--  Dépenses -->
+	<div class='col-md-4'>
+		<div class='gestion-compte-info gestion-compte-info-depense'>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Dépense à ce jour</h3>
+				<div class='gestion-compte-info-contenu'>{{ totalDepenseNotPlanified | abs }} €</div>
+			</div>
+			<div class='col-md-6'>
+				<h3 class='gestion-compte-info-titre'>Dépense à venir</h3>
+				<div class='gestion-compte-info-contenu'>{{ totalDepensePlanified | abs }} €</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if compte.mouvementFinanciers is not empty %}
 	<div class='row'>
+		<!-- visualisations des mouvements financiers  -->
 		<div class='col-md-9'>
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="#accueil" data-toggle="tab">Opérations </a></li>
-				<li><a href="#livres" data-toggle="tab">Opérations à venir </a></li>
+			<ul class="nav nav-tabs nav-justified">
+				<li class="active"><a href="#operations" data-toggle="tab">Opérations </a></li>
+				<li><a href="#operations_planifiees" data-toggle="tab">Opérations à venir </a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="accueil">
+				<!-- Mouvements financiers effectifs -->
+				<div class="tab-pane active" id="operations">
 					<table class="table table-striped ">
 						<thead>
 							<tr>
@@ -105,6 +106,7 @@
 						<tbody>
 							{% for mouvementFinancier in compte.mouvementFinanciers %}
 								{% if mouvementFinancier.isPlanified == false %}
+									{% set compteur_mouvements_effectifs = compteur_mouvements_effectifs + 1 %}
 									<tr>
 										<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
 										<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
@@ -119,9 +121,12 @@
 								{% endif %}
 							{% endfor %}
 						</tbody>
+						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement.valeur'|transchoice(compteur_mouvements_effectifs) }} </caption>
 					</table>
 				</div>
-				<div class="tab-pane" id="livres">
+				
+				<!-- Mouvements financiers planifiées -->
+				<div class="tab-pane" id="operations_planifiees">
 					<table class="table table-striped ">
 						<thead>
 							<tr>
@@ -144,6 +149,7 @@
 						<tbody>
 							{% for mouvementFinancier in compte.mouvementFinanciers %}
 								{% if mouvementFinancier.isPlanified == true %}
+									{% set compteur_mouvements_planifies = compteur_mouvements_planifies + 1 %}
 									<tr>
 										<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
 										<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
@@ -158,13 +164,12 @@
 								{% endif %}
 							{% endfor %}
 						</tbody>
+						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement.valeur'|transchoice(compteur_mouvements_planifies) }} </caption>
 					</table>
 				</div>
 			</div>
-			{% if compte.mouvementFinanciers is not empty %}
 		</div>
-		
-
+	
 		
 		<div class='col-md-3'>
 			<div class="panel panel-danger">
@@ -186,97 +191,108 @@
 			</div>
 		</div>
 	</div>
+{% else %}
+	<p class='well well-sm' style='background-color:#f9f9f9;'>Aucune transaction n'a encore été réalisé sur ce compte ce mois ci.<p>
+{% endif %}
 
-	{% else %}
-		<p class='well well-sm' style='background-color:#f9f9f9;'>Aucune transaction n'a encore été réalisé sur ce compte ce mois ci.<p>
-	{% endif %}
+<nav>
+	<ul class="pager">
+		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date_moins_1_mois|date('Y'),'mois':date_moins_1_mois|date('m')}) }}"><span aria-hidden="true">&larr;</span> Mois précédent</a></li>
+		<li class=""id="mois_annee_en_cours"><a href='{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id}) }}'><span class='glyphicon glyphicon-calendar'></span></a></li>
+		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date_plus_1_mois|date('Y'),'mois':date_plus_1_mois|date('m')}) }}">Mois suivant <span aria-hidden="true">&rarr;</span></a></li>
+	</ul>
+</nav>
 
 {% endblock %}
 
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
-	<style>
-	
-	.categorie-mf {
-		font-size:90%; font-weight: normal;
-	}
-	.info
-	{
-		color:			#fff; 
-		padding: 		0px;
-		margin:			0px; 
-		color:			#000;
-		margin-bottom:	21px !important;
-	}
-	.info:before
-	{
-		font-family: 	"daily-life" !important;
-		content:		"'";
-		position: 		absolute;
-		position:		absolute; 
-		top:			50%; 
-		left:			50%; 
-		height:			40px; 
-		width:			40px;
-		line-height:	40px;
-		vertical-align:	middle;
-		font-size:		20px;
-		text-align:		center;  
-		border-radius:	50%;
-		background-color:#fff;
-		border:			1px solid #8ac249;
-		z-index:		2;
-		margin:			-30px 0px 0px -20px;
-		
-	}
-	.info:after
-	{
-		content:	'';
-		box-sizing: border-box;
-		clear: 		both;
-		display: 	table;
-	}
-					<div style='color:#8ac249;'>
-					<i class="glyphicon icon-arrow-graph-up-right" ></i>
-				</div>
-	
-	
-	</style>
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/Mouvements/visualiser_mouvements_compte_mois.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
+<style>
+.datepicker.dropdown-menu th,
+.datepicker.datepicker-inline th,
+.datepicker.dropdown-menu td,
+.datepicker.datepicker-inline td {
+  padding: 4px 15px;
+}
+.modal-content
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 342px;
+}
+#date .modal-dialog
+{
+	z-index:9999;
+}
+.table
+{
+	border: 1px solid #ddd;
+	border-top:0px;
+}
+</style>
 {% endblock %}
 
 
 {% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset('bundles/fgsgestioncomptes/js/Chart.js') }}"></script>
-	<script>
+{{ parent() }}
+<script src="{{ asset('bundles/fgsgestioncomptes/js/Chart.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<script>
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
+
+
+//sélection du mois à afficher
+$('#mois_annee_en_cours').datepicker({
+    format: "MM yyyy",
+    minViewMode: 1,
+    language: "fr",
+    calendarWeeks: true,
+    autoclose: true,
+    orientation: "bottom"
+}).on('changeDate',function(e){
+	var date_selectionnee = $('#mois_annee_en_cours').datepicker('getDate');
+	var page_lien = $('#mois_annee_en_cours a').attr('href');
 	
-	$(function () {
-	  $('[data-toggle="tooltip"]').tooltip();
-	})
 	
-	var dataCanvasDepense = [
-		{% for totalCategorie in totauxParCategorie %}
-			{% if totalCategorie['total'] < 0  %}
-			{
-				value: {{ totalCategorie['total']|abs  }},
-				color:"#F7464A",
-				highlight: "#FF5A5E",
-				label: "{{ totalCategorie['libelle_categorie'] }}"
-			}
-			{% if loop.last == false %},{% endif %}
-			{% endif %}
-		{% endfor %}
-	];
+	window.location = page_lien+'/'+date_selectionnee.getFullYear()+'/'+(date_selectionnee.getMonth()+1);
+});
 
-	var confCanvas = {responsive : true};
+$('#mois_annee_en_cours').click(function(event){
+	event.preventDefault();
+});
 
-	window.onload = function(){
-		var ctx = document.getElementById("canvas-depense").getContext("2d");
-		window.myDoughnut = new Chart(ctx).Doughnut(dataCanvasDepense, confCanvas);
 
-	};
+//graphique
+var dataCanvasDepense = [
+	{% for totalCategorie in totauxParCategorie %}
+		{% if totalCategorie['total'] < 0  %}
+		{	
+			value: {{ totalCategorie['total']|abs  }},
+			color:"#F7464A",
+			highlight: "#FF5A5E",
+			label: "{{ totalCategorie['libelle_categorie'] }}"
+		}
+		{% if loop.last == false %},{% endif %}
+		{% endif %}
+	{% endfor %}
+];
 
-	
-	</script>
+var confCanvas = {responsive : true};
+
+window.onload = function(){
+	var ctx = document.getElementById("canvas-depense").getContext("2d");
+	window.myDoughnut = new Chart(ctx).Doughnut(dataCanvasDepense, confCanvas);
+
+};
+
+
+</script>
 {% endblock %}

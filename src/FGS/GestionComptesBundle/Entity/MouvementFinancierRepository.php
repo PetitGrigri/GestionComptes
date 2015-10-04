@@ -34,4 +34,16 @@ class MouvementFinancierRepository extends EntityRepository
 			->getQuery()
 			->getSingleResult();
 	}
+	
+	/*
+	public function getAllDistinctYearMonthForCompte($id)
+	{
+	
+		$qb	= $this->createQueryBuilder('mf');
+		$qb->select($qb->expr()->substring('mf.date',1,7))
+			->distinct('mf.date');
+
+		return $qb->getQuery()->getScalarResult();
+	}
+	*/
 }
