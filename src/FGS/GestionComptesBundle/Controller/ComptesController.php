@@ -4,18 +4,8 @@ namespace FGS\GestionComptesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityRepository;
 use FGS\GestionComptesBundle\Entity\Compte;
-use FGS\GestionComptesBundle\Entity\TypeCompte;
-use FGS\GestionComptesBundle\Entity\Banque;
 use FGS\GestionComptesBundle\Form\CompteType;
-use Symfony\Component\HttpFoundation\Response;
-use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
-use Symfony\Component\Form\RequestHandlerInterface;
-use FGS\GestionComptesBundle\Form\CategorieMouvementFinancierType;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use FGS\GestionComptesBundle\Exceptions\GestionComptesException;
-use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
 
 class ComptesController extends Controller
 {
@@ -82,6 +72,10 @@ class ComptesController extends Controller
     {
     	$em		= $this->getDoctrine()->getManager();
     	
+    	$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
+    	
+    	$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
+    	
     	if ($em->getRepository('FGSGestionComptesBundle:Compte')->deleteCompteById($id)	=== 1)
     	{
 	    	$em->flush();
@@ -106,6 +100,7 @@ class ComptesController extends Controller
     	
 		$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
 		
+		$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 		
     	$form = $this->createForm(new CompteType(), $compte)
     	    		->add('sauver', 'submit', array('label'=>'Modifier ce compte'))

@@ -5,17 +5,9 @@ namespace FGS\GestionComptesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityRepository;
-use FGS\GestionComptesBundle\Entity\Compte;
-use FGS\GestionComptesBundle\Entity\TypeCompte;
-use FGS\GestionComptesBundle\Entity\Banque;
-use FGS\GestionComptesBundle\Form\CompteType;
-use Symfony\Component\HttpFoundation\Response;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
-use Symfony\Component\Form\RequestHandlerInterface;
 use FGS\GestionComptesBundle\Form\CategorieMouvementFinancierType;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use FGS\GestionComptesBundle\Exceptions\GestionComptesException;
+//TODO : voir comment utiliser cette exception
 use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
 
 
@@ -84,6 +76,8 @@ class CategoriesController extends Controller
 		 
 		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
 	
+		$this->denyAccessUnlessGranted('proprietaire', $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+		
 		if ($cmf->getUtilisateur()->getId() != $this->getUser()->getId())
 		{
 			$session	=	new Session();
@@ -122,8 +116,10 @@ class CategoriesController extends Controller
 		//récupération de la catégorie à supprimer
 		$cmfASupprimer = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
 		
-		//Vérification du propriétaire du Cmf et de l'existance d'un parent
-		if (($cmfASupprimer->getUtilisateur()->getId() != $this->getUser()->getId()) || (!$cmfASupprimer->hasParent())) 
+		$this->denyAccessUnlessGranted('proprietaire', $cmfASupprimer, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+		
+		//Vérification de l'existance d'un parent (si pas de parent : catégorie mère non supprimable)
+		if (!$cmfASupprimer->hasParent())
 		{
 			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
 		}
@@ -155,70 +151,58 @@ class CategoriesController extends Controller
 	}
 	
 	
-	
+	/**
+	 * Permet de monter une catégorie
+	 * Un test dans la vue de gestion des catégories empêche de lancer cette action s'il n'y a pas de catégorie ayant un ordre plus bas que celle qu'on souhaite modifier
+	 * Dans le cas contraire deplacerCategorie provoquera un flashBag
+	 * @param int $id
+	 */
 	public function monterCategorieAction($id)
 	{
-		$em	=$this->getDoctrine()->getManager();
-		
-		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
-		
-		if (($cmf != null) && ($cmf->getOrdre() > 1))
-		{
-			$test =  $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->increseOrdrePredecessor($cmf);
-			
-			if ($test == 1)
-			{
-				$cmf->setOrdre($cmf->getOrdre() - 1);			
-				$em->flush();
-				
-				$session	=	new Session();
-				$session->getFlashBag()->add('success', 'La catégorie a été déplacé !');
-			}
-			else 
-			{
-				throw new GestionComptesCategorieMouvementFinancierException('Impossible de monter votre Catégorie', 500);
-			}
-		}
-		else
-		{
-			throw new GestionComptesCategorieMouvementFinancierException('Impossible de monter votre Catégorie', 500);
-		}
-		
-		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
+		return $this->deplacerCategorie($id, +1);
 	}
+
 	
-	
-	
-	
-	
+	/**
+	 * Permet de descendre une catégorie
+	 * Un test dans la vue de gestion des catégories empêche de lancer cette action s'il n'y a pas de catégorie ayant un ordre plus haut que celle qu'on souhaite modifier
+	 * Dans le cas contraire deplacerCategorie provoquera un flashBag
+	 * @param int $id
+	 */
 	public function descendreCategorieAction($id)
 	{
-		$em	=$this->getDoctrine()->getManager();
-		
-		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
-		
-		if ($cmf != null)
+		return $this->deplacerCategorie($id, -1);
+	}
+	
+	/**
+	 * Permet de monter ou descendre une catégorie
+	 * @param int $id 
+	 * @param int $modification
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	private function deplacerCategorie($id, $modification)
+	{
+		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier');
+	
+		$cmf 		= $repository->find($id);
+	
+		$this->denyAccessUnlessGranted('proprietaire', $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+	
+		$cmfPredecessorOrSuccessor	= $repository->findOneBy(array(
+				'ordre' 		=> $cmf->getOrdre()-$modification,
+				'utilisateur'	=> $cmf->getUtilisateur(),
+				'parent'		=> $cmf->getParent(),
+		));
+		if ($cmfPredecessorOrSuccessor != null)
 		{
-			$test =  $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->decreaseOrdreSuccessor($cmf);
-			
-			if ($test == 1)
-			{
-				$cmf->setOrdre($cmf->getOrdre() + 1);			
-				$em->flush();
-				
-				$session	=	new Session();
-				$session->getFlashBag()->add('success', 'La catégorie a été déplacé !');
-			}
-			else 
-			{
-				throw new GestionComptesCategorieMouvementFinancierException('Impossible de monter votre Catégorie', 500);
-			}
+			$repository->switchOrdre($cmf, $cmfPredecessorOrSuccessor);
 		}
-		else
+		else 
 		{
-			throw new GestionComptesCategorieMouvementFinancierException('Impossible de monter votre Catégorie', 500);
+			$session	=	new Session();
+			$session->getFlashBag()->add('error', 'Impossible de déplacer cette catégorie');
 		}
-		
+	
 		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 	}
 }

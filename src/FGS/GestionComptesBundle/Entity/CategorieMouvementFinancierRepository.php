@@ -72,13 +72,16 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			->execute();
 	}
 	
-	public function increseOrdrePredecessor(\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $cmf)
+	public function increseOrdrePredecessor(\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $cmf, $utilisateurId)
 	{
 		$queryBuilder	= $this->_em->createQueryBuilder()
 							->update('\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier', 'cmf')
+							->innerJoin('cmf.utilisateur', 'u')
 							->set('cmf.ordre', 	'cmf.ordre+1')
 							->where('cmf.ordre = ?1')
-							->setParameter('1', $cmf->getOrdre()-1);
+							->andWhere('u.id = ?3')
+							->setParameter('1', $cmf->getOrdre()-1)
+							->setParameter('3', $utilisateurId);
 		
 		return $this->addParentCondition($queryBuilder, $cmf)->getQuery()->getResult();
 	}
@@ -94,6 +97,16 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			return $this->addParentCondition($queryBuilder, $cmf)->getQuery()->execute();
 	}
 	
+	
+	public function switchOrdre(\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $cmf1, \FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $cmf2)
+	{
+		$ordreTempo	= $cmf1->getOrdre();
+		
+		$cmf1->setOrdre($cmf2->getOrdre());
+		$cmf2->setOrdre($ordreTempo);
+		
+		$this->getEntityManager()->flush();
+	}
 	
 	/*
 	 * Cette méthode permet de renvoyer les catégories d'un utilisateur sous la forme d'une liste (array).

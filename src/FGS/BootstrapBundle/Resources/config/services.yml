@@ -3,3 +3,16 @@ services:
         class: FGS\BootstrapBundle\Twig\BootstrapFormExtension 
         tags:
             - { name: twig.extension }
+
+    security.access.post_voter_mf_ou_mfp:
+        class:      FGS\GestionComptesBundle\Security\Authorization\Voter\MouvementFinancierVoter
+        public:     false
+        tags:
+            - { name: security.voter }
+
+
+    security.access.post_voter_compte_ou_categorie:
+        class:      FGS\GestionComptesBundle\Security\Authorization\Voter\CompteOrCategorieVoter
+        public:     false
+        tags:
+            - { name: security.voter }
