@@ -4,3 +4,5 @@ recurence:
     valeur: "[0,1]Chaque |]1,Inf[Tout les %count%"
 mouvement:
     valeur: "{0}Aucun mouvement financier réalisé|{1}%count% mouvement financier réalisé|]1,Inf[%count% mouvements financiers réalisés"
+mouvement_planifie:
+    valeur: "{0}Aucun mouvement financier planifié|{1}%count% mouvement financier planifié|]1,Inf[%count% mouvements financiers planifiés"
