@@ -1,0 +1,40 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block title %}{{ parent() }} : Création d'un nouveau compte{% endblock %}
+
+{% block panel_heading %}Création d'un nouveau compte{% endblock %}
+
+
+{% block panel_body %}
+	<p class="text-justify">
+		Inscrivez-vous en quelques instants !
+	</p>
+	<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+		<div class="form-group {% if form.email.vars.errors|length > 0 %}has-error{% endif %}">
+			{{ form_widget(form.email, { 'attr': {'placeholder': 'resetting.request.username'|trans } }) }}
+			{{ form_errors(form.email) }}
+		</div>
+		<div class="form-group {% if form.username.vars.errors|length > 0  %}has-error{% endif %}">
+			{{ form_widget(form.username, { 'attr': {'placeholder': 'form.username'|trans } }) }}
+			{{ form_errors(form.username) }}
+		</div>
+		<div class="form-group {% if form.plainPassword.first.vars.errors|length > 0  %}has-error{% endif %}">
+			{{ form_widget(form.plainPassword.first, { 'attr': {'placeholder': 'form.password'|trans } }) }}
+			{{ form_errors(form.plainPassword.first) }}
+		</div>
+		<div class="form-group {% if form.plainPassword.second.vars.errors|length > 0  %}has-error{% endif %}">
+			{{ form_widget(form.plainPassword.second, { 'attr': {'placeholder': 'form.password_confirmation'|trans } }) }}
+			{{ form_errors(form.plainPassword.second) }}
+		</div>
+		{{ form_rest(form) }}
+		<div class="form-group">
+			<input type="submit" id="_submit" name="_submit" value="{{ 'registration.submit'|trans }}"  class="btn btn-primary btn-block"  />
+	    </div>
+	</form>
+	<hr />
+	<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
+{% endblock %}

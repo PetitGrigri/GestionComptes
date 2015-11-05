@@ -1,34 +1,37 @@
-{% extends "::base.html.twig" %}
+{% extends "::base_login.html.twig" %}
 
-{% block title %}Gestion Comptes{% endblock %}
+{% block title %}Ma petite Tirelire{% endblock %}
 
-{% block contenu %}
-
-{#
-<div>
-	{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-		{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-		<a href="{{ path('fos_user_security_logout') }}">
-			{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-		</a>
-	{% else %}
-		<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-	{% endif %}
-	
-</div>
-#}
-
-{% for type, messages in app.session.flashBag.all %}
-	{% for message in messages %}
-		<div class="{{ type }}">
-			{{ message|trans({}, 'FOSUserBundle') }}
-		</div>
-	{% endfor %}
-{% endfor %}
-
-<div>
-	{% block fos_user_content %}
-	
-	{% endblock fos_user_content %}
-</div>
+{% block stylesheets %}
+	{{  parent()  }}
+	<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+	<style>
+	#logo{
+		max-height: 50px;
+		width: auto;
+		margin-top: -6px;
+	}
+	h1 {
+		font-family: 'Indie Flower', cursive;
+		color: #0079a1; 
+		line-height: 40px; 
+		vertical-align: middle;
+		padding: 0px; 
+		margin:0px 0px 30px 0px;
+		
+	}
+	#_submit{
+		margin: 30px 0px 10px 0px;
+	}
+	html, body {
+	    min-height: 100%;
+	}
+	body{
+		background: url({{ absolute_url(asset('img/picjumbo.com_HNCK8984_bis.jpg')) }}) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	</style>
 {% endblock %}

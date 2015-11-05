@@ -1,0 +1,29 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+{% block title %}{{ parent() }} : Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_heading %}Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_body %}
+	<p class="text-justify">
+		Pour réinitialiser votre mot de passe veuillez saisir deux fois votre nouveau mot de passe.
+	</p>
+
+	<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_resetting_reset">
+    {{ form_widget(form) }}
+    <div>
+        <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" class="btn btn-primary btn-block" />
+    </div>
+	</form>
+	<hr />
+	<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
+{% endblock %}
+
+
+
+
+

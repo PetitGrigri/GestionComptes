@@ -32,5 +32,9 @@ monolog:
 assetic:
     use_controller: "%use_assetic_controller%"
 
-#swiftmailer:
-#    delivery_address: me@example.com
+swiftmailer:
+    transport: gmail
+    host:      ~
+    username:  "fgriselles@gmail.com"
+    password:  "@ndr01dF0r3v3r"
+    spool:     { type: memory }

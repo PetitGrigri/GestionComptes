@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+	 	<meta name="viewport" content="width=320px, initial-scale=1, maximum-scale=1" />
+		<title>{% block title %}{% endblock %}</title>
+
+		{% block stylesheets %}
+		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+		{% endblock %}
+	</head>
+
+	<body>
+		<div class="container">
+			<div class='text-center'  style='margin-top:50px;'>
+				<img src="{{ asset('img/logo.png') }}" id='logo'>
+				<h1>Ma petite Tirelire</h1>
+			</div>	
+				
+			<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+	
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						{% block panel_heading %}{% endblock %}
+					</div>
+					<div class="panel-body">
+			    		{% block panel_body %}{% endblock %}
+			    		{% block fos_user_content %}{% endblock %}
+					</div>
+				</div>
+			</div>
+	
+			</div>
+		</div>
+		{% block javascripts %}
+			<script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
+			<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		{% endblock %}
+	
+	</body>
+</html>

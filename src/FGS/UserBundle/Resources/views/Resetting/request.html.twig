@@ -1,0 +1,36 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}{{ parent() }} : Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_heading %}Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_body %}
+	<p class="text-justify">
+		Pour réinitialiser votre mot de passe, veuillez saisir votre nom d'utilisateur ou votre adresse e-mail.
+	</p>
+	<p class="text-justify">
+		Un mail vous sera ensuite envoyé vous indiquant la marche à suivre. 
+	</p>
+	{% if invalid_username is defined %}
+		<div class="alert alert-danger alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+			<span class="glyphicon glyphicon-warning-sign"></span> {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}
+		</div>
+	{% endif %}
+	
+	<form action="{{ path('fos_user_resetting_send_email') }}"" method="POST" class="fos_user_resetting_request" style="margin-top:20px;">
+	    <div>
+	        
+	        {#<label for="username">{{ 'resetting.request.username'|trans }}</label>#}
+	        <input type="text" id="username" name="username" required="required" class="form-control" placeholder="{{ 'resetting.request.username'|trans }}"/>
+	    </div>
+	    
+	    <div>
+	        <input type="submit" id="_submit" value="{{ 'resetting.request.submit'|trans }}" class="btn btn-primary btn-block" />
+	    </div>
+	</form>
+	<hr />
+	<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
+{% endblock %}

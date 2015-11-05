@@ -1,0 +1,19 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}{{ parent() }} : Création d'un nouveau compte validée{% endblock %}
+
+{% block panel_heading %}Création d'un nouveau compte validée{% endblock %}
+
+{% block panel_body %}
+	<p class="text-justify">
+    	{{ 'registration.confirmed'|trans({'%username%': user.username}) }}
+    </p>
+    {% if targetUrl %}
+    <p class="text-justify">
+    	<a href="{{ targetUrl }}">
+    	{{ 'registration.back'|trans }}</a>
+    </p>
+    {% endif %}
+{% endblock %}

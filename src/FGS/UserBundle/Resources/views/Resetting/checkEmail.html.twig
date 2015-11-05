@@ -1,0 +1,14 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}{{ parent() }} : Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_heading %}Réinitialisation de votre mot de passe{% endblock %}
+
+{% block panel_body %}
+<p class="text-justify">
+	{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+<hr />
+<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
+{% endblock %}
