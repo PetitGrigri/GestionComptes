@@ -5,21 +5,17 @@
 {% block contenu %}
 <section class='container-fluid'>
 	<h1 class="page-header">{% block titre_contenu %}Ajout d'un dépense Planifié{% endblock %}</h1>
+
+	{{ set_bootstrap_form_presentation("horizontal") }}
 	
-	<div class='col-sm-9'>
-		{{ set_bootstrap_form_presentation("horizontal") }}
-		
-		{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }}
-		{{ set_bootstrap_widget_grid({"sm":9,"md":9}) }}
-		{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}
-		{{ set_bootstrap_reset_grid({"sm":4, "md":4,"xs":6}) }}
-		{{ set_bootstrap_submit_grid({"sm":5, "sm-offset": 3, "md":5,"xs":6}) }}
-		
-		{{ form(form) }}
-	</div>
-	<div class='col-sm-2 text-justify' style='font-size: 12px; font-weight: normal;'>
-		Un revenu planifié est un mouvement financier récurent. <br /> //TODO Finir blabla
-	</div>
+	{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }}
+	{{ set_bootstrap_widget_grid({"sm":8,"md":6}) }}
+	{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}
+	{{ set_bootstrap_reset_grid({"sm":4, "md":3,"xs":6}) }}
+	{{ set_bootstrap_submit_grid({"sm":4, "sm-offset": 3, "md":3, "md-offset":3, "xs":6}) }}
+	
+	{{ form(form) }}
+
 </section>
 {% endblock %}
 

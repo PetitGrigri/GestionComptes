@@ -57,21 +57,6 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 		return array_reverse($resultat);
 	}
 	
-	public function decreaseOrdreAfter(\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $parent, $ordre)
-	{
-		//TODO passer ca en query builder
-		$this->_em
-			->createQuery('
-				UPDATE 		FGSGestionComptesBundle:CategorieMouvementFinancier cmf
-				SET  		cmf.ordre	=	cmf.ordre - 1 
-				WHERE 		cmf.parent 	= 	?1
-				AND			cmf.ordre 	>	?2
-				')
-			->setParameter('1', $parent)
-			->setParameter('2', $ordre)
-			->execute();
-	}
-	
 	public function increseOrdrePredecessor(\FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier $cmf, $utilisateurId)
 	{
 		$queryBuilder	= $this->_em->createQueryBuilder()

@@ -7,10 +7,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Form\CategorieMouvementFinancierType;
-//TODO : voir comment utiliser cette exception
-use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
-
-
 
 
 class CategoriesController extends Controller

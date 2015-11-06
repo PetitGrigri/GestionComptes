@@ -12,15 +12,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CompteType extends AbstractType
 {
-	/* (non-PHPdoc)
-	 * @see \Symfony\Component\Form\AbstractType::buildForm()
-	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) 
 	{
-		/*
-		 * 	//->add("typeCompte", 	New TypeCompteType()) //TODO voir si on peut faire un truc dans ce genre
-		 *	//->add("banque", 		New BanqueType()) //TODO Voir si on peut faire un truc dans  ce genre
-		 */
 		$builder
 			->add('nom',			'text' )
 			->add('montantActuel', 	'money')
@@ -37,7 +30,6 @@ class CompteType extends AbstractType
 			))
 			;
 	}
-	
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{

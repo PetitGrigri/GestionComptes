@@ -18,7 +18,6 @@ class CompteRepository extends EntityRepository
 {
 	public function deleteCompteById($id)
 	{
-		//TODO Quand la l'entity utilisateur aura été créée, il faudra penser à ajouter la condition
 		$query	= $this->_em->createQuery("DELETE FGSGestionComptesBundle:Compte c WHERE c.id = :id");
 		$query->setParameter("id", $id);
 		
