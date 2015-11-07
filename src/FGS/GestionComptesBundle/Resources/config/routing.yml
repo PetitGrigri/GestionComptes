@@ -104,27 +104,27 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee:
 
 fgs_gestion_comptes_ajouter_depense_planifiee:
     path:     /planifier-depense
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterDepensePLanifiee }
+    defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:ajouterDepensePLanifiee }
     
         
 fgs_gestion_comptes_ajouter_revenu_planifie:
     path:     /planifier-revenu
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterRevenuPLanifie }
+    defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:ajouterRevenuPLanifie }
     
     
 fgs_gestion_comptes_voir_mouvements_planifies:
     path:     /visualiser-mouvements-planifies
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierPlanifie }
+    defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:voirMouvementFinancierPlanifie }
     
 fgs_gestion_comptes_modifier_mouvements_planifies:
     path:     /modifier-mouvement-financier-planifie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:modifierMouvementFinancierPlanifie }
+    defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:modifierMouvementFinancierPlanifie }
     requirements:
         id:    \d+  
         
 fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
     path:     /supprimer-mouvement-financier-planifie/{id}
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancierPlanifie }
+    defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:supprimerMouvementFinancierPlanifie }
     requirements:
         id:    \d+
         
