@@ -99,7 +99,7 @@ class MouvementsController extends Controller
 		
 		$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
 		
-		if ($mf != null) {
+		if ($mf !== null) {
 			$em->remove($mf);
 			$em->flush();
 		
@@ -160,7 +160,7 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id, $annee, $mois)
 	{
-		$date		= (($annee != null)&&($mois!=null))? new \DateTime("$annee-$mois"):new \DateTime("now");
+		$date		= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTime("now");
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
@@ -186,7 +186,7 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteAnneeAction($id, $annee)
 	{
-		$date		= ($annee != null)? new \DateTime("$annee-01"):new \DateTime("now");
+		$date		= ($annee !== null)? new \DateTime("$annee-01"):new \DateTime("now");
 
 		$data_annee_mois	= array();
 		
@@ -381,7 +381,7 @@ class MouvementsController extends Controller
 	
 		$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
 		
-		if ($mfp != null) {
+		if ($mfp !== null) {
 			$em->remove($mfp);
 			$em->flush();
 	

@@ -280,7 +280,7 @@ class MouvementFinancier
 			//suppression de l'impact du mouvement financier (s'il y a) sur le compte lorsque ce dernier avait impacté le compte 
 			if (($this->oldIsPlanified===false)||	(($this->oldIsPlanified===null)&&($this->isPlanified===false)))
 			{
-				$compte->setMontantActuel($compte->getMontantActuel() - (($this->oldMontant == null) ? $this->montant : $this->oldMontant ));
+				$compte->setMontantActuel($compte->getMontantActuel() - (($this->oldMontant === null) ? $this->montant : $this->oldMontant ));
 			}
 			//ajout de l'impact du mouvement financier sur le compte (s'il y a)
 			if ($this->isPlanified===false)
@@ -294,7 +294,7 @@ class MouvementFinancier
 			//suppression de l'impact du mouvement financier (s'il y a) sur l'ancien compte lorsque ce dernier avait impacté le compte
 			if (($this->oldIsPlanified===false)||	(($this->oldIsPlanified===null)&&($this->isPlanified===false)))
 			{
-				$this->oldCompte->setMontantActuel($this->oldCompte->getMontantActuel() - (($this->oldMontant == null) ? $this->montant : $this->oldMontant ));
+				$this->oldCompte->setMontantActuel($this->oldCompte->getMontantActuel() - (($this->oldMontant === null) ? $this->montant : $this->oldMontant ));
 			}
 			//ajout de l'impact du mouvement financier sur le compte (s'il y a)
 			if ($this->isPlanified===false)

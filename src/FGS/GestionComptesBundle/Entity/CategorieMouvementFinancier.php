@@ -166,7 +166,7 @@ class CategorieMouvementFinancier
 	
 	public  function hasParent()
 	{
-		return  $this->parent != null;
+		return  $this->parent !== null;
 	}
 	
 	public function getChildrens() {

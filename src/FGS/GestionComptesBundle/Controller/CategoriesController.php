@@ -38,7 +38,7 @@ class CategoriesController extends Controller
 		
 		$cmf->setUtilisateur($this->getUser());
 		
-		if ($cmf->getParent() != null) {
+		if ($cmf->getParent() !== null) {
 			$cmf->setOrdre(count($cmf->getParent()->getChildrens())+1);
 			$cmf->setType($cmf->getParent()->getType());
 		}
@@ -189,7 +189,7 @@ class CategoriesController extends Controller
 				'utilisateur'	=> $cmf->getUtilisateur(),
 				'parent'		=> $cmf->getParent(),
 		));
-		if ($cmfPredecessorOrSuccessor != null)
+		if ($cmfPredecessorOrSuccessor !== null)
 		{
 			$repository->switchOrdre($cmf, $cmfPredecessorOrSuccessor);
 		}

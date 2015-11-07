@@ -22,14 +22,14 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 		$queryBuilder	=	$this->getCategoriesForUtilisateur($utilisateurId);
 		
 		
-		if (($cmf != null) && ( in_array($cmf->getType(), array(CategorieMouvementFinancier::TYPE_DEPENSE, CategorieMouvementFinancier::TYPE_REVENU))))
+		if (($cmf !== null) && ( in_array($cmf->getType(), array(CategorieMouvementFinancier::TYPE_DEPENSE, CategorieMouvementFinancier::TYPE_REVENU))))
 		{
 			$queryBuilder
 				->andWhere('cmf.type = ?2')
 				->setParameter('2', $cmf->getType());
 		}
 		
-		if (($cmf != null) && ($cmf->getId() != null) && (!$allowCmfId))
+		if (($cmf !== null) && ($cmf->getId() !== null) && (!$allowCmfId))
 		{
 			$queryBuilder
 				->andWhere('cmf.id != ?3')
@@ -42,7 +42,7 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 		{
 			$ligne=$resultat[$key];
 
-			if ($ligne->getParent() != null) 
+			if ($ligne->getParent() !== null) 
 			{
 				$this->addChildrenAndSetParent($resultat, $ligne);
 				unset($resultat[$key]);
@@ -118,7 +118,7 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 		$searchCmf	= $this->getCmfAndChildrensFor($this->getTreeCategoriesForUtilisateur($cmf->getUtilisateur()->getId()), $cmf);
 		
 		//rénvoie une liste contenant le Cmf recherche et tout ses enfants
-		return ($searchCmf != null) ? $this->flatChildren(array($searchCmf)) : null;
+		return ($searchCmf !== null) ? $this->flatChildren(array($searchCmf)) : null;
 	}
 	
 	
@@ -157,7 +157,7 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 			
 			$searchCmfInChildren	= $this->getCmfAndChildrensFor($cmf->getChildrens(), $searchCmf);
 			
-			if ($searchCmfInChildren != null)
+			if ($searchCmfInChildren !== null)
 			{
 				return $searchCmfInChildren;
 			}
@@ -175,13 +175,11 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 	 */
 	private function addParentCondition(\Doctrine\ORM\QueryBuilder $queryBuilder, $cmf)
 	{
-		if ($cmf->getParent() == null)
-		{
+		if ($cmf->getParent() === null)	{
 			$queryBuilder
 				->andWhere('cmf.parent is NULL');
-		}
-		else
-		{
+		} 
+		else {
 			$queryBuilder
 				->andWhere('cmf.parent = ?2')
 				->setParameter('2', $cmf->getParent());

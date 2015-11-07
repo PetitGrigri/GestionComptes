@@ -45,7 +45,7 @@ class CategorieMouvementFinancierType extends AbstractType
 				$cmf	= $event->getData();
 				
 				//Si on a une entité "Racine", on empêche la modification du libellé
-				if ($cmf && $cmf->getId() && $cmf->getParent() == null)
+				if ($cmf && $cmf->getId() && $cmf->getParent() === null)
 				{
 					$form->add('libelle', 'text', array(	'label'		=> 'Nom de la catégorie',
 															'disabled'	=> true,					
@@ -65,7 +65,7 @@ class CategorieMouvementFinancierType extends AbstractType
 				
 
 				//si on a une création, ou une modification d'une catégorie "non Racine" on ajoute le choix du parent
-				if ((!$cmf || $cmf->getId() === null) || ($cmf && $cmf->getId() && $cmf->getParent() != null))
+				if ((!$cmf || $cmf->getId() === null) || ($cmf && $cmf->getId() && $cmf->getParent() !== null))
 				{
 					$form->add(	'parent', 'entity', array(
 								'class'			=>	'FGSGestionComptesBundle:CategorieMouvementFinancier',
