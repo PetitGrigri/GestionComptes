@@ -275,7 +275,7 @@ class MouvementFinancier
 		$compte	= $this->getCompte();
 		
 		//pas de changement de compte
-		if ($this->oldCompte == null)
+		if (null === $this->oldCompte)
 		{
 			//suppression de l'impact du mouvement financier (s'il y a) sur le compte lorsque ce dernier avait impacté le compte 
 			if (($this->oldIsPlanified===false)||	(($this->oldIsPlanified===null)&&($this->isPlanified===false)))
