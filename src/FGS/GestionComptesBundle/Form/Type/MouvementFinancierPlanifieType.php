@@ -1,6 +1,6 @@
 <?php
 
-namespace FGS\GestionComptesBundle\Form;
+namespace FGS\GestionComptesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -6,7 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
-use FGS\GestionComptesBundle\Form\CategorieMouvementFinancierType;
+use FGS\GestionComptesBundle\Form\Type\CategorieMouvementFinancierType;
+
 
 
 class CategoriesController extends Controller

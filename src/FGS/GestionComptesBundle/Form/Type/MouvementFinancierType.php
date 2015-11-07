@@ -1,6 +1,6 @@
 <?php
 
-namespace FGS\GestionComptesBundle\Form;
+namespace FGS\GestionComptesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,6 +34,7 @@ class MouvementFinancierType extends AbstractType
 			->add(	'date', 'date', array(
 					'widget' => 'single_text',
     				'format' => 'dd-MM-yyyy',
+					
 			))
 			->add('compte', 	'entity', 	array(
 					'class'			=>	'FGSGestionComptesBundle:Compte',

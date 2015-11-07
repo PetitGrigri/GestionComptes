@@ -5,7 +5,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\Compte;
-use FGS\GestionComptesBundle\Form\CompteType;
+use FGS\GestionComptesBundle\Form\Type\CompteType;
+
 
 class ComptesController extends Controller
 {

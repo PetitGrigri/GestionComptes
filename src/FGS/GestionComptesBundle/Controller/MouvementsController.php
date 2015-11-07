@@ -5,22 +5,12 @@ namespace FGS\GestionComptesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityRepository;
 use FGS\GestionComptesBundle\Entity\Compte;
-use FGS\GestionComptesBundle\Entity\TypeCompte;
-use FGS\GestionComptesBundle\Entity\Banque;
-use FGS\GestionComptesBundle\Form\CompteType;
-use Symfony\Component\HttpFoundation\Response;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
-use Symfony\Component\Form\RequestHandlerInterface;
-use FGS\GestionComptesBundle\Form\CategorieMouvementFinancierType;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use FGS\GestionComptesBundle\Exceptions\GestionComptesException;
-use FGS\GestionComptesBundle\Exceptions\GestionComptesCategorieMouvementFinancierException;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
-use FGS\GestionComptesBundle\Form\MouvementFinancierType;
 use FGS\GestionComptesBundle\Entity\MouvementFinancierPlanifie;
-use FGS\GestionComptesBundle\Form\MouvementFinancierPlanifieType;
+use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
+use FGS\GestionComptesBundle\Form\Type\MouvementFinancierPlanifieType;
 
 
 class MouvementsController extends Controller
