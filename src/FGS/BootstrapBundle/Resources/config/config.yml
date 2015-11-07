@@ -1,4 +1,3 @@
 twig:
     form:
         resources: ['FGSBootstrapBundle:Form:fields.html.twig'] #le formulaire personalisé est injecté pour tout les form
-        

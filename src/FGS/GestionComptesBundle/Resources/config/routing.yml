@@ -131,4 +131,3 @@ fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
 fgs_gestion_comptes_test_mail:
     path:     /test-mail
     defaults: { _controller: FGSGestionComptesBundle:Mail:testMail }
-    

@@ -95,4 +95,3 @@ fos_user:
     registration:
         confirmation:
             enabled: true
-    

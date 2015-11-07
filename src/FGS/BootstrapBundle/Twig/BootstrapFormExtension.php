@@ -215,5 +215,4 @@ class BootstrapFormExtension extends \Twig_Extension
 	{
 		return 'bootstrap_form_extension';
 	}
-
 }
