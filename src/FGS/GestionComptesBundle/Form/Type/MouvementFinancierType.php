@@ -34,7 +34,6 @@ class MouvementFinancierType extends AbstractType
 			->add(	'date', 'date', array(
 					'widget' => 'single_text',
     				'format' => 'dd-MM-yyyy',
-					
 			))
 			->add('compte', 	'entity', 	array(
 					'class'			=>	'FGSGestionComptesBundle:Compte',
@@ -48,8 +47,6 @@ class MouvementFinancierType extends AbstractType
 				//récupération du formulaire en cours de création et de l'objet à hydrater
 				$form 	= $event->getForm();
 				$mf		= $event->getData();
-				
-				//\Doctrine\Common\Util\Debug::dump($mf);
 				$cmf	= $mf->getCategorieMouvementFinancier();
 
 				$form->add(	'categorieMouvementFinancier', 'entity', array(

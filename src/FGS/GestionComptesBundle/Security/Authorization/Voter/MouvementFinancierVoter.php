@@ -32,21 +32,11 @@ class MouvementFinancierVoter extends AbstractVoter
 		if (!$user instanceof \FGS\UserBundle\Entity\User)
 				return false;
 		
-
-		switch ($attribute)
-		{
+		switch ($attribute) {
 			case (self::PROPRIETAIRE) : //on regarde si l'uilitsateur est le propriétaire du compte ciblé par le mouvement financier
-										if ($user->getId() === $object->getCompte()->getUtilisateur()->getId())
-										{
+										if ($user->getId() === $object->getCompte()->getUtilisateur()->getId()) {
 											return true;
 										}
-										//si l'utilisateur est un super admin, on l'autorise à agir sur l'objet
-										//non réalisé pour le moment, celà impliquerait de modifier le formType du mouvementFinancier lié à la récupération des catégories
-										/*
-										if ($user->hasRole(\FGS\UserBundle\Entity\User::ROLE_SUPER_ADMIN))
-										{
-											return true;
-										}*/
 										break;
 		}
 		return false;
