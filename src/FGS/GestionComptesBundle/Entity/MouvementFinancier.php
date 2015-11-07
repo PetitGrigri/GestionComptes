@@ -200,7 +200,7 @@ class MouvementFinancier
 	public function wasPlanified() {
 		return $this->wasPlanified;
 	}
-	public function setIsPlanified($isPlanified) {
+	public function setPlanified($isPlanified) {
 		$this->isPlanified = $isPlanified;
 		return $this;
 	}

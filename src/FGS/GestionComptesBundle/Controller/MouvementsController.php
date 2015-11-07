@@ -388,10 +388,10 @@ class MouvementsController extends Controller
 		
 		//vérification de la date pour savoir si le mouvement financier sera planifié ou pas
 		if ($mf->getDate() > $today) {
-			$mf->setIsPlanified(true);
+			$mf->setPlanified(true);
 		}
 		else {
-			$mf->setIsPlanified(false);
+			$mf->setPlanified(false);
 		}
 		
 		//vérification du type de la categorie du mouvement financier pour avoir un montant cohérent
@@ -423,7 +423,7 @@ class MouvementsController extends Controller
 		$mf->setLibelle($mfp->getLibelle());
 		$mf->setMontant($mfp->getMontant());
 		$mf->setWasPlanified(true);
-		$mf->setIsPlanified(false);
+		$mf->setPlanified(false);
 		
 		return $mf;
 	}
