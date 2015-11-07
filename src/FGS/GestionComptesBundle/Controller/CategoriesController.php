@@ -35,8 +35,6 @@ class CategoriesController extends Controller
 		
 		$form->handleRequest($request);
 
-		//\Doctrine\Common\Util\Debug::dump($cmf);
-		
 		$cmf->setUtilisateur($this->getUser());
 		
 		if ($cmf->getParent() !== null) {

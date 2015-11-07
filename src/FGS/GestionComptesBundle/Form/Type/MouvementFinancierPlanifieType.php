@@ -53,10 +53,8 @@ class MouvementFinancierPlanifieType extends AbstractType
            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event)
 			{
 				//récupération du formulaire en cours de création et de l'objet à hydrater
-				$form 		= $event->getForm();
-				$mfp		= $event->getData();
-				
-				//\Doctrine\Common\Util\Debug::dump($mf);
+				$form 	= $event->getForm();
+				$mfp	= $event->getData();
 				$cmf	= $mfp->getCategorieMouvementFinancier();
 
 				$form->add(	'categorieMouvementFinancier', 'entity', array(
@@ -71,31 +69,25 @@ class MouvementFinancierPlanifieType extends AbstractType
 				
 				if (!$mfp || $mfp->getId() === null)
 				{
-					if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
-					{
+					if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE) {
 						$form->add('sauver', 'submit', array('label'=>'Ajouter cette dépense Planifié'));
 					}
-					else
-					{
+					else {
 						$form->add('sauver', 'submit', array('label'=>'Ajouter ce revenu planifié'));
 					}
 				}
 				else
 				{
-					if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
-					{
+					if ($mfp->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE) {
 						$form->add('sauver', 'submit', array('label'=>'Modifier cette dépense planifié'));
 					}
-					else
-					{
+					else {
 						$form->add('sauver', 'submit', array('label'=>'Modifier ce revenu planifié'));
 					}
 				}
 				//mis dans le gestionnaire d'évènement après l'ajout du bouton de sauvegarde afin un bug d'afichage
 				$form->add('effacer','reset');
 			});
-
-        
     }
     
     /**

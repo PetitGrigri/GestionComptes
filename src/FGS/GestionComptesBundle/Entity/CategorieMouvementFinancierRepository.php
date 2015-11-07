@@ -210,19 +210,12 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 
 		foreach ($treeCategorie as $categorie)
 		{
-			if ($categorie->hasChildren())
-			{
-
-				//echo $categorie->getLibelle(). ' a un enfant (level : '.$level.')<br/>';
+			if ($categorie->hasChildren()) {
 				$categorie->setLevel($level);
-				
 				$futurResultat = array_merge($futurResultat, array($categorie));
-				$futurResultat = array_merge($futurResultat, $this->flatChildren($categorie->getChildrens(), $level+1));
-				
+				$futurResultat = array_merge($futurResultat, $this->flatChildren($categorie->getChildrens(), $level+1));	
 			}
-			else
-			{
-				//echo $categorie->getLibelle(). ' n\'a pas d\'enfant (level : '.$level.')<br/>';
+			else {
 				$categorie->setLevel($level);
 				$futurResultat = array_merge($futurResultat, array($categorie));
 			}
@@ -233,13 +226,10 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 
 	private function addChildrenAndSetParent(&$resultat, &$enfant)
 	{
-		foreach ($resultat as $categorie)
-		{
-			if ($enfant->getParent()->getId() == $categorie->getId())
-			{
+		foreach ($resultat as $categorie) {
+			if ($enfant->getParent()->getId() == $categorie->getId()) {
 				$enfant->setParent($categorie);
 				$categorie->addChildren($enfant);
-
 			}
 		}
 	}

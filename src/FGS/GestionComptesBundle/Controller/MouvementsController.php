@@ -212,9 +212,6 @@ class MouvementsController extends Controller
 	public function checkMouvementFinancierAction($id)
 	{
 		$em 	= $this->getDoctrine()->getEntityManager();
-		
-		//la recherche via repository est moins rapide que l'utilisation de find... incompréhensible :(
-		//$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->getMouvementFinancierAndCompte($id);
 		$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
 		
 		if ($mf->getCompte()->getUtilisateur()->getId() != $this->getUser()->getId()) {

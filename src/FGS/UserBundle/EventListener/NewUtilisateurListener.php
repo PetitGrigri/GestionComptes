@@ -16,7 +16,6 @@ class NewUtilisateurListener implements EventSubscriberInterface
 	public function __construct(EntityManager $em)
 	{
 		$this->_em 							= $em;
-
 	}
 	
 	public static function getSubscribedEvents()
@@ -51,10 +50,5 @@ class NewUtilisateurListener implements EventSubscriberInterface
 		
 		$this->_em->persist($revenu);
 		$this->_em->flush();
-		
-		//\Doctrine\Common\Util\Debug::dump($responseEvent->getUser());
-		
-		//echo "J'ai un nouvel utilisateur";
-		
 	}
 }
