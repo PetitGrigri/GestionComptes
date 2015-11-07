@@ -90,7 +90,7 @@ class CategorieMouvementFinancier
     
     public function __toString(){
     	$avant = '';
-    	for ($a=0; $a<$this->getLevel(); $a++)
+    	for ($a=0; $a<$this->level; $a++)
     	{
     		$avant.='&nbsp;&nbsp;';
     	}
