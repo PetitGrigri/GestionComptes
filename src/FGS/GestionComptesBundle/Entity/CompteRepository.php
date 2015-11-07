@@ -3,10 +3,7 @@
 namespace FGS\GestionComptesBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use FGS\GestionComptesBundle\FGSGestionComptesBundle;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\Query\Expr\Select;
-use Doctrine\ORM\Query;
 
 /**
  * CompteRepository

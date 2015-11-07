@@ -5,8 +5,6 @@ namespace FGS\GestionComptesBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use FGS\GestionComptesBundle\Entity\Compte;
-
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 

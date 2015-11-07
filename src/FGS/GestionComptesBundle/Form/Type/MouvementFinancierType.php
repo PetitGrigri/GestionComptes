@@ -5,11 +5,8 @@ namespace FGS\GestionComptesBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use FGS\GestionComptesBundle\Entity\Compte;
-
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use FGS\BootstrapBundle\Form\Type\ButtonTextType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;

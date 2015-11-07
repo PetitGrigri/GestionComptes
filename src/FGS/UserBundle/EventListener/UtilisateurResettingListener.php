@@ -4,14 +4,9 @@ namespace FGS\UserBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use Doctrine\ORM\EntityManager;
-use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Event\FormEvent;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 
 class UtilisateurResettingListener implements EventSubscriberInterface
 {

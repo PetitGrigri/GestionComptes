@@ -2,7 +2,6 @@
 namespace FGS\BootstrapBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ButtonTextType extends AbstractType
 {
