@@ -18,6 +18,9 @@ parameters:
 
     locale:            en
 
+    # A secret key that's used to generate certain security-related tokens
+    secret:            Th1IsAnAws0meP@ssw0rd!
+
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true
