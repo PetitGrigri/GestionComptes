@@ -26,7 +26,10 @@ col-sm-8 col-md-6
     {% endfor %}
 {%- endblock choice_widget_options -%}
 
-
+{%- block submit_widget -%}
+    {% set attr = attr|merge({class: (attr.class|default('btn-primary btn-block') ~ ' btn')|trim}) %}
+	{{- parent() -}}
+{%- endblock submit_widget -%}
 
 {% block button_text_widget %}
     {% if label is empty -%}
