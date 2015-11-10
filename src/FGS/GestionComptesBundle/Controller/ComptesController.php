@@ -29,10 +29,8 @@ class ComptesController extends Controller
     {
     	$compte	=	new Compte();
     	
-    	$form = $this->createForm(new CompteType(), $compte)
-    				->add('sauver', 'submit', array('label'=>'Ajouter ce compte'))
-    				->add('effacer','reset');
-
+    	$form = $this->createForm(new CompteType(), $compte);
+    	
     	$form->handleRequest($request);
     	
     	if ($form->isValid())
@@ -103,9 +101,7 @@ class ComptesController extends Controller
 		
 		$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 		
-    	$form = $this->createForm(new CompteType(), $compte)
-    	    		->add('sauver', 'submit', array('label'=>'Modifier ce compte'))
-    				->add('effacer','reset');;
+    	$form = $this->createForm(new CompteType(), $compte);
     	
     	$form->handleRequest($request);
     	 

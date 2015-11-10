@@ -6,14 +6,6 @@
 
 <h1 class="page-header">{% block titre_contenu %}Ajout d'un nouveau Compte{% endblock %}</h1>
 
-	{{ set_bootstrap_form_presentation("horizontal") }}
-	
-	{{ set_bootstrap_label_grid({"sm":3,"md":2, "md-offset": 1}) }}
-	{{ set_bootstrap_widget_grid({"sm":8,"md":6}) }}
-	{{ set_bootstrap_error_grid({"sm":3, "sm-offset": 3}) }}
-	{{ set_bootstrap_reset_grid({"sm":4, "md":3,"xs":6}) }}
-	{{ set_bootstrap_submit_grid({"sm":4, "sm-offset": 3, "md":3, "md-offset":3, "xs":6}) }}
-	
 	{{ form(form) }}
 
 {% endblock %}

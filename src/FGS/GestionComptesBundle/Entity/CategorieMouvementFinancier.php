@@ -92,7 +92,7 @@ class CategorieMouvementFinancier
     	$avant = '';
     	for ($a=0; $a<$this->level; $a++)
     	{
-    		$avant.='&nbsp;&nbsp;';
+    		$avant.='  ';
     	}
     	
     	return $avant.$this->libelle;    

@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use FGS\GestionComptesBundle\Entity\Compte;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 
 class CompteType extends AbstractType
@@ -26,7 +28,19 @@ class CompteType extends AbstractType
 				'property'	=>	'nom',
 				'empty_value'	=>	'Selectionnez une banque',
 			))
-			;
+			->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event)
+			{	
+				$form = $event->getForm();
+				$compte	= $event->getData();
+				
+				if (null === $compte->getId())
+				{
+					$form->add('sauver', 'submit', array('label'=>'Ajouter ce compte'));
+				}
+				else {
+					$form->add('sauver', 'submit', array('label'=>'Modifier ce compte'));
+				}
+			});
 	}
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)

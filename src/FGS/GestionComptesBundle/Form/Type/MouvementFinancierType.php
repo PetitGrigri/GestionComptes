@@ -82,8 +82,8 @@ class MouvementFinancierType extends AbstractType
 						$form->add('sauver', 'submit', array('label'=>'Modifier ce revenu'));
 					}
 				}
-				//mis dans le gestionnaire d'évènement après l'ajout du bouton de sauvegarde afin un bug d'afichage
-				$form->add('effacer','reset');
+				//mis dans le gestionnaire d'évènement après l'ajout du bouton de sauvegarde afin de gérer un bug d'afichage
+				//$form->add('effacer','reset');
 			})
 			;
 
