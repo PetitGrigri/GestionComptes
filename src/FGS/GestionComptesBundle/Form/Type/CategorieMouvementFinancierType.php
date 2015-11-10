@@ -83,8 +83,6 @@ class CategorieMouvementFinancierType extends AbstractType
 				{
 					$form->add('sauver', 'submit', array('label'=>'Modifier cette categorie'));
 				}
-				//mis dans le gestionnaire d'évènement après l'ajout du bouton de sauvegarde afin un bug d'afichage
-				//$form->add('effacer','reset');
 			})
 			;
 
