@@ -36,11 +36,6 @@
 {% macro generer_enfants(enfants) %}
 <ul class='media-list' style='margin-top: 20px;'>
 	{% for children in enfants %}
-	
-	{% set lien_supprimer 	= children.parent is empty ? '#' : path('fgs_gestion_comptes_supprimer_categorie', {"id":children.id})  %}
-	{% set lien_modifier	= path('fgs_gestion_comptes_modifier_categorie', {"id":children.id}) %}
-	{% set lien_monter		= loop.first ? '#' : path('fgs_gestion_comptes_monter_categorie', {'id': children.id}) %}
-	{% set lien_descendre	= loop.last ? '#' :path('fgs_gestion_comptes_descendre_categorie', {'id': children.id}) %}
 
 	<li class='media''>
 		<div class='media-left'>
@@ -51,35 +46,30 @@
 		<div class='media-body' style='width: 10000px;'>
 			
 			<div style='line-height: 34px; vertical-align: middle;'>
-	{#{{children.ordre}} : #}{{ children.libelle }} 
-				
-
-
+				{{ children.libelle }} 
 				<div class='pull-right' >
 
-					<a  href="{{ lien_modifier }}" class="btn btn-info ">
+					<a  href="{{ path('fgs_gestion_comptes_modifier_categorie', {"id":children.id}) }}" class="btn btn-info ">
 						<span class="glyphicon glyphicon-pencil"></span><span class='hidden-xs'> Modifier</span>
 					</a>
 					
-					<a href="{% if children.parent is not empty %}{{ lien_supprimer }}{% else %}#{% endif %}" class="btn btn-danger {% if children.parent is  empty %}disabled{% endif %}" {% if children.parent is not empty %}data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}"{% endif %}>
+					<a href="{{ children.parent is empty ? '#' : path('fgs_gestion_comptes_supprimer_categorie', {"id":children.id}) }}" class="btn btn-danger {% if children.parent is  empty %}disabled{% endif %}" {% if children.parent is not empty %}data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}"{% endif %}>
 						<span class="glyphicon glyphicon-trash"></span><span class='hidden-xs'> Supprimer</span>
 					</a>
 					
 					<div class='btn-group'>
-						<a  href="{{ lien_monter }}" class="btn btn-success{% if loop.first %} disabled{% endif %}">
+						<a  href="{{ loop.first ? '#' : path('fgs_gestion_comptes_monter_categorie', {'id': children.id}) }}" class="btn btn-success{{ loop.first ? ' disabled'}}">
 							<span class="glyphicon glyphicon-arrow-up"></span>
 						</a>
-						<a  href="{{ lien_descendre }}" class="btn btn-success{% if loop.last %} disabled {% endif %}">
+						<a  href="{{ loop.last ? '#' :path('fgs_gestion_comptes_descendre_categorie', {'id': children.id}) }}" class="btn btn-success{{ loop.last ? ' disabled'}}">
 							<span class="glyphicon glyphicon-arrow-down"></span>
 						</a>
 					</div>
 					
 				</div>
 			</div>
-			
-			{% if children.childrens is not empty %}
-			{{ _self.generer_enfants(children.childrens) }}
-			{% endif %}
+
+			{{ children.childrens is not empty  ? _self.generer_enfants(children.childrens) }}
 			
 		</div>
 		
@@ -119,6 +109,9 @@ padding-right: 0px;
 .media-left > div, .media-body > div{
 	/*border-bottom: 	1px solid #eee;*/
 	padding: 		0px 0px 15px 10px;
+}
+.modal-dialog {
+	z-index: 1050;
 }
 </style>
 {% endblock %}
