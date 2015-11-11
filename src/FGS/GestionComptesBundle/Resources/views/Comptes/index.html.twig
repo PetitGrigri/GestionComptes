@@ -35,13 +35,13 @@
 		<tbody>
 			{% for mouvementFinancier in compte.mouvementFinanciers %}
 			<tr>
-				<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
+				<td><a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs {{ mouvementFinancier.checkBanque ? 'text-success' : 'text-muted' }}'><span class='glyphicon {{ mouvementFinancier.checkBanque ? 'glyphicon-thumbs-up':'glyphicon-thumbs-down' }}'></span></a></td>
 				<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
 				<td>{% if mouvementFinancier.commentaire %}<span class='glyphicon glyphicon-tag' data-toggle='tooltip' title='{{ mouvementFinancier.commentaire }}'></span> {% endif %}{{ mouvementFinancier.libelle }}</td>
 				<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
 				<td class="text-right">{{ mouvementFinancier.montant }} €</td>
 				<td class='text-right'>
-					{% if mouvementFinancier.wasPlanified %}<a href='#', {'id':mouvementFinancier.id}) }}' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-time'></span></a>{% endif %}
+					{{ mouvementFinancier.wasPlanified ? "<a href='#' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-time'></span></a>" }}
 					<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
 					<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
 				</td>
