@@ -16,7 +16,7 @@ col-sm-8 col-md-6
                 {{- block('choice_widget_options') -}}
             </optgroup>
         {%- else -%}
-            <option value="{{ choice.value }}" {{ block('attributes') }}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{% for i in 0..get_start_white_space(choice.label) %}&nbsp;{% endfor %}{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+            <option value="{{ choice.value }}" {{ block('attributes') }}{{ choice is selectedchoice(value) ? 'selected="selected"'}}>{% for i in 0..get_start_white_space(choice.label) %}&nbsp;{% endfor %}{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
         {%- endif -%}
     {% endfor %}
 {%- endblock choice_widget_options -%}
