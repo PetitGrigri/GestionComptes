@@ -33,7 +33,8 @@
 	
 		<table class="table table-striped ">
 			<caption>
-				Visualisation de vos {{ longueur }} {% if paginationAct == 1  %}dernière {% endif %}opérations {% if paginationAct > 1  %} (page {{ paginationAct }}){% endif %}
+
+				Visualisation de vos dernières opérations (page {{ paginationAct }} / {{ paginationMax }})
 			</caption>
 			<thead>
 				<tr>
@@ -56,7 +57,7 @@
 			<tbody>
 				{% for mouvementFinancier in compte.mouvementFinanciers %}
 				<tr>
-					<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
+					<td>{% include 'FGSGestionComptesBundle:Utils:check_banque.html.twig' %}</td>
 					<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
 					<td>{% if mouvementFinancier.commentaire %}<span class='glyphicon glyphicon-tag' data-toggle='tooltip' title='{{ mouvementFinancier.commentaire }}'></span> {% endif %}{{ mouvementFinancier.libelle }}</td>
 					<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
