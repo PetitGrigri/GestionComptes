@@ -146,7 +146,7 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id, $annee, $mois)
 	{
-		$date		= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTimeImmutable("now");
+		$date		= (($annee !== null)&&($mois !== null))? new \DateTimeImmutable("$annee-$mois"):new \DateTimeImmutable("now");
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
