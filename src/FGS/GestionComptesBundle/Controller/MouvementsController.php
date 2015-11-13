@@ -149,10 +149,8 @@ class MouvementsController extends Controller
 		$date				= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTime("now");
 		$date_moins_1_mois 	= clone $date; 
 		$date_plus_1_mois	= clone $date;
-		
 		$date_moins_1_mois->modify('-1 month');
 		$date_plus_1_mois->modify('+1 month');
-		
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
@@ -161,10 +159,6 @@ class MouvementsController extends Controller
 		
 		//récupération de tout les totaux pour chaque catégories		
 		$montantCategorie	= $repository->getMontantForEachCategorie($id, $anneeMois);
-		//création d'un callback de filtre pour ne transmettre que  les totaux de type "dépense"
-		$callback_depense = function($array_data) {
-			return ($array_data['total'] <0);
-		};
 		
 		$totalDepenseAndRevenuNotPlanified		= $repository->getDepenseAndRevenuNotPlanified($id, $anneeMois);
 		$totalDepenseAndRevenuPlanified			= $repository->getDepenseAndRevenuPlanified($id, $anneeMois);
@@ -188,7 +182,7 @@ class MouvementsController extends Controller
 					'moins_1_mois'	=> $date_moins_1_mois,
 					'plus_1_mois'	=> $date_plus_1_mois,
 				),
-				'totaux_par_categorie'		=> array_filter($montantCategorie,$callback_depense),
+				'totaux_par_categorie'		=> array_filter($montantCategorie,function($array_data) { return ($array_data['total'] < 0); }),
 				'totaux'					=> array (
 					'depense_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
 					'revenu_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
