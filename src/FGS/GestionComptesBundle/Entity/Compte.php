@@ -187,6 +187,23 @@ class Compte
 		return $this->mouvementFinanciers;
 	}
 	
+	public function getMouvementFinanciersPlanified() 
+	{
+		$callbackPlanified = function(\FGS\GestionComptesBundle\Entity\MouvementFinancier $mf) {
+			return !($mf->isPlanified());
+		};
+		return array_filter( $this->mouvementFinanciers->toArray(), $callbackPlanified);
+	}
+	
+	public function getMouvementFinanciersNotPlanified() 
+	{
+		$callbackNotPlanified = function(\FGS\GestionComptesBundle\Entity\MouvementFinancier $mf) {
+			return $mf->isPlanified();
+		};
+		return array_filter( $this->mouvementFinanciers->toArray(), $callbackNotPlanified);
+	}
+	
+	
 	public function setMouvementFinanciers($mouvementFinanciers) {
 		$this->mouvementFinanciers = $mouvementFinanciers;
 		return $this;
