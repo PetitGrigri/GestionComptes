@@ -1,6 +1,4 @@
 {% extends "FGSGestionComptesBundle::layout.html.twig" %}
-{% set date_plus_1_mois 	= date|date_modify("+1 month") %}
-{% set date_moins_1_mois 	= date|date_modify("-1 month") %}
 
 {% block title %}Visualisation des données d'un compte{% endblock %}
 
@@ -21,7 +19,7 @@
 		<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
 	</div>
 	<div class="col-md-11 col-xs-10">
-		<h1>{{ compte.nom }} ({{ date|localizeddate('full','none',null, null, 'MMMM YYYY') }})</h1>
+		<h1>{{ compte.nom }} ({{ date.actuelle|localizeddate('full','none',null, null, 'MMMM YYYY') }})</h1>
 	</div>
 </div>
 
@@ -186,9 +184,9 @@
 
 <nav>
 	<ul class="pager">
-		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date_moins_1_mois|date('Y'),'mois':date_moins_1_mois|date('m')}) }}"><span aria-hidden="true">&larr;</span> Mois précédent</a></li>
+		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date.moins_1_mois|date('Y'),'mois':date.moins_1_mois|date('m')}) }}"><span aria-hidden="true">&larr;</span> Mois précédent</a></li>
 		<li class=""id="mois_annee_en_cours"><a href='{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id}) }}'><span class='glyphicon glyphicon-calendar'></span></a></li>
-		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date_plus_1_mois|date('Y'),'mois':date_plus_1_mois|date('m')}) }}">Mois suivant <span aria-hidden="true">&rarr;</span></a></li>
+		<li class=""><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois', {'id':id, 'annee':date.plus_1_mois|date('Y'),'mois':date.plus_1_mois|date('m')}) }}">Mois suivant <span aria-hidden="true">&rarr;</span></a></li>
 	</ul>
 </nav>
 

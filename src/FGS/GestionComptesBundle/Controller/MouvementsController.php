@@ -146,7 +146,13 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id, $annee, $mois)
 	{
-		$date		= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTime("now");
+		$date				= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTime("now");
+		$date_moins_1_mois 	= clone $date; 
+		$date_plus_1_mois	= clone $date;
+		
+		$date_moins_1_mois->modify('-1 month');
+		$date_plus_1_mois->modify('+1 month');
+		
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
@@ -173,11 +179,15 @@ class MouvementsController extends Controller
 				$nbNotPlanified++;
 			}
 		}
-			
+
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_mois.html.twig', array(
 				'compte'					=> $compte[0],
 				'id'						=> $id,
-				'date'						=> $date,
+				'date'						=> array(
+					'actuelle'		=> $date,
+					'moins_1_mois'	=> $date_moins_1_mois,
+					'plus_1_mois'	=> $date_plus_1_mois,
+				),
 				'totaux_par_categorie'		=> array_filter($montantCategorie,$callback_depense),
 				'totaux'					=> array (
 					'depense_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
