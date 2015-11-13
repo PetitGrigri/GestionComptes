@@ -2,9 +2,6 @@
 {% set date_plus_1_mois 	= date|date_modify("+1 month") %}
 {% set date_moins_1_mois 	= date|date_modify("-1 month") %}
 
-{% set compteur_mouvements_effectifs	= 0 %}
-{% set compteur_mouvements_planifies	= 0 %}
-
 {% block title %}Visualisation des données d'un compte{% endblock %}
 
 {% block modal %}
@@ -35,11 +32,11 @@
 		<div class='gestion-compte-info gestion-compte-info-revenu'>
 			<div class='col-md-6'>
 				<h3 class='gestion-compte-info-titre'>Revenu à ce jour</h3>
-				<div class='gestion-compte-info-contenu'>{{ totalRevenuNotPlanified }} €</div>
+				<div class='gestion-compte-info-contenu'>{{ totaux.revenu_not_planified }} €</div>
 			</div>
 			<div class='col-md-6'>
 				<h3 class='gestion-compte-info-titre'>Revenu à venir</h3>
-				<div class='gestion-compte-info-contenu'>{{ totalRevenuPlanified }} €</div>
+				<div class='gestion-compte-info-contenu'>{{ totaux.revenu_planified }} €</div>
 			</div>
 		</div>
 	</div>
@@ -53,21 +50,21 @@
 			</div>
 			<div class='col-md-6'>
 				<h3 class='gestion-compte-info-titre'>Total planifié</h3>
-				<div class='gestion-compte-info-contenu'>{{ compte.montantActuel + totalRevenuPlanified + totalDepensePlanified }} €</div>
+				<div class='gestion-compte-info-contenu'>{{ compte.montantActuel + totaux.revenu_planified + totaux.depense_planified }} €</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!--  Dépenses -->
 	<div class='col-md-4'>
 		<div class='gestion-compte-info gestion-compte-info-depense'>
 			<div class='col-md-6'>
 				<h3 class='gestion-compte-info-titre'>Dépense à ce jour</h3>
-				<div class='gestion-compte-info-contenu'>{{ totalDepenseNotPlanified | abs }} €</div>
+				<div class='gestion-compte-info-contenu'>{{ totaux.depense_not_planified | abs }} €</div>
 			</div>
 			<div class='col-md-6'>
 				<h3 class='gestion-compte-info-titre'>Dépense à venir</h3>
-				<div class='gestion-compte-info-contenu'>{{ totalDepensePlanified | abs }} €</div>
+				<div class='gestion-compte-info-contenu'>{{ totaux.depense_planified | abs }} €</div>
 			</div>
 		</div>
 	</div>
@@ -104,24 +101,21 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for mouvementFinancier in compte.mouvementFinanciers %}
-								{% if mouvementFinancier.isPlanified == false %}
-									{% set compteur_mouvements_effectifs = compteur_mouvements_effectifs + 1 %}
-									<tr>
-										<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
-										<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
-										<td>{% if mouvementFinancier.commentaire %}<span class='glyphicon glyphicon-tag' data-toggle='tooltip' title='{{ mouvementFinancier.commentaire }}'></span> {% endif %}{{ mouvementFinancier.libelle }}</td>
-										<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
-										<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
-										<td class='text-right'>
-											<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-											<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
-										</td>
-									</tr>
-								{% endif %}
+							{% for mouvementFinancier in compte.mouvementFinanciers if mouvementFinancier.isPlanified == false %}
+								<tr>
+									<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
+									<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
+									<td>{% if mouvementFinancier.commentaire %}<span class='glyphicon glyphicon-tag' data-toggle='tooltip' title='{{ mouvementFinancier.commentaire }}'></span> {% endif %}{{ mouvementFinancier.libelle }}</td>
+									<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
+									<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
+									<td class='text-right'>
+										<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
+										<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+									</td>
+								</tr>
 							{% endfor %}
 						</tbody>
-						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement.valeur'|transchoice(compteur_mouvements_effectifs) }} </caption>
+						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement.valeur'|transchoice(totaux.nb_not_planified) }} </caption>
 					</table>
 				</div>
 				
@@ -147,24 +141,21 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for mouvementFinancier in compte.mouvementFinanciers %}
-								{% if mouvementFinancier.isPlanified == true %}
-									{% set compteur_mouvements_planifies = compteur_mouvements_planifies + 1 %}
-									<tr>
-										<td>{% if mouvementFinancier.checkBanque%}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-success'><span class='glyphicon glyphicon-thumbs-up'></span></a>{% else %}<a href="{{ path('fgs_gestion_comptes_check_mouvement_financier', {'id':mouvementFinancier.id}) }}" class='btn btn-xs text-muted'><span class='glyphicon glyphicon-thumbs-down'></span></a>{% endif %}</td>
-										<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
-										<td>{% if mouvementFinancier.commentaire %}<span class='glyphicon glyphicon-tag' data-toggle='tooltip' title='{{ mouvementFinancier.commentaire }}'></span> {% endif %}{{ mouvementFinancier.libelle }}</td>
-										<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
-										<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
-										<td class='text-right'>
-											<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-											<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
-										</td>
-									</tr>
-								{% endif %}
+							{% for mouvementFinancier in compte.mouvementFinanciers if mouvementFinancier.isPlanified %}
+								<tr>
+									<td>{% include 'FGSGestionComptesBundle:Utils:check_banque.html.twig' %}</td>
+									<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
+									<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
+									<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
+									<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
+									<td class='text-right'>
+										<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
+										<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+									</td>
+								</tr>
 							{% endfor %}
 						</tbody>
-						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement_planifie.valeur'|transchoice(compteur_mouvements_planifies) }} </caption>
+						<caption style="caption-side: bottom; text-align:right;">{{ 'mouvement_planifie.valeur'|transchoice(totaux.nb_planified) }} </caption>
 					</table>
 				</div>
 			</div>
@@ -181,10 +172,8 @@
 						<canvas id="canvas-depense" style="width: 100%; height: auto;"/>
 					</div>
 					<ul class='list-group' >
-						{% for totalCategorie in totauxParCategorie %}
-							{% if totalCategorie['total'] < 0  %}
-								<li class='list-group-item' style='border:none;'>{{ totalCategorie['libelle_categorie'] }} <span class="badge pull-right">{{ totalCategorie['total']|abs  }} €</span></li>
-							{% endif %}
+						{% for totalCategorie in totaux_par_categorie if totalCategorie['total'] < 0 %}
+							<li class='list-group-item' style='border:none;'>{{ totalCategorie['libelle_categorie'] }} <span class="badge pull-right">{{ totalCategorie['total']|abs  }} €</span></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -272,7 +261,7 @@ $('#mois_annee_en_cours').click(function(event){
 
 //graphique
 var dataCanvasDepense = [
-	{% for totalCategorie in totauxParCategorie %}
+	{% for totalCategorie in totaux_par_categorie %}
 		{% if totalCategorie['total'] < 0  %}
 		{	
 			value: {{ totalCategorie['total']|abs  }},
@@ -280,7 +269,7 @@ var dataCanvasDepense = [
 			highlight: "#FF5A5E",
 			label: "{{ totalCategorie['libelle_categorie'] }}"
 		}
-		{% if loop.last == false %},{% endif %}
+		{{ loop.last == false ? ',' }}
 		{% endif %}
 	{% endfor %}
 ];

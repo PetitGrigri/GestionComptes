@@ -134,7 +134,7 @@ class MouvementsController extends Controller
 	{
 		$Max		= intval($this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte')->getCompteMaxMouvements($id));
 		$compte		= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte')->getCompteMouvementAndCategorie($id, $debut, $longueur);
-		
+
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte.html.twig', array(
 			'compte'				=> $compte[0],
 			'maxMouvementFinanciers'=> $Max,
@@ -158,15 +158,30 @@ class MouvementsController extends Controller
 		$totalDepenseAndRevenuNotPlanified		= $repository->getDepenseAndRevenuNotPlanified($id, $anneeMois);
 		$totalDepenseAndRevenuPlanified			= $repository->getDepenseAndRevenuPlanified($id, $anneeMois);
 		
+		$nbPlanified	= 0;
+		$nbNotPlanified = 0;
+		
+		foreach ($compte[0]->getMouvementFinanciers() as $mf) {
+			if ($mf->isPlanified()) {
+				$nbPlanified++;
+			} else {
+				$nbNotPlanified++;
+			}
+		}
+			
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_mois.html.twig', array(
 				'compte'					=> $compte[0],
 				'id'						=> $id,
 				'date'						=> $date,
-				'totauxParCategorie'		=> $montantCategorie,
-				'totalDepensePlanified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
-				'totalRevenuPlanified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
-				'totalDepenseNotPlanified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
-				'totalRevenuNotPlanified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,	
+				'totaux_par_categorie'		=> $montantCategorie,
+				'totaux'					=> array (
+					'depense_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
+					'revenu_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+					'depense_not_planified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
+					'revenu_not_planified'	=> isset($totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuNotPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,
+					'nb_planified'			=>	$nbPlanified,
+					'nb_not_planified'		=> $nbNotPlanified,
+				),
 		));
 	}
 	
