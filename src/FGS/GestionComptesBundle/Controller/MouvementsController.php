@@ -146,11 +146,7 @@ class MouvementsController extends Controller
 	
 	public function voirMouvementFinancierCompteMoisAction($id, $annee, $mois)
 	{
-		$date				= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTime("now");
-		$date_moins_1_mois 	= clone $date; 
-		$date_plus_1_mois	= clone $date;
-		$date_moins_1_mois->modify('-1 month');
-		$date_plus_1_mois->modify('+1 month');
+		$date		= (($annee !== null)&&($mois !== null))? new \DateTime("$annee-$mois"):new \DateTimeImmutable("now");
 		$anneeMois	= $date->format('Y-m');
 
 		$repository	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:Compte');
@@ -167,11 +163,10 @@ class MouvementsController extends Controller
 		$nbNotPlanified = 0;
 		
 		foreach ($compte[0]->getMouvementFinanciers() as $mf) {
-			if ($mf->isPlanified()) {
+			if ($mf->isPlanified())
 				$nbPlanified++;
-			} else {
+			else
 				$nbNotPlanified++;
-			}
 		}
 
 		return $this->render('FGSGestionComptesBundle:Mouvements:visualiser_mouvements_compte_mois.html.twig', array(
@@ -179,8 +174,8 @@ class MouvementsController extends Controller
 				'id'						=> $id,
 				'date'						=> array(
 					'actuelle'		=> $date,
-					'moins_1_mois'	=> $date_moins_1_mois,
-					'plus_1_mois'	=> $date_plus_1_mois,
+					'moins_1_mois'	=> $date->modify('-1 month'),
+					'plus_1_mois'	=> $date->modify('+1 month'),
 				),
 				'totaux_par_categorie'		=> array_filter($montantCategorie,function($array_data) { return ($array_data['total'] < 0); }),
 				'totaux'					=> array (
