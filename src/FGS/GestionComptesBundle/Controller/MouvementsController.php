@@ -153,7 +153,12 @@ class MouvementsController extends Controller
 		
 		$compte			= $repository->getCompteMouvementAndCategorieMois($id, $anneeMois);
 		
+		//récupération de tout les totaux pour chaque catégories		
 		$montantCategorie	= $repository->getMontantForEachCategorie($id, $anneeMois);
+		//création d'un callback de filtre pour ne transmettre que  les totaux de type "dépense"
+		$callback_depense = function($array_data) {
+			return ($array_data['total'] <0);
+		};
 		
 		$totalDepenseAndRevenuNotPlanified		= $repository->getDepenseAndRevenuNotPlanified($id, $anneeMois);
 		$totalDepenseAndRevenuPlanified			= $repository->getDepenseAndRevenuPlanified($id, $anneeMois);
@@ -173,7 +178,7 @@ class MouvementsController extends Controller
 				'compte'					=> $compte[0],
 				'id'						=> $id,
 				'date'						=> $date,
-				'totaux_par_categorie'		=> $montantCategorie,
+				'totaux_par_categorie'		=> array_filter($montantCategorie,$callback_depense),
 				'totaux'					=> array (
 					'depense_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE]) ? $totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_DEPENSE] : 0,
 					'revenu_planified'		=> isset($totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU]) ?$totalDepenseAndRevenuPlanified[CategorieMouvementFinancier::TYPE_REVENU] : 0,

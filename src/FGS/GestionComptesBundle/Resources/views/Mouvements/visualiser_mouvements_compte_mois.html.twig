@@ -172,7 +172,7 @@
 						<canvas id="canvas-depense" style="width: 100%; height: auto;"/>
 					</div>
 					<ul class='list-group' >
-						{% for totalCategorie in totaux_par_categorie if totalCategorie['total'] < 0 %}
+						{% for totalCategorie in totaux_par_categorie %}
 							<li class='list-group-item' style='border:none;'>{{ totalCategorie['libelle_categorie'] }} <span class="badge pull-right">{{ totalCategorie['total']|abs  }} €</span></li>
 						{% endfor %}
 					</ul>
@@ -262,15 +262,13 @@ $('#mois_annee_en_cours').click(function(event){
 //graphique
 var dataCanvasDepense = [
 	{% for totalCategorie in totaux_par_categorie %}
-		{% if totalCategorie['total'] < 0  %}
-		{	
-			value: {{ totalCategorie['total']|abs  }},
-			color:"#F7464A",
-			highlight: "#FF5A5E",
-			label: "{{ totalCategorie['libelle_categorie'] }}"
-		}
-		{{ loop.last == false ? ',' }}
-		{% endif %}
+	{
+		value: {{ totalCategorie['total']|abs  }},
+		color:"#F7464A",
+		highlight: "#FF5A5E",
+		label: "{{ totalCategorie['libelle_categorie'] }}"
+	}
+	{{ loop.last == false ? ',' }}
 	{% endfor %}
 ];
 
