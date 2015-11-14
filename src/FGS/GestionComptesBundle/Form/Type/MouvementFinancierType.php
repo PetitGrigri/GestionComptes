@@ -4,7 +4,6 @@ namespace FGS\GestionComptesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use FGS\GestionComptesBundle\Entity\Compte;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormEvents;
@@ -13,9 +12,6 @@ use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 
 class MouvementFinancierType extends AbstractType
 {
-	/* (non-PHPdoc)
-	 * @see \Symfony\Component\Form\AbstractType::buildForm()
-	 */
 	public function __construct(RegistryInterface $doctrine, $utilisateurId)
 	{
 		$this->doctrine				= $doctrine;
@@ -82,8 +78,6 @@ class MouvementFinancierType extends AbstractType
 						$form->add('sauver', 'submit', array('label'=>'Modifier ce revenu'));
 					}
 				}
-				//mis dans le gestionnaire d'évènement après l'ajout du bouton de sauvegarde afin de gérer un bug d'afichage
-				//$form->add('effacer','reset');
 			})
 			;
 
