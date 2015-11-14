@@ -1,5 +1,7 @@
 # This file is a "template" of what your parameters.yml file should look like
 parameters:
+    session_name: ma_petite_tirelire
+    application_name: "Ma petite Tirelire"
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
