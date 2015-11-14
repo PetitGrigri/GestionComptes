@@ -20,11 +20,9 @@ class MouvementsPlanifiesController extends Controller
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
-				'type'			=>	CategorieMouvementFinancier::TYPE_DEPENSE,
-				'parent'		=>	null,
-				'utilisateur'	=>	$utilisateur,
-		));
+		$cmf = $this->getDoctrine()
+					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+					->getRootMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
@@ -61,12 +59,10 @@ class MouvementsPlanifiesController extends Controller
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->findOneBy(array(
-				'type'			=>	CategorieMouvementFinancier::TYPE_REVENU,
-				'parent'		=>	null,
-				'utilisateur'	=>	$utilisateur,
-		));
-
+		$cmf = $this->getDoctrine()
+					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+					->getRootMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
+		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
 		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
@@ -196,4 +192,6 @@ class MouvementsPlanifiesController extends Controller
 		
 		return $mf;
 	}
+	
+	
 }

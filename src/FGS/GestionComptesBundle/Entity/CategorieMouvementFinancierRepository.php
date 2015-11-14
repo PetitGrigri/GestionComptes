@@ -11,7 +11,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategorieMouvementFinancierRepository extends EntityRepository
 {
-
+	/**
+	 * Cette méthode permet de récupérer le mouvement financier principal d'un utilisateur (Dépense ou Revenu)
+	 * @param  mixed $utilisateur
+	 * @param  string $type
+	 */
+	public function getRootMouvementFinancier($utilisateur, $type)
+	{
+		return $this->findOneBy(array(
+			'type'			=>	$type,
+			'parent'		=>	null,
+			'utilisateur'	=>	$utilisateur,
+		));
+	}
 	/*
 	 * Cette méthode permet de récupérer les catégories d'un utilisateur, sous la forme d'une liste pouvant contenir
 	 * des enfants 
@@ -102,11 +114,6 @@ class CategorieMouvementFinancierRepository extends EntityRepository
 	{
 		return $this->flatChildren($this->getTreeCategoriesForUtilisateur($utilisateurId, $cmf, $allowCmfId));
 	}
-	
-	
-	
-	
-
 
 	/**
 	 * Permet de récupérer la CatégorieMouvementFinancier recherchée ainsi que tout ses enfants (en récursif) dans une seule liste
