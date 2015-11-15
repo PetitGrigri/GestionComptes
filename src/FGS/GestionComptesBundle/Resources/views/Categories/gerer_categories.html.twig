@@ -55,8 +55,6 @@
 					
 					{{ render(controller('FGSGestionComptesBundle:Categories:gerenerLienSuppression', {'cmf': children})) }}
 					
-
-
 					<div class='btn-group'>
 						<a  href="{{ loop.first ? '#' : path('fgs_gestion_comptes_monter_categorie', {'id': children.id}) }}" class="btn btn-success{{ loop.first ? ' disabled'}}">
 							<span class="glyphicon glyphicon-arrow-up"></span>

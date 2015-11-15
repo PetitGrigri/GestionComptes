@@ -56,9 +56,7 @@
 						</a>
 					</div>
 					<div class="col-xs-6">
-						<a data-compte="{{ compte.nom }}" href="{{ path('fgs_gestion_comptes_supprimer_compte', {"id":compte.id}) }}" class="btn btn-danger btn-block" data-toggle="modal">
-							<span class="glyphicon glyphicon-trash"></span> Supprimer
-						</a>
+						{{ render(controller('FGSGestionComptesBundle:Comptes:gerenerLienSuppression', {'compte': compte})) }}
 					</div>
 				</div>
 			</div>
@@ -93,7 +91,7 @@
 {{ parent() }}
 <script>
 $(document).ready(function(){
-	$('a[data-compte]').click(function(e)
+	$('button[data-compte]').click(function(e)
 	{
 		//stop de la propagation de l'évènement
 		e.preventDefault();
@@ -103,11 +101,21 @@ $(document).ready(function(){
 
 		//modification de la fenêtre de confirmation
 		$('#nom_compte').html($this.attr('data-compte'));
-		$('#valider_suppression').attr('href', $this.attr('href'));
+		$('#valider_suppression').attr('href', $this.attr('id'));
 		
 		//affichage de la fenêtre de confirmation
 		$('#confirmation').modal('show');
 	});
+	$('#valider_suppression').click(function(e){
+		
+		//stop de la propagation de l'évènement
+		e.preventDefault();
+		
+		//récupération de l'identifiant du bouton sur lequel on avait cliqué  puis click
+		formulaire = '#formulaire'+$(this).attr('href');
+		$(formulaire).submit();
+		
+	})
 });
 </script>
 {% endblock %}

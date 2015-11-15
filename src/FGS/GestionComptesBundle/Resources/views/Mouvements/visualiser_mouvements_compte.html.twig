@@ -65,18 +65,14 @@
 					<td class='text-right'>
 						{% include 'FGSGestionComptesBundle:Utils:is_planified.html.twig' %}
 						{% include 'FGSGestionComptesBundle:Utils:was_planified.html.twig' %}
-						<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-						<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+						<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a>
+						{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienSuppression', {'id':mouvementFinancier.id})) }}
 					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
-		
-		{# 				<li class="enabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-				<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-				<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-				#}
+
 		<div class='text-center'>
 			<nav>
 				<ul class="pagination">

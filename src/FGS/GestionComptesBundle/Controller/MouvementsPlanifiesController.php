@@ -93,6 +93,13 @@ class MouvementsPlanifiesController extends Controller
 		));
 	}
 	
+	public function gerenerLienSuppressionAction($id)
+	{
+		return $this->render('FGSGestionComptesBundle:MouvementsPlanifies:generer_lien_suppression.html.twig', array(
+			'form'	=> $this->createDeleteForm($id)->createView(),
+		));
+	}
+	
 	public function voirMouvementFinancierPlanifieAction()
 	{
 		$utilisateur	= $this->getUser();
@@ -145,24 +152,34 @@ class MouvementsPlanifiesController extends Controller
 	}
 	
 	
-	public function supprimerMouvementFinancierPlanifieAction($id)
-	{
-		$em		= $this->getDoctrine()->getManager();
-	
-		$mfp = $em->find('FGSGestionComptesBundle:MouvementFinancierPlanifie', $id);
-	
-		$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
+	public function supprimerMouvementFinancierPlanifieAction(Request $request)
+	{//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+		$form = $this->createDeleteForm();
 		
-		if ($mfp !== null) {
-			$em->remove($mfp);
-			$em->flush();
-	
-			$session	=	new Session();
-			$session->getFlashBag()->add('success', 'Votre '.$mfp->getCategorieMouvementFinancier()->getType().' a été supprimé !');
-		}
-		else {
-			$session	=	new Session();
-			$session->getFlashBag()->add('error', 'TODO.');
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			//récupération de l'id du mouvement financier
+			$id = $form->getViewData()['id'];
+			
+			$em		= $this->getDoctrine()->getManager();
+		
+			$mfp = $em->find('FGSGestionComptesBundle:MouvementFinancierPlanifie', $id);
+		
+			$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
+			
+			if ($mfp !== null) {
+				$em->remove($mfp);
+				$em->flush();
+		
+				$session	=	new Session();
+				$session->getFlashBag()->add('success', 'Votre '.$mfp->getCategorieMouvementFinancier()->getType().' a été supprimé !');
+			}
+			else {
+				$session	=	new Session();
+				$session->getFlashBag()->add('error', 'TODO.');
+			}
 		}
 		return $this->redirect($this->getRequest()->headers->get('referer'));
 	}
@@ -192,6 +209,16 @@ class MouvementsPlanifiesController extends Controller
 		
 		return $mf;
 	}
-	
-	
+	/**
+	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier planifie
+	 * @param int $id
+	 */
+	private function createDeleteForm($id=null)
+	{
+		return $this->createFormBuilder(array('id'	=> $id))
+		->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_mouvement_financier_planifie'))
+		->setMethod('DELETE')
+		->add('id', 'hidden')
+		->getForm();
+	}
 }

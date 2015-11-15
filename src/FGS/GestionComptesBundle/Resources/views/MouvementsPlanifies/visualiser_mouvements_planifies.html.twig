@@ -44,7 +44,7 @@
 					</td>
 					<td>
 						<a href='{{ path('fgs_gestion_comptes_modifier_mouvements_planifies', {'id':mouvementFinancierPlanifie.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-						<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier_planifie', {'id':mouvementFinancierPlanifie.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+						{{ render(controller('FGSGestionComptesBundle:MouvementsPlanifies:gerenerLienSuppression', {'id':mouvementFinancierPlanifie.id})) }}
 					</td>
 				</tr>
 			{% endfor %}

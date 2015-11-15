@@ -15,10 +15,8 @@ fgs_gestion_comptes_gerer_compte:
     methods:  [GET]
     
 fgs_gestion_comptes_supprimer_compte: 
-    path:     /supprimer-compte/{id}
+    path:     /supprimer-compte
     defaults: { _controller: FGSGestionComptesBundle:Comptes:supprimerCompte }
-    requirements:
-        id:    \d+
     methods:  [DELETE]
 
 fgs_gestion_comptes_modifier_compte: 
@@ -141,10 +139,8 @@ fgs_gestion_comptes_modifier_mouvements_planifies:
     methods:  [GET, POST]
    
 fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
-    path:     /supprimer-mouvement-financier-planifie/{id}
+    path:     /supprimer-mouvement-financier-planifie
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:supprimerMouvementFinancierPlanifie }
-    requirements:
-        id:    \d+
     methods:  [DELETE]
         
 fgs_gestion_comptes_test_mail:

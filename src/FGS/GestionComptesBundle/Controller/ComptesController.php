@@ -64,30 +64,48 @@ class ComptesController extends Controller
     	return $this->render('FGSGestionComptesBundle:Comptes:gerer.html.twig', array(
     			'listeComptes'=> $listeComptes
     	));
-
     }
     
-    public function supprimerCompteAction($id)
+    public function gerenerLienSuppressionAction(Compte $compte)
     {
-    	$em		= $this->getDoctrine()->getManager();
+    	return $this->render('FGSGestionComptesBundle:Comptes:generer_lien_suppression.html.twig', array(
+    		'form'		=> $this->createDeleteForm($compte->getId())->createView(),
+    		'compte'	=> $compte,
+    	));
+    }
+    
+    public function supprimerCompteAction(Request $request)
+    {
+    	//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+    	$form = $this->createDeleteForm();
     	
-    	$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
+    	$form->handleRequest($request);
     	
-    	$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
-    	
-    	if ($em->getRepository('FGSGestionComptesBundle:Compte')->deleteCompteById($id)	=== 1)
+    	if ($form->isValid())
     	{
-	    	$em->flush();
+    		//récupération de l'id du mouvement financier
+    		$id = $form->getViewData()['id'];
+    		
+	    	$em		= $this->getDoctrine()->getManager();
 	    	
-	    	$session	=	new Session();
-	    	$session->getFlashBag()->add('success', 'Le compte a bien été supprimé !');
-    	}
-    	else 
-    	{
-    		$session	=	new Session();
-    		$session->getFlashBag()->add('error', 'Erreur lors de la tentative de suppression.');
-    	}
+	    	$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
 	    	
+	    	$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
+	    	
+	    	if ($em->getRepository('FGSGestionComptesBundle:Compte')->deleteCompteById($id)	=== 1)
+	    	{
+		    	$em->flush();
+		    	
+		    	$session	=	new Session();
+		    	$session->getFlashBag()->add('success', 'Le compte a bien été supprimé !');
+	    	}
+	    	else 
+	    	{
+	    		$session	=	new Session();
+	    		$session->getFlashBag()->add('error', 'Erreur lors de la tentative de suppression.');
+	    	}
+    	}
+    	
     	return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_compte"));
     
     }
@@ -119,5 +137,14 @@ class ComptesController extends Controller
     	return $this->render('FGSGestionComptesBundle:Comptes:modifier.html.twig', array(
     			"form"=> $form->createView(),
     	));
+    }
+    
+    private function createDeleteForm($id=null)
+    {
+    	return $this->createFormBuilder(array('id'	=> $id))
+    	->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_compte'))
+    	->setMethod('DELETE')
+    	->add('id', 'hidden')
+    	->getForm();
     }
 }
