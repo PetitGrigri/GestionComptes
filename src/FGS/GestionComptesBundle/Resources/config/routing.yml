@@ -75,7 +75,7 @@ fgs_gestion_comptes_ajouter_revenu:
 fgs_gestion_comptes_supprimer_mouvement_financier:
     path:     /supprimer-mouvement-financier
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancier }
-    methods:  [DELETE]
+    methods:  [POST]
         
 fgs_gestion_comptes_modifier_mouvement_financier:
     path:     /modifier-mouvement-financier/{id}
@@ -87,7 +87,7 @@ fgs_gestion_comptes_modifier_mouvement_financier:
 fgs_gestion_comptes_check_mouvement_financier:
     path:     /check-mouvement-financier
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:checkMouvementFinancier }
-    methods:  [PATCH]
+    methods:  [POST]
               
 fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}

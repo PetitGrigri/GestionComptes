@@ -299,7 +299,7 @@ class MouvementsController extends Controller
 	{
 		return $this->createFormBuilder(array('id'	=> $id))
 			->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_mouvement_financier'))
-			->setMethod('DELETE')
+			->setMethod('POST')
 			->add('id', 'hidden')
 			->getForm();
 	}
@@ -312,7 +312,7 @@ class MouvementsController extends Controller
 	{
 		return $this->createFormBuilder(array('id'	=> $id))
 		->setAction($this->generateUrl('fgs_gestion_comptes_check_mouvement_financier'))
-		->setMethod('PATCH')
+		->setMethod('POST')
 		->add('id', 'hidden')
 		->getForm();
 	}
