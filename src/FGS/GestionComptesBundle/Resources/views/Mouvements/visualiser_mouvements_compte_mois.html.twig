@@ -101,7 +101,7 @@
 						<tbody>
 							{% for mouvementFinancier in compte.getMouvementFinanciersPlanified %}
 								<tr>
-									<td>{% include 'FGSGestionComptesBundle:Utils:check_banque.html.twig' %}</td>
+									<td>{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienCheck', {'id':mouvementFinancier.id, 'check':mouvementFinancier.checkBanque})) }}</td>
 									<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
 									<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
 									<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
@@ -141,7 +141,7 @@
 						<tbody>
 							{% for mouvementFinancier in compte.mouvementFinanciersNotPlanified %}
 								<tr>
-									<td>{% include 'FGSGestionComptesBundle:Utils:check_banque.html.twig' %}</td>
+									<td>{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienCheck', {'id':mouvementFinancier.id, 'check':mouvementFinancier.checkBanque})) }}</td>
 									<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
 									<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
 									<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
@@ -228,6 +228,15 @@
 <script src="{{ asset('bundles/fgsgestioncomptes/js/Chart.js') }}"></script>
 <script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<style>
+.categorie-mf {
+	font-size:90%; font-weight: normal;
+}
+.text-muted
+{
+	color: #999 !important;
+}
+</style>
 <script>
 
 $(function () {

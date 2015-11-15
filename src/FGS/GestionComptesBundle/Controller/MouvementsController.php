@@ -81,6 +81,14 @@ class MouvementsController extends Controller
 		));
 	}
 	
+	public function gerenerLienCheckAction($id, $check)
+	{
+		return $this->render('FGSGestionComptesBundle:Mouvements:generer_lien_check_banque.html.twig', array(
+			'form'	=> $this->createCheckForm($id)->createView(),
+			'check'	=> $check,
+		));
+	}
+	
 	public function supprimerMouvementFinancierAction(Request $request)
 	{
 		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
@@ -240,16 +248,23 @@ class MouvementsController extends Controller
 		));
 	}
 	
-	public function checkMouvementFinancierAction($id)
+	public function checkMouvementFinancierAction(Request $request)
 	{
-		$em 	= $this->getDoctrine()->getEntityManager();
-		$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
+		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+		$form = $this->createCheckForm();
 		
-		if ($mf->getCompte()->getUtilisateur()->getId() != $this->getUser()->getId()) {
-			$session	= $this->getRequest()->getSession();
-			$session->getFlashBag()->add('error', 'Vous ne pouvez pas checker ce mouvement financier !');
-		}
-		else {
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			//récupération de l'id du mouvement financier
+			$id = $form->getViewData()['id'];
+	
+			$em 	= $this->getDoctrine()->getEntityManager();
+			$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
+			
+			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
+
 			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
 			$em->flush();
 		}
@@ -288,5 +303,18 @@ class MouvementsController extends Controller
 			->setMethod('DELETE')
 			->add('id', 'hidden')
 			->getForm();
+	}
+	
+	/**
+	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier
+	 * @param unknown $id
+	 */
+	private function createCheckForm($id=null)
+	{
+		return $this->createFormBuilder(array('id'	=> $id))
+		->setAction($this->generateUrl('fgs_gestion_comptes_check_mouvement_financier'))
+		->setMethod('PATCH')
+		->add('id', 'hidden')
+		->getForm();
 	}
 }
