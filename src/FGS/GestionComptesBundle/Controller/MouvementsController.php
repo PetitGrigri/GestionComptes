@@ -18,7 +18,7 @@ class MouvementsController extends Controller
 
 		$cmf = $this->getDoctrine()
 					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-					->getRootMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
+					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 
 		$mf->setCategorieMouvementFinancier($cmf);
 		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
@@ -50,7 +50,7 @@ class MouvementsController extends Controller
 
 		$cmf = $this->getDoctrine()
 					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-					->getRootMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
+					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mf->setCategorieMouvementFinancier($cmf);
 		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);

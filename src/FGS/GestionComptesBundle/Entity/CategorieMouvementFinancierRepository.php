@@ -12,11 +12,11 @@ use Doctrine\ORM\EntityRepository;
 class CategorieMouvementFinancierRepository extends EntityRepository
 {
 	/**
-	 * Cette méthode permet de récupérer le mouvement financier principal d'un utilisateur (Dépense ou Revenu)
+	 * Cette méthode permet de récupérer la catégorie mouvement financier principal d'un utilisateur (Dépense ou Revenu)
 	 * @param  mixed $utilisateur
 	 * @param  string $type
 	 */
-	public function getRootMouvementFinancier($utilisateur, $type)
+	public function getRootCategorieMouvementFinancier($utilisateur, $type)
 	{
 		return $this->findOneBy(array(
 			'type'			=>	$type,
