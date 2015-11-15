@@ -37,7 +37,7 @@
 <ul class='media-list' style='margin-top: 20px;'>
 	{% for children in enfants %}
 
-	<li class='media''>
+	<li class='media'>
 		<div class='media-left'>
 			<div>
 				<span class=' img-circle bg-primary text-center glyphicon {{ children.icone }}'> </span>
@@ -53,7 +53,7 @@
 						<span class="glyphicon glyphicon-pencil"></span><span class='hidden-xs'> Modifier</span>
 					</a>
 					
-					{{ render(controller('FGSGestionComptesBundle:Categories:gerenerLienSuppression', {'cmf': children})) }}
+					{%- include 'FGSGestionComptesBundle:Categories:delete_button.html.twig' -%}
 					
 					<div class='btn-group'>
 						<a  href="{{ loop.first ? '#' : path('fgs_gestion_comptes_monter_categorie', {'id': children.id}) }}" class="btn btn-success{{ loop.first ? ' disabled'}}">
@@ -91,6 +91,7 @@
 	{% endif %}
 	</div>
 </div>
+{{ form(form_delete) }}
 {% endblock %}
 
 
@@ -119,34 +120,5 @@ padding-right: 0px;
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-$(document).ready(function(){
-	$('button[data-categorie]').click(function(e)
-	{
-		//stop de la propagation de l'évènement
-		e.preventDefault();
-
-		//récupération de élément courant
-		$this = $(this);
-
-		//modification de la fenêtre de confirmation
-		$('#ma_categorie').html($this.attr('data-categorie'));
-		$('#son_parent').html($this.attr('data-parent'));
-		$('#valider_suppression').attr('href', $this.attr('id'));
-		
-		//affichage de la fenêtre de confirmation
-		$('#confirmation').modal('show');
-	});
-	$('#valider_suppression').click(function(e){
-		
-		//stop de la propagation de l'évènement
-		e.preventDefault();
-		
-		//récupération de l'identifiant du bouton sur lequel on avait cliqué  puis click
-		formulaire = '#formulaire'+$(this).attr('href');
-		$(formulaire).submit();
-		
-	})
-});
-</script>
+<script src='{{ asset('bundles/fgsgestioncomptes/js/delete-cat-mf.js') }}'></script>
 {% endblock %}

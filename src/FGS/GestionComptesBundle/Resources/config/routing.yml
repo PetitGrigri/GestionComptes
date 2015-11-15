@@ -46,7 +46,7 @@ fgs_gestion_comptes_modifier_categorie:
 fgs_gestion_comptes_supprimer_categorie:
     path:     /supprimer-categorie
     defaults: { _controller: FGSGestionComptesBundle:Categories:supprimerCategorie }
-    methods:  [DELETE]
+    methods:  [POST]
         
 fgs_gestion_comptes_monter_categorie:
     path:     /monter-categorie/{id}

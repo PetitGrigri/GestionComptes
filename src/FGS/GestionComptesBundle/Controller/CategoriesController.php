@@ -22,6 +22,7 @@ class CategoriesController extends Controller
     	
     	return $this->render('FGSGestionComptesBundle:Categories:gerer_categories.html.twig', array(
 			'listeCategories'	=> $listeCategories,
+    		'form_delete'		=> $this->createDeletePOSTForm()->createView(),
 
     	));
 	}
@@ -45,10 +46,8 @@ class CategoriesController extends Controller
 			//normallement on ne peux pas arriver ici
 			$cmf->setOrdre(1);
 		}
-		
-			
-		if ($form->isValid())
-		{
+
+		if ($form->isValid()) {
 			$em	=	$this->getDoctrine()->getManager();
 		
 			$em->persist($cmf);
@@ -102,18 +101,10 @@ class CategoriesController extends Controller
 		));
 	}
 	
-	public function gerenerLienSuppressionAction(CategorieMouvementFinancier $cmf=null)
-	{
-		return $this->render('FGSGestionComptesBundle:Categories:generer_lien_suppression.html.twig', array(
-			'form'	=> (!empty($cmf->getParent())) ? $this->createDeleteForm($cmf->getId())->createView() : null,
-			'cmf'	=> $cmf,
-		));
-	}
-	
 	public function supprimerCategorieAction(Request $request)
 	{
 		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
-		$form = $this->createDeleteForm();
+		$form = $this->createDeletePOSTForm();
 		
 		$form->handleRequest($request);
 		
@@ -220,12 +211,17 @@ class CategoriesController extends Controller
 		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 	}
 	
-	private function createDeleteForm($id=null)
+	//voir si on peut faire un trait
+	private function createEmptyPOSTForm($route, $idForm)
 	{
-		return $this->createFormBuilder(array('id'	=> $id))
-		->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_categorie'))
-		->setMethod('DELETE')
-		->add('id', 'hidden')
-		->getForm();
+		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
+			->setAction($this->generateUrl($route))
+			->add('id', 'hidden')
+			->setMethod('POST')
+			->getForm();
+	}
+	private function createDeletePOSTForm()
+	{
+		return $this->createEmptyPostForm('fgs_gestion_comptes_supprimer_categorie', 'delete_cat');
 	}
 }
