@@ -91,7 +91,7 @@ fgs_gestion_comptes_check_mouvement_financier:
               
 fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}
-    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompte, debut:0, longueur:15 }
+    defaults: { _controller: FGSGestionComptesBundle:Mouvements:voirMouvementFinancierCompte, debut:0, longueur:30 }
     requirements:
         id:       \d+
         debut:    \d+
