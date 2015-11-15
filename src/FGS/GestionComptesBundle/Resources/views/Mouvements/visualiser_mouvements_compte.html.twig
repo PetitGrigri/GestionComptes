@@ -29,7 +29,7 @@
 			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee',{'id':id}) }}" class='btn btn-primary pull-right'><span class='glyphicon glyphicon-calendar'></span> Visualisation de l'année en cours</a>
 		</div>
 	</div>
-	{% if compte and compte.mouvementFinanciers is not empty %}
+	{% if compte.mouvementFinanciers is not empty %}
 	
 		<table class="table table-striped ">
 			<caption>
