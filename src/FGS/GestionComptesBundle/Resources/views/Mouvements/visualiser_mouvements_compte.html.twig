@@ -57,7 +57,7 @@
 			<tbody>
 				{% for mouvementFinancier in compte.mouvementFinanciers %}
 				<tr>
-					<td>{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienCheck', {'id':mouvementFinancier.id, 'check':mouvementFinancier.checkBanque})) }}</td>
+					<td>{% include 'FGSGestionComptesBundle:Mouvements:check_button.html.twig' %}</td>
 					<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
 					<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
 					<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
@@ -66,7 +66,7 @@
 						{% include 'FGSGestionComptesBundle:Utils:is_planified.html.twig' %}
 						{% include 'FGSGestionComptesBundle:Utils:was_planified.html.twig' %}
 						<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a>
-						{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienSuppression', {'id':mouvementFinancier.id})) }}
+						{% include 'FGSGestionComptesBundle:Mouvements:delete_button.html.twig' %}
 					</td>
 				</tr>
 				{% endfor %}
@@ -86,25 +86,25 @@
 		<p class='well well-sm' style='background-color:#f9f9f9;'>Aucune transaction n'a encore été réalisé sur ce compte<p>
 	{% endif %}
 
-
+	{{- render(controller('FGSGestionComptesBundle:Mouvements:genererFormsCheckAndDelete')) -}}
 {% endblock %}
 
 
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
-	<style>
-	.categorie-mf {
-		font-size:90%; font-weight: normal;
-	}
-	</style>
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<style>
+.categorie-mf {
+	font-size:90%; font-weight: normal;
+}
+.text-muted {
+	color: #999 !important;
+}
+</style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-})
-</script>
+<script src='{{ asset('bundles/fgsgestioncomptes/js/activate-tooltip.js') }}'></script>
+<script src='{{ asset('bundles/fgsgestioncomptes/js/check-or-delete-mf.js') }}'></script>
 {% endblock %}

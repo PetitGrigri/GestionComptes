@@ -73,25 +73,11 @@ class MouvementsController extends Controller
 		));
 	}
 
-	public function gerenerLienSuppressionAction($id)
-	{
-		return $this->render('FGSGestionComptesBundle:Mouvements:generer_lien_suppression.html.twig', array(
-			'form'	=> $this->createDeleteForm($id)->createView(),
-		));
-	}
-	
-	public function gerenerLienCheckAction($id, $check)
-	{
-		return $this->render('FGSGestionComptesBundle:Mouvements:generer_lien_check_banque.html.twig', array(
-			'form'	=> $this->createCheckForm($id)->createView(),
-			'check'	=> $check,
-		));
-	}
 	
 	public function supprimerMouvementFinancierAction(Request $request)
 	{
 		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
-		$form = $this->createDeleteForm();
+		$form = $this->createCheckPOSTForm();
 		
 		$form->handleRequest($request);
 
@@ -250,7 +236,7 @@ class MouvementsController extends Controller
 	public function checkMouvementFinancierAction(Request $request)
 	{
 		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
-		$form = $this->createCheckForm();
+		$form = $this->createCheckPOSTForm();
 		
 		$form->handleRequest($request);
 
@@ -291,29 +277,30 @@ class MouvementsController extends Controller
 		}
 	}
 	
-	/**
-	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier
-	 * @param unknown $id
-	 */
-	private function createDeleteForm($id=null)
+	public function genererFormsCheckAndDeleteAction()
 	{
-		return $this->createFormBuilder(array('id'	=> $id))
-			->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_mouvement_financier'))
-			->setMethod('POST')
-			->add('id', 'hidden')
-			->getForm();
+		return $this->render('FGSGestionComptesBundle:Mouvements:generer_formulaires_check_delete.html.twig', array(
+			'form_delete'	=> $this->createDeletePOSTForm()->createView(),
+			'form_check'	=> $this->createCheckPOSTForm()->createView(),
+		));
+	
 	}
 	
-	/**
-	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier
-	 * @param unknown $id
-	 */
-	private function createCheckForm($id=null)
+	private function createEmptyPOSTForm($route, $idForm)
 	{
-		return $this->createFormBuilder(array('id'	=> $id))
-		->setAction($this->generateUrl('fgs_gestion_comptes_check_mouvement_financier'))
-		->setMethod('POST')
+		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
+		->setAction($this->generateUrl($route))
 		->add('id', 'hidden')
+		->setMethod('POST')
 		->getForm();
 	}
+	private function createDeletePOSTForm()
+	{
+		return $this->createEmptyPostForm('fgs_gestion_comptes_supprimer_mouvement_financier', 'delete_mf');
+	}
+	private function createCheckPOSTForm()
+	{
+		return $this->createEmptyPostForm('fgs_gestion_comptes_check_mouvement_financier', 'check_mf');
+	}
+	
 }
