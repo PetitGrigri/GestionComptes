@@ -1,6 +1,6 @@
 {% if children.parent is not empty %}
 	<button data-categorie="{{ children.libelle }}" data-parent="{{ children.parent.libelle }}" data-action='delete' data-value='{{ children.id }}' class='btn btn-danger'>
-		<span class='glyphicon glyphicon-remove'></span> Supprimer
+		<span class='glyphicon glyphicon-trash'></span> Supprimer
 	</button>
 {% else %}
 	<button class='btn btn-danger disabled' type='button'><span class='glyphicon glyphicon-trash'></span> Supprimer</button>
