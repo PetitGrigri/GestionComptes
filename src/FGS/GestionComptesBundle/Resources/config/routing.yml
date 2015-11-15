@@ -1,84 +1,101 @@
 fgs_gestion_comptes_homepage:
     path:     /
     defaults: { _controller: FGSGestionComptesBundle:Comptes:index }
+    methods:  [GET]
     
 fgs_gestion_comptes_ajouter_compte: 
     path:     /ajouter-compte
     defaults: { _controller: FGSGestionComptesBundle:Comptes:ajouterCompte }
+    methods:  [GET, POST]
+    
     
 fgs_gestion_comptes_gerer_compte: 
     path:     /gerer-compte
     defaults: { _controller: FGSGestionComptesBundle:Comptes:gererCompte }
+    methods:  [GET]
     
 fgs_gestion_comptes_supprimer_compte: 
     path:     /supprimer-compte/{id}
     defaults: { _controller: FGSGestionComptesBundle:Comptes:supprimerCompte }
     requirements:
         id:    \d+
+    methods:  [GET]
 
 fgs_gestion_comptes_modifier_compte: 
     path:     /modifier-compte/{id}
     defaults: { _controller: FGSGestionComptesBundle:Comptes:modifierCompte }
     requirements:
         id:    \d+
+    methods:  [GET, POST]
         
 fgs_gestion_comptes_gerer_categories:
     path:     /gerer-categories-compte
     defaults: { _controller: FGSGestionComptesBundle:Categories:gererCategories }
+    methods:  [GET]
     
 fgs_gestion_comptes_ajouter_categorie:
     path:     /ajouter-categorie
     defaults: { _controller: FGSGestionComptesBundle:Categories:ajouterCategorie }
+    methods:  [GET, POST]
     
 fgs_gestion_comptes_modifier_categorie:
     path:     /modifier-categorie/{id}
     defaults: { _controller: FGSGestionComptesBundle:Categories:modifierCategorie }
     requirements:
         id:    \d+
+    methods:  [GET, POST]
         
 fgs_gestion_comptes_supprimer_categorie:
     path:     /supprimer-categorie/{id}
     defaults: { _controller: FGSGestionComptesBundle:Categories:supprimerCategorie }
     requirements:
         id:    \d+
+    methods:  [GET]
         
 fgs_gestion_comptes_monter_categorie:
     path:     /monter-categorie/{id}
     defaults: { _controller: FGSGestionComptesBundle:Categories:monterCategorie }
     requirements:
         id:    \d+
+    methods:  [GET]
         
 fgs_gestion_comptes_descendre_categorie:
     path:     /descendre-categorie/{id}
     defaults: { _controller: FGSGestionComptesBundle:Categories:descendreCategorie }
     requirements:
         id:    \d+
+    methods:  [GET]
         
 fgs_gestion_comptes_ajouter_depense:
     path:     /ajouter-depense
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterDepense }
+    methods:  [GET, POST]
     
 fgs_gestion_comptes_ajouter_revenu:
     path:     /ajouter-revenu
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:ajouterRevenu }
+    methods:  [GET, POST]
     
 fgs_gestion_comptes_supprimer_mouvement_financier:
     path:     /supprimer-mouvement-financier/{id}
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancier }
     requirements:
         id:    \d+
+    methods:  [GET]
         
 fgs_gestion_comptes_modifier_mouvement_financier:
     path:     /modifier-mouvement-financier/{id}
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:modifierMouvementFinancier }
     requirements:
-        id:    \d+   
+        id:    \d+
+    methods:  [GET, POST]
          
 fgs_gestion_comptes_check_mouvement_financier:
     path:     /check-mouvement-financier/{id}
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:checkMouvementFinancier }
     requirements:
         id:    \d+ 
+    methods:  [GET]
               
 fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     path:     /visualiser-mouvement-financiers-compte/{id}/{debut}/{longueur}
@@ -86,6 +103,7 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte:
     requirements:
         id:       \d+
         debut:    \d+
+    methods:  [GET]
 
 fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
     path:     /visualiser-mouvement-financiers-compte-mois/{id}/{annee}/{mois}
@@ -94,6 +112,7 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois:
         id:       \d+
         annee:    \d{4}
         mois:     \d+
+    methods:  [GET]
 
 fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee:
     path:     /visualiser-mouvement-financiers-compte-annee/{id}/{annee}
@@ -101,33 +120,39 @@ fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee:
     requirements:
         id:       \d+
         annee:    \d{4}
+    methods:  [GET]
 
 fgs_gestion_comptes_ajouter_depense_planifiee:
     path:     /planifier-depense
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:ajouterDepensePLanifiee }
-    
+    methods:  [GET, POST]
         
 fgs_gestion_comptes_ajouter_revenu_planifie:
     path:     /planifier-revenu
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:ajouterRevenuPLanifie }
-    
+    methods:  [GET, POST]
     
 fgs_gestion_comptes_voir_mouvements_planifies:
     path:     /visualiser-mouvements-planifies
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:voirMouvementFinancierPlanifie }
-    
+    methods:  [GET]
+
 fgs_gestion_comptes_modifier_mouvements_planifies:
     path:     /modifier-mouvement-financier-planifie/{id}
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:modifierMouvementFinancierPlanifie }
     requirements:
         id:    \d+  
-        
+    methods:  [GET, POST]
+   
 fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
     path:     /supprimer-mouvement-financier-planifie/{id}
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:supprimerMouvementFinancierPlanifie }
     requirements:
         id:    \d+
+    methods:  [GET]
         
 fgs_gestion_comptes_test_mail:
     path:     /test-mail
     defaults: { _controller: FGSGestionComptesBundle:Mail:testMail }
+    methods:  [GET]
+
