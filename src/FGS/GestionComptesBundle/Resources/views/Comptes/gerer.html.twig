@@ -80,8 +80,14 @@
 {% endblock %}
 
 
-
-
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.modal-dialog {
+	z-index: 1050;
+}
+</style>
+{% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
