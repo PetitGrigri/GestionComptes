@@ -19,7 +19,7 @@ fgs_gestion_comptes_supprimer_compte:
     defaults: { _controller: FGSGestionComptesBundle:Comptes:supprimerCompte }
     requirements:
         id:    \d+
-    methods:  [GET]
+    methods:  [DELETE]
 
 fgs_gestion_comptes_modifier_compte: 
     path:     /modifier-compte/{id}
@@ -46,11 +46,9 @@ fgs_gestion_comptes_modifier_categorie:
     methods:  [GET, POST]
         
 fgs_gestion_comptes_supprimer_categorie:
-    path:     /supprimer-categorie/{id}
+    path:     /supprimer-categorie
     defaults: { _controller: FGSGestionComptesBundle:Categories:supprimerCategorie }
-    requirements:
-        id:    \d+
-    methods:  [GET]
+    methods:  [DELETE]
         
 fgs_gestion_comptes_monter_categorie:
     path:     /monter-categorie/{id}
@@ -77,11 +75,9 @@ fgs_gestion_comptes_ajouter_revenu:
     methods:  [GET, POST]
     
 fgs_gestion_comptes_supprimer_mouvement_financier:
-    path:     /supprimer-mouvement-financier/{id}
+    path:     /supprimer-mouvement-financier
     defaults: { _controller: FGSGestionComptesBundle:Mouvements:supprimerMouvementFinancier }
-    requirements:
-        id:    \d+
-    methods:  [GET]
+    methods:  [DELETE]
         
 fgs_gestion_comptes_modifier_mouvement_financier:
     path:     /modifier-mouvement-financier/{id}
@@ -149,7 +145,7 @@ fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:supprimerMouvementFinancierPlanifie }
     requirements:
         id:    \d+
-    methods:  [GET]
+    methods:  [DELETE]
         
 fgs_gestion_comptes_test_mail:
     path:     /test-mail

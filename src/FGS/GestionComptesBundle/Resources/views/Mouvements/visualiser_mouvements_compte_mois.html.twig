@@ -108,7 +108,7 @@
 									<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
 									<td class='text-right'>
 										<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-										<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+										{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienSuppression', {'id':mouvementFinancier.id})) }}
 									</td>
 								</tr>
 							{% endfor %}
@@ -148,7 +148,7 @@
 									<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
 									<td class='text-right'>
 										<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-										<a href='{{ path('fgs_gestion_comptes_supprimer_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span></a>
+										{{ render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienSuppression', {'id':mouvementFinancier.id})) }}
 									</td>
 								</tr>
 							{% endfor %}

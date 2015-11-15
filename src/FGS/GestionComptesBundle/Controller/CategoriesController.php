@@ -102,46 +102,65 @@ class CategoriesController extends Controller
 		));
 	}
 	
-	public function supprimerCategorieAction($id)
+	public function gerenerLienSuppressionAction(CategorieMouvementFinancier $cmf=null)
 	{
-		$em					= $this->getDoctrine()->getManager();
-		$listeCmfIdImpacte	= array();
-		$session			=	new Session();
-
-		//récupération de la catégorie à supprimer
-		$cmfASupprimer = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
-		
-		$this->denyAccessUnlessGranted('proprietaire', $cmfASupprimer, 'Vous n\'êtes pas le propriétaire de cette catégorie');
-		
-		//Vérification de l'existance d'un parent (si pas de parent : catégorie mère non supprimable)
-		if (!$cmfASupprimer->hasParent())
-		{
-			$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
-		}
-		else 
-		{
-			//récupération de la liste des Cmf impactés par la suppression de la catégorie (cmf, cmf enfants...)
-			$listeCmfImpacte	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-				->getFlatTreeCategoriesForCmf($cmfASupprimer);
+		return $this->render('FGSGestionComptesBundle:Categories:generer_lien_suppression.html.twig', array(
+			'form'	=> (!empty($cmf->getParent())) ? $this->createDeleteForm($cmf->getId())->createView() : null,
+			'cmf'	=> $cmf,
+		));
+	}
 	
-			//récupération de tout les mf de la liste récupérés
-			foreach ($listeCmfImpacte as $cmf)
+	public function supprimerCategorieAction(Request $request)
+	{
+		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+		$form = $this->createDeleteForm();
+		
+		$form->handleRequest($request);
+		
+		if ($form->isValid())
+		{
+			//récupération de l'id du mouvement financier
+			$id = $form->getViewData()['id'];
+
+			$em					= $this->getDoctrine()->getManager();
+			$listeCmfIdImpacte	= array();
+			$session			=	new Session();
+
+			//récupération de la catégorie à supprimer
+			$cmfASupprimer = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
+			
+			$this->denyAccessUnlessGranted('proprietaire', $cmfASupprimer, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+			
+			//Vérification de l'existance d'un parent (si pas de parent : catégorie mère non supprimable)
+			if (!$cmfASupprimer->hasParent())
 			{
-				$listeCmfIdImpacte[]	= $cmf->getId();
+				$session->getFlashBag()->add('error', 'Vous ne pouvez pas modifier cette catégorie !');
 			}
+			else 
+			{
+				//récupération de la liste des Cmf impactés par la suppression de la catégorie (cmf, cmf enfants...)
+				$listeCmfImpacte	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+					->getFlatTreeCategoriesForCmf($cmfASupprimer);
+		
+				//récupération de tout les mf de la liste récupérés
+				foreach ($listeCmfImpacte as $cmf)
+				{
+					$listeCmfIdImpacte[]	= $cmf->getId();
+				}
+		
+				//mise à jour des mouvements financiers lié au cmf à supprimer (tout les mf prendront la cmf parente de la cmf à supprimer)
+				$em->getRepository('FGSGestionComptesBundle:MouvementFinancier')
+					->updateMouvementFiancierWithCmfFromList($cmfASupprimer->getParent(), $listeCmfIdImpacte);
+		
+				//suppression de la liste des Cmf
+				$em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+					->removeCmfFromIdList($listeCmfIdImpacte);
 	
-			//mise à jour des mouvements financiers lié au cmf à supprimer (tout les mf prendront la cmf parente de la cmf à supprimer)
-			$em->getRepository('FGSGestionComptesBundle:MouvementFinancier')
-				->updateMouvementFiancierWithCmfFromList($cmfASupprimer->getParent(), $listeCmfIdImpacte);
-	
-			//suppression de la liste des Cmf
-			$em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-				->removeCmfFromIdList($listeCmfIdImpacte);
-
-			$session	=	new Session();
-			$session->getFlashBag()->add('success', 'La catégorie a bien été supprimé !');
+				$session	=	new Session();
+				$session->getFlashBag()->add('success', 'La catégorie a bien été supprimé !');
+			}
 		}
-	
+		
 		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 	}
 	
@@ -199,5 +218,14 @@ class CategoriesController extends Controller
 		}
 	
 		return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
+	}
+	
+	private function createDeleteForm($id=null)
+	{
+		return $this->createFormBuilder(array('id'	=> $id))
+		->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_categorie'))
+		->setMethod('DELETE')
+		->add('id', 'hidden')
+		->getForm();
 	}
 }

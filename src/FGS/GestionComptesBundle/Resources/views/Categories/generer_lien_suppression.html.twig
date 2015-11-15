@@ -1,0 +1,8 @@
+{% if form %}
+	{% form_theme form 'form_div_layout.html.twig' %}
+	{{ form_start(form, {'attr':{'style':'display: inline;', 'id' : 'formulaire_'~cmf.id }}) }}
+	<button class='btn btn-danger' type='submit' data-categorie="{{ cmf.libelle }}"  data-parent="{{ cmf.parent.libelle }}" id="_{{ cmf.id }}"><span class="glyphicon glyphicon-trash"></span> Supprimer</button>
+	{{ form_end(form) }}
+{% else %}
+	<button class='btn btn-danger disabled' type='button'><span class='glyphicon glyphicon-trash'></span> Supprimer</button>
+{% endif %}

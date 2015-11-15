@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
+use FGS\GestionComptesBundle\FGSGestionComptesBundle;
 
 class MouvementsController extends Controller
 {
@@ -73,26 +74,44 @@ class MouvementsController extends Controller
 		));
 	}
 
-	
-	public function supprimerMouvementFinancierAction($id)
+	public function gerenerLienSuppressionAction($id)
 	{
-		$em		= $this->getDoctrine()->getManager();
+		return $this->render('FGSGestionComptesBundle:Mouvements:generer_lien_suppression.html.twig', array(
+			'form'	=> $this->createDeleteForm($id)->createView(),
+		));
+	}
 	
-		$mf = $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
+	public function supprimerMouvementFinancierAction(Request $request)
+	{
+		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+		$form = $this->createDeleteForm();
 		
-		$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
-		
-		if ($mf !== null) {
-			$em->remove($mf);
-			$em->flush();
-		
-			$session	=	new Session();
-			$session->getFlashBag()->add('success', 'Votre '.$mf->getCategorieMouvementFinancier()->getType().' a été supprimé !');
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			//récupération de l'id du mouvement financier
+			$id = $form->getViewData()['id'];
+
+			$em		= $this->getDoctrine()->getManager();
+
+			$mf = $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
+
+			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
+			
+			if ($mf !== null) {
+				$em->remove($mf);
+				$em->flush();
+			
+				$session	=	new Session();
+				$session->getFlashBag()->add('success', 'Votre '.$mf->getCategorieMouvementFinancier()->getType().' a été supprimé !');
+			}
+			else {
+				$session	=	new Session();
+				$session->getFlashBag()->add('error', 'Ce mouvement financier n\'existe pas.');
+			}
 		}
-		else {
-			$session	=	new Session();
-			$session->getFlashBag()->add('error', 'TODO.');
-		}
+		
 		return $this->redirect($this->getRequest()->headers->get('referer'));
 	}
 	
@@ -256,5 +275,18 @@ class MouvementsController extends Controller
 		if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_REVENU) {
 			$mf->setMontant(abs($mf->getMontant()));
 		}
+	}
+	
+	/**
+	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier
+	 * @param unknown $id
+	 */
+	private function createDeleteForm($id=null)
+	{
+		return $this->createFormBuilder(array('id'	=> $id))
+			->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_mouvement_financier'))
+			->setMethod('DELETE')
+			->add('id', 'hidden')
+			->getForm();
 	}
 }
