@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
-use FGS\GestionComptesBundle\FGSGestionComptesBundle;
 
 class MouvementsController extends Controller
 {
