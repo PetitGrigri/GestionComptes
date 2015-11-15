@@ -15,7 +15,7 @@
 	</p>
 	<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
 		<div class="form-group {% if form.email.vars.errors|length > 0 %}has-error{% endif %}">
-			{{ form_widget(form.email, { 'attr': {'placeholder': 'resetting.request.username'|trans } }) }}
+			{{ form_widget(form.email, { 'attr': {'placeholder': 'form.email'|trans } }) }}
 			{{ form_errors(form.email) }}
 		</div>
 		<div class="form-group {% if form.username.vars.errors|length > 0  %}has-error{% endif %}">
