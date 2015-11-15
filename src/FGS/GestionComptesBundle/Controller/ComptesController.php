@@ -101,11 +101,6 @@ class ComptesController extends Controller
 		    	$session	=	new Session();
 		    	$session->getFlashBag()->add('success', 'Le compte a bien été supprimé !');
 	    	}
-	    	else 
-	    	{
-	    		$session	=	new Session();
-	    		$session->getFlashBag()->add('error', 'Erreur lors de la tentative de suppression.');
-	    	}
     	}
     	return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_compte"));
     
@@ -143,10 +138,10 @@ class ComptesController extends Controller
     private function createDeleteForm($id)
     {
     	return $this->createFormBuilder(array('id'	=> $id))
-    	->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_compte'))
-    	->setMethod('DELETE')
-    	->add('id', 'hidden')
-    	->getForm();
+	    	->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_compte'))
+	    	->setMethod('DELETE')
+	    	->add('id', 'hidden')
+	    	->getForm();
     }
     
     private function createEmptyPOSTForm($route, $idForm)

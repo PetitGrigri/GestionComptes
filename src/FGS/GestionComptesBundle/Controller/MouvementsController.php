@@ -16,8 +16,7 @@ class MouvementsController extends Controller
 		$mf				= new MouvementFinancier();
 		$utilisateur	= $this->getUser();
 
-		$cmf = $this->getDoctrine()
-					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 
 		$mf->setCategorieMouvementFinancier($cmf);
@@ -48,8 +47,7 @@ class MouvementsController extends Controller
 		$mf				= new MouvementFinancier();
 		$utilisateur	= $this->getUser();
 
-		$cmf = $this->getDoctrine()
-					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mf->setCategorieMouvementFinancier($cmf);
@@ -81,8 +79,7 @@ class MouvementsController extends Controller
 		
 		$form->handleRequest($request);
 
-		if ($form->isValid())
-		{
+		if ($form->isValid()) {
 			//récupération de l'id du mouvement financier
 			$id = $form->getViewData()['id'];
 
@@ -98,10 +95,6 @@ class MouvementsController extends Controller
 			
 				$session	=	new Session();
 				$session->getFlashBag()->add('success', 'Votre '.$mf->getCategorieMouvementFinancier()->getType().' a été supprimé !');
-			}
-			else {
-				$session	=	new Session();
-				$session->getFlashBag()->add('error', 'Ce mouvement financier n\'existe pas.');
 			}
 		}
 		
@@ -272,6 +265,7 @@ class MouvementsController extends Controller
 		if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE) {
 			$mf->setMontant(-abs($mf->getMontant()));
 		}
+		
 		if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_REVENU) {
 			$mf->setMontant(abs($mf->getMontant()));
 		}
@@ -289,10 +283,10 @@ class MouvementsController extends Controller
 	private function createEmptyPOSTForm($route, $idForm)
 	{
 		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
-		->setAction($this->generateUrl($route))
-		->add('id', 'hidden')
-		->setMethod('POST')
-		->getForm();
+			->setAction($this->generateUrl($route))
+			->add('id', 'hidden')
+			->setMethod('POST')
+			->getForm();
 	}
 	private function createDeletePOSTForm()
 	{
