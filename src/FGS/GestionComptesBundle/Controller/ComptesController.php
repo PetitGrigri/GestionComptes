@@ -21,9 +21,7 @@ class ComptesController extends Controller
 		//génération de la vue
     	return $this->render('FGSGestionComptesBundle:Comptes:index.html.twig', array(
     			'listeComptes'	=> $listeComptes,
-    			'form_delete'	=> $this->createEmptyPostForm('fgs_gestion_comptes_supprimer_mouvement_financier', 'delete_mf')->createView(),
-    			'form_check'	=> $this->createEmptyPostForm('fgs_gestion_comptes_check_mouvement_financier', 'check_mf')->createView(),
-    	));
+     	));
 
     }
     
@@ -64,22 +62,15 @@ class ComptesController extends Controller
     	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($utilisateur->getId());
     	
     	return $this->render('FGSGestionComptesBundle:Comptes:gerer.html.twig', array(
-    			'listeComptes'=> $listeComptes
+    			'listeComptes'=> $listeComptes, 
+    			''
     	));
     }
-    
-    public function gerenerLienSuppressionAction(Compte $compte)
-    {
-    	return $this->render('FGSGestionComptesBundle:Comptes:generer_lien_suppression.html.twig', array(
-    		'form'		=> $this->createDeleteForm($compte->getId())->createView(),
-    		'compte'	=> $compte,
-    	));
-    }
-    
+
     public function supprimerCompteAction(Request $request)
     {
     	//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
-    	$form = $this->createDeleteForm();
+    	$form = $this->createDeletePOSTForm();
     	
     	$form->handleRequest($request);
     	
@@ -134,16 +125,18 @@ class ComptesController extends Controller
     			"form"=> $form->createView(),
     	));
     }
-    
-    private function createDeleteForm($id)
-    {
-    	return $this->createFormBuilder(array('id'	=> $id))
-	    	->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_compte'))
-	    	->setMethod('DELETE')
-	    	->add('id', 'hidden')
-	    	->getForm();
-    }
-    
+	public function genererFormDeleteAction()
+	{
+		return $this->render('FGSGestionComptesBundle:Comptes:generer_formulaire_delete.html.twig', array(
+			'form_delete'	=> $this->createDeletePOSTForm()->createView(),
+		));
+	}
+	
+	private function createDeletePOSTForm()
+	{
+		return $this->createEmptyPostForm('fgs_gestion_comptes_supprimer_compte', 'delete_compte');
+	}
+	
     private function createEmptyPOSTForm($route, $idForm)
     {
     	return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))

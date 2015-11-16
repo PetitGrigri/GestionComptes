@@ -17,7 +17,7 @@ fgs_gestion_comptes_gerer_compte:
 fgs_gestion_comptes_supprimer_compte: 
     path:     /supprimer-compte
     defaults: { _controller: FGSGestionComptesBundle:Comptes:supprimerCompte }
-    methods:  [DELETE]
+    methods:  [POST]
 
 fgs_gestion_comptes_modifier_compte: 
     path:     /modifier-compte/{id}

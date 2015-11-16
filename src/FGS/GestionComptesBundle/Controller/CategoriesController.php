@@ -139,8 +139,7 @@ class CategoriesController extends Controller
 		
 				//suppression de la liste des Cmf
 				$em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->removeCmfFromIdList($listeCmfIdImpacte);
-	
-				$session	=	new Session();
+
 				$session->getFlashBag()->add('success', 'La catégorie a bien été supprimé !');
 			}
 		}
