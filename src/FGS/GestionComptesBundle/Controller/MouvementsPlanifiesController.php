@@ -93,13 +93,6 @@ class MouvementsPlanifiesController extends Controller
 		));
 	}
 	
-	public function gerenerLienSuppressionAction($id)
-	{
-		return $this->render('FGSGestionComptesBundle:MouvementsPlanifies:generer_lien_suppression.html.twig', array(
-			'form'	=> $this->createDeleteForm($id)->createView(),
-		));
-	}
-	
 	public function voirMouvementFinancierPlanifieAction()
 	{
 		$utilisateur	= $this->getUser();
@@ -154,7 +147,7 @@ class MouvementsPlanifiesController extends Controller
 	
 	public function supprimerMouvementFinancierPlanifieAction(Request $request)
 	{//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
-		$form = $this->createDeleteForm();
+		$form = $this->createDeletePOSTForm();
 		
 		$form->handleRequest($request);
 
@@ -209,16 +202,24 @@ class MouvementsPlanifiesController extends Controller
 		
 		return $mf;
 	}
-	/**
-	 * méthode permetant de générer un formulaire non mappé sur un mouvement financier planifie
-	 * @param int $id
-	 */
-	private function createDeleteForm($id=null)
+	public function genererFormDeleteAction()
 	{
-		return $this->createFormBuilder(array('id'	=> $id))
-		->setAction($this->generateUrl('fgs_gestion_comptes_supprimer_mouvement_financier_planifie'))
-		->setMethod('DELETE')
-		->add('id', 'hidden')
-		->getForm();
+		return $this->render('FGSGestionComptesBundle:Comptes:generer_formulaire_delete.html.twig', array(
+			'delete_mfp'	=> $this->createDeletePOSTForm()->createView(),
+		));
 	}
+	
+	private function createDeletePOSTForm()
+	{
+		return $this->createEmptyPostForm('fgs_gestion_comptes_supprimer_mouvement_financier_planifie', 'delete_mfp');
+	}
+	
+    private function createEmptyPOSTForm($route, $idForm)
+    {
+    	return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
+	    	->setAction($this->generateUrl($route))
+	    	->add('id', 'hidden')
+	    	->setMethod('POST')
+	    	->getForm();
+    }
 }

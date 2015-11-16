@@ -139,7 +139,7 @@ fgs_gestion_comptes_modifier_mouvements_planifies:
 fgs_gestion_comptes_supprimer_mouvement_financier_planifie:
     path:     /supprimer-mouvement-financier-planifie
     defaults: { _controller: FGSGestionComptesBundle:MouvementsPlanifies:supprimerMouvementFinancierPlanifie }
-    methods:  [DELETE]
+    methods:  [POST]
         
 fgs_gestion_comptes_test_mail:
     path:     /test-mail
