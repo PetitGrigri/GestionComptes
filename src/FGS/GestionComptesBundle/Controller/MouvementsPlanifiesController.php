@@ -13,18 +13,17 @@ use FGS\GestionComptesBundle\Form\Type\MouvementFinancierPlanifieType;
 
 class MouvementsPlanifiesController extends Controller
 {
-	
+
 	public function ajouterDepensePLanifieeAction(Request $request)
 	{
 		$mfp			= new MouvementFinancierPlanifie();
-		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($this->getUser(), CategorieMouvementFinancier::TYPE_DEPENSE);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -44,7 +43,7 @@ class MouvementsPlanifiesController extends Controller
 			$session	=	new Session();
 			$session->getFlashBag()->add('success', 'La dépense planifié a été prise en compte!');
 		
-			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_voir_mouvements_planifies"));
 		}
 		
 		return $this->render('FGSGestionComptesBundle:MouvementsPlanifies:ajouter_depense_planifiee.html.twig', array(
@@ -55,14 +54,13 @@ class MouvementsPlanifiesController extends Controller
 	public function ajouterRevenuPLanifieAction(Request $request)
 	{
 		$mfp			= new MouvementFinancierPlanifie();
-		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($this->getUser(), CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -82,7 +80,7 @@ class MouvementsPlanifiesController extends Controller
 			$session	=	new Session();
 			$session->getFlashBag()->add('success', 'Le revenu planifié a été prise en compte!');
 		
-			return $this->redirect($this->generateUrl("fgs_gestion_comptes_homepage"));
+			return $this->redirect($this->generateUrl("fgs_gestion_comptes_voir_mouvements_planifies"));
 		}
 		
 		return $this->render('FGSGestionComptesBundle:MouvementsPlanifies:ajouter_revenu_planifie.html.twig', array(
@@ -143,7 +141,8 @@ class MouvementsPlanifiesController extends Controller
 	
 	
 	public function supprimerMouvementFinancierPlanifieAction(Request $request)
-	{//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
+	{
+		//récupération du "mini formulaire" contenant l'id de ce que l'on veut supprimer (avec le tocker crsf)
 		$form = $this->createDeletePOSTForm();
 		
 		$form->handleRequest($request);

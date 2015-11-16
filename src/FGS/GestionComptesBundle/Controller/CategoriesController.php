@@ -18,7 +18,6 @@ class CategoriesController extends Controller
     	$utilisateur		= $this->getUser();
     	
     	$listeCategories	= $em->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getTreeCategoriesForUtilisateur($utilisateur->getId());
-
     	
     	return $this->render('FGSGestionComptesBundle:Categories:gerer_categories.html.twig', array(
 			'listeCategories'	=> $listeCategories,
