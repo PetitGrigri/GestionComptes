@@ -20,11 +20,10 @@ class MouvementsPlanifiesController extends Controller
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf = $this->getDoctrine()
-					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
+		
 		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
 		$form->handleRequest($request);
 		
@@ -59,9 +58,7 @@ class MouvementsPlanifiesController extends Controller
 		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
-		$cmf = $this->getDoctrine()
-					->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
-					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
+		$cmf = $this->getDoctrine()->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
@@ -202,6 +199,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		return $mf;
 	}
+	
 	public function genererFormDeleteAction()
 	{
 		return $this->render('FGSGestionComptesBundle:Comptes:generer_formulaire_delete.html.twig', array(
