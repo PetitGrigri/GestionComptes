@@ -201,7 +201,7 @@ class MouvementsPlanifiesController extends Controller
 	
 	public function genererFormDeleteAction()
 	{
-		return $this->render('FGSGestionComptesBundle:Comptes:generer_formulaire_delete.html.twig', array(
+		return $this->render('FGSGestionComptesBundle:MouvementsPlanifies:generer_formulaire_delete.html.twig', array(
 			'delete_mfp'	=> $this->createDeletePOSTForm()->createView(),
 		));
 	}

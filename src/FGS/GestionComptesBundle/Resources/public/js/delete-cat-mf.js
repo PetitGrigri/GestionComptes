@@ -1,7 +1,7 @@
 $(function () 
 {
 	$('#valider_suppression').click(function(e)
-	{alert($('#delete_cat').html());
+	{
 		//stop de la propagation de l'évènement
 		e.preventDefault();
 
