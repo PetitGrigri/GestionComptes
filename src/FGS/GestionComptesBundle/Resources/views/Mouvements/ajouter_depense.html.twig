@@ -24,6 +24,9 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
 <style>
+.modal-dialog {
+	z-index: 1050;
+}
 .datepicker.dropdown-menu th,
 .datepicker.datepicker-inline th,
 .datepicker.dropdown-menu td,
@@ -38,8 +41,6 @@
 }
 </style>
 {% endblock %}
-
-
 
 
 {% block javascripts %}

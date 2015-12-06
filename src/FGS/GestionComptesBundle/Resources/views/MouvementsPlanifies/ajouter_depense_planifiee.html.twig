@@ -2,6 +2,15 @@
 
 {% block title %}Ajout d'une dépense Planifiée{% endblock %}
 
+{% block modal %}
+<div class="modal" id="date">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+{% endblock %}
+
 {% block contenu %}
 <section class='container-fluid'>
 	<h1 class="page-header">{% block titre_contenu %}Ajout d'un dépense Planifié{% endblock %}</h1>
@@ -15,6 +24,9 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
 <style>
+.modal-dialog {
+	z-index: 1050;
+}
 .datepicker.dropdown-menu th,
 .datepicker.datepicker-inline th,
 .datepicker.dropdown-menu td,

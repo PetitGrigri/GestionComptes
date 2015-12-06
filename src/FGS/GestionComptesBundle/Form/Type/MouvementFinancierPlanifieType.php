@@ -30,6 +30,9 @@ class MouvementFinancierPlanifieType extends AbstractType
             ->add(	'dateInitiale', 'date', array(
             		'widget' => 'single_text',
             		'format' => 'dd-MM-yyyy',
+	            	'attr'		=> array(
+	            		'autocomplete'	=> 'off',
+	            	),
             ))
             ->add('intervalType', 'choice', array(
             	'label'		=> 'Type de récurence',

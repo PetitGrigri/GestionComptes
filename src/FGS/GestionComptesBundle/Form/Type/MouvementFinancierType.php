@@ -25,8 +25,11 @@ class MouvementFinancierType extends AbstractType
 			->add('libelle', 'text', array())
 			->add('montant',  'money')
 			->add(	'date', 'date', array(
-					'widget' => 'single_text',
-    				'format' => 'dd-MM-yyyy',
+					'widget'	=> 'single_text',
+    				'format'	=> 'dd-MM-yyyy',
+					'attr'		=> array(
+						'autocomplete'	=> 'off',
+					), 
 			))
 			->add('compte', 	'entity', 	array(
 					'class'			=>	'FGSGestionComptesBundle:Compte',
