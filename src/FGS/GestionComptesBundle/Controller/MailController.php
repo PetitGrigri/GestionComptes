@@ -13,7 +13,7 @@ class MailController extends Controller
 	{
 		$mail = new \Swift_Message;
 		$mail->setSubject('It\'s Working')
-			->setFrom('fgriselles@gmail.com')
+			->setFrom($this->getParameter('mailer_user'))
 			->setTo('test_gestion_compte2@yopmail.com')
 			->setContentType('text/html')
 			->setBody('<h1>It\'s Working  ! ! !</h1><p>On peut envoyer des mails de test !  ! !</p>');
