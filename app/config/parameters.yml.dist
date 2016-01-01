@@ -26,3 +26,6 @@ parameters:
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true
+    
+    fos_user_bundle_from_adress:    "test@toto.com"
+    fos_user_bundle_from_name:      "test"
