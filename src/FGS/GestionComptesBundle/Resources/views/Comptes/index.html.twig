@@ -4,58 +4,42 @@
 
 {% block contenu %}
 	{% for compte in listeComptes %}
-		<div class='row'>
-		<div class="col-md-1 col-xs-2" class="height: 38px;">
-			<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
+		<div class='col-lg-6'>
+			<div class='panel panel-{{ compte.montantActuel < 0 ? 'danger':'primary' }}'>
+				<div class='panel-heading'>
+					<div class="btn-group pull-right" style="margin-top: 10.5px;">
+						<a type="button" class=" dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="glyphicon glyphicon-option-vertical"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte', {'id':compte.id}) }}">Visualiser tout les mouvements du comptes </a></li>
+							<li><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':compte.id}) }}">Visualisation du mois en cours</a></li>
+							<li><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee',{'id':compte.id}) }}">Visualisation de l'année en cours</a></li>
+						</ul>
+					</div>
+					<h2>
+						<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style='height:32px; margin-bottom:10.5px;'/>
+						<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte', {'id':compte.id}) }}">
+							{{ compte.nom }}
+						</a>
+					</h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class='panel-body'>
+					{% if compte.mouvementFinanciers is not empty %}
+						{{ include('FGSGestionComptesBundle:Utils:tableau_mouvement_financier.html.twig', { 'liste_mouvement_financier' : compte.mouvementFinanciers, 'caption_bottom': 'Vos 2 dernières transactions' }) }}
+					{% else %}
+					<p>Aucune transaction n'a encore été réalisé sur ce compte<p>
+					{% endif %}
+				</div>
+				<div class='panel-footer'>
+					<h3 class=" {{ compte.montantActuel < 0 ? 'text-danger':'text-success' }} text-right">
+						<small>Total : </small>{{ compte.montantActuel|number_format(2, ',', ' ') }} €
+					</h3>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-11 col-xs-10"><h1><a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte', {'id':compte.id}) }}">{{ compte.nom }}<span class="label {{ compte.montantActuel < 0 ? 'label-danger':'label-success' }} pull-right">{{ compte.montantActuel|number_format(2, ',', ' ') }} €</span></a></h1></div>
-	
-		</div>
-		{% if compte.mouvementFinanciers is not empty %}
-		<table class="table table-striped ">
-			<thead>
-				<tr>
-					<th></th>
-					<th>
-						Date
-					</th>
-					<th>
-						Libellé
-					</th>
-					<th>
-						Catégorie
-					</th>
-					<th class="text-right">
-						Montant
-					</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for mouvementFinancier in compte.mouvementFinanciers %}
-				<tr>
-					<td>{% include 'FGSGestionComptesBundle:Mouvements:check_button.html.twig' %}</td>
-					<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
-					<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
-					<td><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
-					<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
-					<td class='text-right'>
-						{{ mouvementFinancier.wasPlanified ? "<a href='#' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-time'></span></a>" }}
-						<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
-						{# render(controller('FGSGestionComptesBundle:Mouvements:gerenerLienSuppression', {'id':mouvementFinancier.id})) #}
-						{% include 'FGSGestionComptesBundle:Mouvements:delete_button.html.twig' %}
-					</td>
-				</tr>
-				{% endfor %}
-				<caption style="caption-side: bottom; text-align:right;">Vos 2 dernières transactions</caption>
-			</tbody>
-		</table>
-		{% else %}
-		<p class='well well-sm' style='background-color:#f9f9f9;'>Aucune transaction n'a encore été réalisé sur ce compte<p>
-		{% endif %}
-		{% if loop.last != true %}
-		<hr style="margin: 10px 0px;"/>
-		{% endif %}
+		{% if loop.index is even %}<div class='clearfix'></div>{%  endif %}
 	{% endfor %}
 	
 	{{- render(controller('FGSGestionComptesBundle:Mouvements:genererFormsCheckAndDelete')) -}}
@@ -70,6 +54,11 @@
 }
 .text-muted {
 	color: #999 !important;
+}
+.panel .panel-heading h1, .panel .panel-heading h2, .panel .panel-heading h3, 
+.panel .panel-footer h1, .panel .panel-footer h2, .panel .panel-footer h3
+{
+	margin: 0px;
 }
 </style>
 {% endblock %}

@@ -1,116 +1,116 @@
 @CHARSET "UTF-8";
 .categorie-mf {
-		font-size:90%; font-weight: normal;
-	}
-	.gestion-compte-info
-	{
-		color:			#fff; 
-		padding: 		0px;
-		margin:			0px; 
-		color:			#000;
-		margin-bottom:	21px !important;
-	}
-	
-	.gestion-compte-info .gestion-compte-info-titre
-	{
-		font-size: 		1rem; 
-		padding:		0px; 
-		margin:			0px;
-	}
-	.gestion-compte-info .gestion-compte-info-contenu
-	{
-		font-size: 		2rem;
-	}
-	
-	.gestion-compte-info:before
-	{
-		position:		absolute; 
-		font-family: 	"daily-life" !important;
-		top:			50%; 
-		left:			50%; 
-		height:			40px; 
-		width:			40px;
-		line-height:	40px;
-		vertical-align:	middle;
-		font-size:		20px;
-		text-align:		center;  
-		border-radius:	50%;
-		background-color:#fff;
-		z-index:		2;
-		margin:			-30px 0px 0px -20px;
-		
-	}
-	.gestion-compte-info-revenu:before
-	{
-		color:			#8ac249;
-		content:		"'";
+	font-size:90%; font-weight: normal;
+}
+.gestion-compte-info
+{
+	color:			#fff; 
+	padding: 		0px;
+	margin:			0px; 
+	color:			#000;
+	margin-bottom:	21px !important;
+}
 
-	}
-	.gestion-compte-info-total:before
-	{
+.gestion-compte-info .gestion-compte-info-titre
+{
+	font-size: 		1rem; 
+	padding:		0px; 
+	margin:			0px;
+}
+.gestion-compte-info .gestion-compte-info-contenu
+{
+	font-size: 		2rem;
+}
+
+.gestion-compte-info:before
+{
+	position:		absolute; 
+	font-family: 	"daily-life" !important;
+	top:			50%; 
+	left:			50%; 
+	height:			40px; 
+	width:			40px;
+	line-height:	40px;
+	vertical-align:	middle;
+	font-size:		20px;
+	text-align:		center;  
+	border-radius:	50%;
+	background-color:#fff;
+	z-index:		2;
+	margin:			-30px 0px 0px -20px;
 	
-		color:			#008cba;
-		content:		"T"; 
-	}
-	.gestion-compte-info-depense:before
-	{
-		color:			#dc1c5d;
-		content:		"("; 
-	}
-	
-	.gestion-compte-info:after
-	{
-		content:	'';
-		box-sizing: border-box;
-		clear: 		both;
-		display: 	table;
-	}
-	
-		.gestion-compte-info>div
-	{
-		padding: 		20px;
-		margin:			0px; 
-		color:			#fff; 	
-		overflow:		hidden;
-	}
-	.gestion-compte-info>div:first
-	{
-		text-align:		left;
-	}
-	.gestion-compte-info>div:last
-	{
-		text-align:		right;
-	}
-	
-	.gestion-compte-info-revenu>div:first-child
-	{
-		background-color:	#8ac249;
-		text-align:			left;
-	}
-	.gestion-compte-info-revenu>div:last-child
-	{
-		background-color:	#83b845;
-		text-align:			right;
-	}
-	
-	.gestion-compte-info-total>div:first-child
-	{
-		background-color:	#008cba;
-		text-align:			left;
-	}
-	.gestion-compte-info-total>div:last-child
-	{
-		background-color:	#008cba;
-		text-align:			right;
-	}
-	
-	.gestion-compte-info-depense>div:first-child
-	{
-		background-color:	#dc1c5d;
-		text-align:			left;
-	}
-	.gestion-compte-info-depense>div:last-child
-	{
-		background-color:	#e81d62;
-		text-align:			right;
-	}
+}
+.gestion-compte-info-revenu:before
+{
+	color:			#8ac249;
+	content:		"'";
+
+}
+.gestion-compte-info-total:before
+{
+
+	color:			#008cba;
+	content:		"T"; 
+}
+.gestion-compte-info-depense:before
+{
+	color:			#dc1c5d;
+	content:		"("; 
+}
+
+.gestion-compte-info:after
+{
+	content:	'';
+	box-sizing: border-box;
+	clear: 		both;
+	display: 	table;
+}
+
+	.gestion-compte-info>div
+{
+	padding: 		20px;
+	margin:			0px; 
+	color:			#fff; 	
+	overflow:		hidden;
+}
+.gestion-compte-info>div:first
+{
+	text-align:		left;
+}
+.gestion-compte-info>div:last
+{
+	text-align:		right;
+}
+
+.gestion-compte-info-revenu>div:first-child
+{
+	background-color:	#8ac249;
+	text-align:			left;
+}
+.gestion-compte-info-revenu>div:last-child
+{
+	background-color:	#83b845;
+	text-align:			right;
+}
+
+.gestion-compte-info-total>div:first-child
+{
+	background-color:	#008cba;
+	text-align:			left;
+}
+.gestion-compte-info-total>div:last-child
+{
+	background-color:	#008cba;
+	text-align:			right;
+}
+
+.gestion-compte-info-depense>div:first-child
+{
+	background-color:	#dc1c5d;
+	text-align:			left;
+}
+.gestion-compte-info-depense>div:last-child
+{
+	background-color:	#e81d62;
+	text-align:			right;
+}

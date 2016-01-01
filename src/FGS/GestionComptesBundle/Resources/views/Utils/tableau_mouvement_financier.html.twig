@@ -1,0 +1,41 @@
+<table class="table table-striped">
+	{% if caption_top is defined %}
+		<caption style="caption-side: top; text-align:right;">{{ caption_top }} </caption>
+	{% endif %}
+	<thead>
+		<tr>
+			<th class='hidden-xs'></th>
+			<th>
+				Date
+			</th>
+			<th>
+				Libellé
+			</th>
+			<th class='hidden-xs'>
+				Catégorie
+			</th>
+			<th class="text-right">
+				Montant
+			</th>
+			<th class='hidden-xs'></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for mouvementFinancier in liste_mouvement_financier %}
+			<tr>
+				<td  class='hidden-xs'>{% include 'FGSGestionComptesBundle:Mouvements:check_button.html.twig' %}</td>
+				<td>{{ mouvementFinancier.date|date("d/m/Y") }}</td>
+				<td>{% include 'FGSGestionComptesBundle:Utils:commentaire.html.twig' %}{{ mouvementFinancier.libelle }}</td>
+				<td  class='hidden-xs'><p class='label {{ mouvementFinancier.montant > 0 ? 'label-success':'label-warning' }} categorie-mf'><span class=' text-center glyphicon {{ mouvementFinancier.categorieMouvementFinancier.icone }}'></span> {{ mouvementFinancier.categorieMouvementFinancier.libelle }}</p></td>
+				<td class="text-right">{{ mouvementFinancier.montant|localizedcurrency('EUR') }}</td>
+				<td class='text-right hidden-xs'>
+					<a href='{{ path('fgs_gestion_comptes_modifier_mouvement_financier', {'id':mouvementFinancier.id}) }}' class='btn btn-info btn-xs'><span class='glyphicon glyphicon-pencil'></span></a> 
+					{% include 'FGSGestionComptesBundle:Mouvements:delete_button.html.twig' %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+	{% if caption_bottom is defined  %}
+		<caption style="caption-side: bottom; text-align:right;">{{ caption_bottom }} </caption>
+	{% endif %}
+</table>

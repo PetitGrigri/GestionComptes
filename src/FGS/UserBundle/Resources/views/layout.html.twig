@@ -4,34 +4,6 @@
 
 {% block stylesheets %}
 	{{  parent()  }}
-	<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
-	<style>
-	#logo{
-		max-height: 50px;
-		width: auto;
-		margin-top: -6px;
-	}
-	h1 {
-		font-family: 'Indie Flower', cursive;
-		color: #0079a1; 
-		line-height: 40px; 
-		vertical-align: middle;
-		padding: 0px; 
-		margin:0px 0px 30px 0px;
-		
-	}
-	#_submit{
-		margin: 30px 0px 10px 0px;
-	}
-	html, body {
-	    min-height: 100%;
-	}
-	body{
-		background: url({{ absolute_url(asset('img/picjumbo.com_HNCK8984_bis.jpg')) }}) no-repeat center center fixed; 
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: cover;
-	}
-	</style>
+	<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" href="{{ asset('bundles/fgsuser/css/layout.css') }}"  rel='stylesheet' type='text/css' />
 {% endblock %}

@@ -2,12 +2,13 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 
-{% block title %}{{ parent() }} : Création d'un nouveau compte{% endblock %}
+{% block title %}{{ parent() }} : Nouveau compte{% endblock %}
 
-{% block panel_heading %}Création d'un nouveau compte{% endblock %}
+{% block panel_heading %}<h2>Nouveau compte</h2>{% endblock %}
 
 {% block panel_body %}
     <p class="text-justify">{{ 'registration.check_email'|trans({'%email%': user.email}) }}<p class="text-justify">
-    <hr />
-	<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
+{% endblock %}
+{% block panel_footer %}
+<a href={{ path('fos_user_security_login') }}>Retour à la page de connexion.</a>
 {% endblock %}

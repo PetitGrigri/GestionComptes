@@ -2,14 +2,17 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% block title %}{{ parent() }} : Création d'un nouveau compte validée{% endblock %}
+{% block title %}{{ parent() }} : Nouveau compte validée{% endblock %}
 
-{% block panel_heading %}Création d'un nouveau compte validée{% endblock %}
+{% block panel_heading %}</h2>Nouveau compte validé</h2>{% endblock %}
 
 {% block panel_body %}
 	<p class="text-justify">
     	{{ 'registration.confirmed'|trans({'%username%': user.username}) }}
     </p>
+{% endblock %}
+
+{% block panel_footer %}
     {% if targetUrl %}
     <p class="text-justify">
     	<a href="{{ targetUrl }}">

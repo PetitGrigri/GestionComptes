@@ -26,35 +26,58 @@
 
 		{% block stylesheets %}
 		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/sticky-footer.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/social-icon.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/base_login.css') }}">
 		{% endblock %}
 	</head>
 
 	<body>
-		<div class="container">
-			<div class='text-center'  style='margin-top:50px;'>
-				<img src="{{ asset('img/logo.png') }}" id='logo'>
-				<h1>Ma petite Tirelire</h1>
-			</div>	
-				
-			<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
-	
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						{% block panel_heading %}{% endblock %}
-					</div>
-					<div class="panel-body">
-			    		{% block panel_body %}{% endblock %}
-			    		{% block fos_user_content %}{% endblock %}
-					</div>
+		<nav class="navbar navbar-inverse navigation" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="{{ path('fgs_gestion_comptes_homepage') }}">
+						<img src="{{ asset('img/logo.png') }}" id='logo' style='float: left;'>
+						<h1  style='float: left; margin-top: 10.5px; font-style: italic; margin-left: 15px;'>Ma petite Tirelire</h1>
+					</a>
 				</div>
 			</div>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-7" style="color: #fff;">
+					{% block presentation %}
+					<h2 style="margin-bottom: 20px;">Gérer Facilement vos comptes</h2>
+					<p class="text-justify">Ma petite tirelire,  est une application web vous permettant de gérer facilement vos comptes jour après jour.</p>
+					<p class="text-justify">Elle vous permet d’anticiper vos mouvements Financiers,  de les classer comme vous l’entendez et d’avoir des récapitulatifs mensuels ou annuels.</p>
+					<p class="text-justify">Par son intermédiaire, vous pourrez visualiser l’intégralité de vos comptes sur une seule interface. </p>
+					{% endblock %}
+				</div>
+				<div class="col-sm-5">
+		
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							{% block panel_heading %}{% endblock %}
+						</div>
+						<div class="panel-body">
+				    		{% block panel_body %}{% endblock %}
+				    		{% block fos_user_content %}{% endblock %}
+						</div>
+						<div class="panel-footer">
+							{% block panel_footer %}{% endblock %}
+						</div>
+					</div>
+				</div>
 	
 			</div>
 		</div>
+		<footer class="text-center footer">
+			Suivez nous sur <a href="https://www.facebook.com/mapetitetirelirefr/" style="text-decoration:none; color: #fff;"><span class="icon icon-facebook" style="font-size: 20px;"></span></a>
+   		</footer>
 		{% block javascripts %}
 			<script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
 			<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 		{% endblock %}
-	
+
 	</body>
 </html>

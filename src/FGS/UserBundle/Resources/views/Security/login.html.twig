@@ -1,6 +1,6 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block panel_heading %}Connexion{% endblock %}
+{% block panel_heading %}<h2>Connexion <small>à votre compte</small><h2>{% endblock %}
 
 {% block panel_body %}
 		
@@ -35,18 +35,6 @@
 				<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-primary btn-block" />
 			</div>
 		</form>
-		
-		<hr />
-		<div>
-			<p>
-				<a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a>
-			</p>
-			<p>
-				Vous n'avez pas encore de compte ? <br />
-				<a href="{{ path('fos_user_registration_register') }}">Créer un nouveau compte</a>
-			<p>
-		</div>
-		
 	{% else %}
 		<div class="row text-center"  style="margin-top: 15px;">
 			{{ 'layout.logged_in_as'|trans({'%username%': app.user.username|title}, 'FOSUserBundle') }} 
@@ -57,4 +45,14 @@
 			</a>
 		</div>
 	{% endif %}
+{% endblock %}
+
+{% block panel_footer %}
+	<p>
+		<a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a>
+	</p>
+	<p>
+		Vous n'avez pas encore de compte ? <br />
+		<a href="{{ path('fos_user_registration_register') }}">Créer un nouveau compte</a>
+	<p>
 {% endblock %}
