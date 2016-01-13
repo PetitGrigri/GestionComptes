@@ -18,10 +18,14 @@ class ComptesController extends Controller
     	//récupération de la liste des comptes et des derniers mouvements liés à ce compte (les deux derniers)
     	$listeComptes	= $em->getRepository('FGSGestionComptesBundle:Compte')->getCompteAndBanqueForUtilisateur($this->getUser()->getId());
 
-		//génération de la vue
-    	return $this->render('FGSGestionComptesBundle:Comptes:index.html.twig', array(
-    			'listeComptes'	=> $listeComptes,
-     	));
+    	if (!empty($listeComptes)) {
+	    	return $this->render('FGSGestionComptesBundle:Comptes:index.html.twig', array(
+	    			'listeComptes'	=> $listeComptes,
+	     	));
+    	}
+    	else {
+    		return $this->redirectToRoute('fgs_gestion_comptes_welcome');
+    	}
 
     }
     
@@ -82,7 +86,7 @@ class ComptesController extends Controller
 	    	$em		= $this->getDoctrine()->getManager();
 	    	
 	    	$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
-	    	
+
 	    	$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 	    	
 	    	if ($em->getRepository('FGSGestionComptesBundle:Compte')->deleteCompteById($id)	=== 1)

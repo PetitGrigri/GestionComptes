@@ -1,58 +1,171 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block panel_heading %}<h2>Connexion <small>à votre compte</small><h2>{% endblock %}
+{% block contenu %}
 
-{% block panel_body %}
-		
-	{% if error %}
-		<div class="alert alert-danger alert-dismissible fade in" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-			<span class="glyphicon glyphicon-warning-sign"></span> {{ error.messageKey|trans(error.messageData, 'security') }}
+<nav id="navigation_puces">
+	<ul class="nav">
+		<li><a href="#login"></a></li>
+		<li><a href="#comptes"></a></li>
+		<li><a href="#mouvements"></a></li>
+		<li><a href="#visualiser"></a></li>
+	</ul>
+</nav>
+<section id="login">
+	<div class="container-fluid">
+		<div class="col-sm-7 presentation">
+			<h1>Gérez facilement vos comptes</h1>
+			<p><span class="ma-petite-tirelire"> Ma petite tirelire</span> est une application web vous permettant de faire vos comptes en ligne.<p>
+			<p>Son but est de vous aider dans la gestion de vos finances et à terme : économiser.</p>
+			<p class='text-center' style='margin-top:50px;'><a href="#comptes" class='decouvrir btn btn-primary'>Découvrez <span class="ma-petite-tirelire"> Ma petite tirelire</span></a></p>
 		</div>
-	{% endif %}
+		
+		<div class="col-sm-5 form">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2>Connexion <small>à votre compte</small><h2>
+				</div>
+				<div class="panel-body">
+	    			{% if error %}
+						<div class="alert alert-danger alert-dismissible fade in" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+							<span class="glyphicon glyphicon-warning-sign"></span> {{ error.messageKey|trans(error.messageData, 'security') }}
+						</div>
+					{% endif %}
 
-	{% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-	
-		<form action="{{ path("fos_user_security_check") }}" method="post" >
-		    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-		
-			<div class="form-group">
-			    {#<label for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label>#}
-			    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" class="form-control" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }} / Mail"/>
+					{% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+						<form action="{{ path("fos_user_security_check") }}" method="post" >
+						    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+						
+							<div class="form-group">
+							    {#<label for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label>#}
+							    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" class="form-control" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }} / Mail"/>
+							</div>
+						
+							<div class="form-group">
+							    {#<label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>#}
+							    <input type="password" id="password" name="_password" required="required" class="form-control" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}"/>
+							</div>
+						
+							<div class="form-group">
+							    <input type="checkbox" id="remember_me" name="_remember_me" value="on"  class=""/>
+							    <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+							</div>
+						
+							<div class="form-group">
+								<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-primary btn-block" />
+							</div>
+						</form>
+					{% else %}
+						<div class="row text-center"  style="margin-top: 15px;">
+							{{ 'layout.logged_in_as'|trans({'%username%': app.user.username|title}, 'FOSUserBundle') }} 
+						</div>
+						<div style="margin-top: 15px;">
+							<a href="{{ path('fos_user_security_logout') }}" class="btn btn-primary btn-block">
+								{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+							</a>
+						</div>
+					{% endif %}
+
+		    		{% block fos_user_content %}{% endblock %}
+				</div>
+				<div class="panel-footer">
+					<p>
+						<a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a>
+					</p>
+					<p>
+						Vous n'avez pas encore de compte ? <br />
+						<a href="{{ path('fos_user_registration_register') }}">Créer un nouveau compte</a>
+					<p>
+				</div>
 			</div>
-		
-			<div class="form-group">
-			    {#<label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>#}
-			    <input type="password" id="password" name="_password" required="required" class="form-control" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}"/>
-			</div>
-		
-			<div class="form-group">
-			    <input type="checkbox" id="remember_me" name="_remember_me" value="on"  class=""/>
-			    <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
-			</div>
-		
-			<div class="form-group">
-				<input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-primary btn-block" />
-			</div>
-		</form>
-	{% else %}
-		<div class="row text-center"  style="margin-top: 15px;">
-			{{ 'layout.logged_in_as'|trans({'%username%': app.user.username|title}, 'FOSUserBundle') }} 
 		</div>
-		<div style="margin-top: 15px;">
-			<a href="{{ path('fos_user_security_logout') }}" class="btn btn-primary btn-block">
-				{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-			</a>
-		</div>
-	{% endif %}
+	</div>
+	<a href="#comptes" class="down"><span class="glyphicon glyphicon-menu-down"></span></a>
+</section>
+
+
+<section id="comptes">
+    <div class="container-fluid">
+    	<div class="row">
+	    	<div class="col-md-5 image col-md-offset-0">
+	    	</div>
+	    	<div class="col-md-7 presentation">
+				<h2>Ajoutez vos comptes</h2>
+				<p class='justify'><span class="ma-petite-tirelire">Ma petite tirelire </span>vous permet de définir les comptes que vous souhaitez gérer. S'ils sont affiliés de banques différentes, ne vous inquiétez pas : c’est prévu.</p>
+				<h2>Vos données confidentielles</h2>
+				<p class='justify'>Aucune donnée confidentielle concernant vos comptes ne vous sera demandée. Vous n’avez donc aucune inquiétude à avoir.</p>
+			</div>	
+		</div>		
+    </div>
+    <a href="#mouvements" class="down"><span class="glyphicon glyphicon-menu-down"></span></a>
+</section>
+
+<section id="mouvements">
+    <div class="container-fluid">
+    	<div class="row">
+	    	<div class="col-md-7 presentation">
+				<h2>Indiquez vos mouvements financiers</h2>
+				<p class='justify'>Chaque action financière doit être ajoutée pour que la gestion de vos comptes soit efficace !</p>
+				<p class='justify'>N’attendez pas d’être chez vous pour le faire ! Votre smartphone vous permet de le faire rapidement.</p>
+				<h2>Catégorisez</h2>
+				<p class='justify'><span class="ma-petite-tirelire">Ma petite tirelire </span>dispose d’un système de catégorisation très précis vous permettant de trier vos mouvements financiers comme vous l’entendez.</p>
+				<h2>Planifiez</h2>
+				<p class='justify'>Vos dépenses régulières (loyer, eau, électricité, etc.) et vos revenus peuvent être planifiés à l’avance.</p>
+				<p class='justify'>Cela vous permettra d’anticiper les mouvements sur votre compte en évitant des saisies superflues.</p>
+			</div>
+			<div class="col-md-5 image">
+			</div>
+		</div>		
+    </div>
+    <a href="#visualiser" class="down"><span class="glyphicon glyphicon-menu-down"></span></a>
+</section>
+
+<section id="visualiser">
+    <div class="container-fluid">
+    	<div class="row">
+	    	<div class="col-md-5 image">
+	    	</div>
+	    	<div class="col-md-7  presentation">
+	    		<h2>Visualisez</h2>
+				<p class='justify'><span class="ma-petite-tirelire">Ma petite tirelire </span>vous permettra d’avoir des informations sur tous vos comptes d’un seul coup d’œil.</p>
+				<p class='justify'>Vous pourrez aussi visualiser le bilan du mois en cours, des mois passés ou du mois prochain :</p>
+				<ul>
+					<li>liste des mouvements financiers réalisés et à venir ;</li>
+					<li>sommes dépensées par catégories ; </li>
+					<li>total des dépenses, des revenus.</li>
+				</ul>
+				<p class='justify'>Vous n’aurez plus de mauvaises surprises à la fin du mois.</p>
+				<p class='justify'>De même, il vous sera aussi possible de visualiser les bilans annuels de vos comptes afin de comparer les dépenses et les revenus sur plusieurs mois. </p>
+
+			<p class='text-center' style='margin-top:50px;'><a href="#login" class='decouvrir btn btn-primary'>Découvrez en plus : <span class="ma-petite-tirelire">inscrivez vous !</span></a></p>
+			</div>	
+		</div>		
+    </div>
+    <a href="#login" class="top"><span class="glyphicon glyphicon-menu-up"></span></a>
+</section>
+
 {% endblock %}
 
-{% block panel_footer %}
-	<p>
-		<a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a>
-	</p>
-	<p>
-		Vous n'avez pas encore de compte ? <br />
-		<a href="{{ path('fos_user_registration_register') }}">Créer un nouveau compte</a>
-	<p>
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsuser/css/security/login.css') }}"  rel='stylesheet' type='text/css' />
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script language="javascript">
+$(document).ready(function(){
+	$('body').scrollspy({target:"#navigation_puces", offset:50});
+	$('#navigation_puces a,a.top, a.down, a.decouvrir').on('click',function(e) {
+		e.preventDefault();
+
+		var qui	= $(this).attr('href');
+		var ou	= $(qui).offset().top;
+		
+		$('html, body').animate({
+			scrollTop: ou
+		}, 500);
+	});
+});
+</script>
 {% endblock %}

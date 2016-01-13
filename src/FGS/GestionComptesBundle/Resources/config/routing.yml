@@ -1,5 +1,5 @@
 fgs_gestion_comptes_homepage:
-    path:     /
+    path:     /vos-comptes
     defaults: { _controller: FGSGestionComptesBundle:Comptes:index }
     methods:  [GET]
     
@@ -146,3 +146,7 @@ fgs_gestion_comptes_test_mail:
     defaults: { _controller: FGSGestionComptesBundle:Mail:testMail }
     methods:  [GET]
 
+fgs_gestion_comptes_welcome:
+    path:     /bienvenue
+    defaults: { _controller: FGSGestionComptesBundle:Aide:bienvenue }
+    methods:  [GET]

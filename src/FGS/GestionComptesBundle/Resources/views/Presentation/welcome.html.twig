@@ -1,0 +1,52 @@
+{% extends "FGSGestionComptesBundle::layout.html.twig" %}
+
+{% block title %}Bienvenue sur ma-petite-tirelire.fr{% endblock %}
+
+{% block contenu %}
+
+<section id="intro" class="text-center row">
+	<div class="container">
+		<h1 style="margin-bottom: 40px;">Bienvenue</h1>
+		<p class="text-justify intro-text">
+			Félicitations, vous venez de terminer votre inscription. Mais avant de pouvoir utiliser <span class="ma-petite-tirelire"> Ma petite tirelire</span>, il vous faudra configurer vos comptes et vos catégories.
+		</p>
+
+		<ul class="etapes">
+			<li>
+				<a href="#" class="rond">1</a>
+				<div class="description-etape">
+					<h2>Ajoutez vos comptes</h2>
+					<p class="text-justify">Pour Ajouter vos comptes, passez par le menu « <i>Mes comptes / Ajouter un compte </i>».</p>
+					<p class="text-justify">Vous aurez plus tard la possibilité de les modifier en passant par le menu « <i>Mes comptes / Gérer mes comptes </i>».</p>
+				</div>
+			</li>
+			<li>
+				<a href="#" class="rond">2</a>
+				<div class="description-etape">
+					<h2>Créer vos propres catégories</h2>
+					<p class="text-justify">Pour Ajouter vos propres catégories, il vous faudra passer le menu « <i>Catégories / Ajouter une catégorie </i>». </p>
+					<p class="text-justify">Vous pourrez plus tard les modifier ou les supprimer en passant par le menu « <i>Catégories / Gérer mes catégories </i>».</p>
+				</div>
+			</li>
+			<li>
+				<a href="#" class="rond">3</a>
+				<div class="description-etape">
+					<h2>Gérez vos finances</h2>
+					<p class="text-justify">Vous pouvez maintenant ajouter vos dépenses ou vos revenus via leur menu respectif : « <i>Dépense </i>» et « <i>Revenu </i>». </p>
+					<p class="text-justify">Quand au menu  « <i>Planifier </i>» il vous permettra de programmer vos mouvements financiers régulier.</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</section>
+{% endblock %}
+
+
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/Presentation/welcome.css') }}">
+</style>
+{% endblock %}
+

@@ -21,7 +21,7 @@ fos_user_resetting:
     
     
 fos_user_security_login:
-    pattern:  /login
+    pattern:  /
     defaults: { _controller: FOSUserBundle:Security:login }
 
 fos_user_security_check:

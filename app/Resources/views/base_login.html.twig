@@ -26,57 +26,52 @@
 
 		{% block stylesheets %}
 		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('css/sticky-footer.css') }}">
+		<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css' />
 		<link rel="stylesheet" href="{{ asset('css/social-icon.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/base_login.css') }}">
 		{% endblock %}
 	</head>
 
 	<body>
-		<nav class="navbar navbar-inverse navigation" role="navigation">
+		<nav class="navbar navbar-inverse navbar-fixed-top transparent" role="navigation" id="menu_top">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a href="{{ path('fgs_gestion_comptes_homepage') }}">
-						<img src="{{ asset('img/logo.png') }}" id='logo' style='float: left;'>
-						<h1  style='float: left; margin-top: 10.5px; font-style: italic; margin-left: 15px;'>Ma petite Tirelire</h1>
+					<a class="navbar-brand" href="{{ path('fgs_gestion_comptes_homepage') }}">
+						<img alt="" src="{{ asset('img/logo.png') }}" id="logo"> Ma petite tirelire
+						
 					</a>
 				</div>
+
+
+				<a href="https://www.facebook.com/mapetitetirelirefr/" target="facebook" class="navbar-text navbar-right"><span class="icon icon-facebook"></span></a>
+				<p class="navbar-text navbar-right">
+					Suivez nous sur 
+				</p>	
 			</div>
 		</nav>
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-7" style="color: #fff;">
-					{% block presentation %}
-					<h2 style="margin-bottom: 20px;">Gérez facilement vos comptes</h2>
-					<p class="text-justify">Ma petite tirelire,  est une application web vous permettant de gérer facilement vos comptes jour après jour.</p>
-					<p class="text-justify">Elle vous permet d’anticiper vos mouvements financiers,  de les classer comme vous l’entendez et d’avoir des récapitulatifs mensuels ou annuels.</p>
-					<p class="text-justify">Par son intermédiaire, vous pourrez visualiser l’intégralité de vos comptes sur une seule interface. </p>
-					{% endblock %}
-				</div>
-				<div class="col-sm-5">
-		
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							{% block panel_heading %}{% endblock %}
-						</div>
-						<div class="panel-body">
-				    		{% block panel_body %}{% endblock %}
-				    		{% block fos_user_content %}{% endblock %}
-						</div>
-						<div class="panel-footer">
-							{% block panel_footer %}{% endblock %}
-						</div>
-					</div>
-				</div>
-	
-			</div>
-		</div>
-		<footer class="text-center footer">
-			Suivez nous sur <a href="https://www.facebook.com/mapetitetirelirefr/" style="text-decoration:none; color: #fff;"><span class="icon icon-facebook" style="font-size: 20px;"></span></a>
-   		</footer>
+
+		{% block contenu %}
+		{% endblock %}
+
 		{% block javascripts %}
 			<script src="{{ asset('js/jquery-1.11.1.min.js') }}"></script>
 			<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+			<script language="javascript">
+			$(document).ready(function(){
+				$(window).on('scroll',function(){
+					if ($(document).scrollTop()>50) {
+						$('#menu_top').removeClass('transparent');
+						$('#navigation_puces').show();
+					}
+					else
+					{
+						$('#menu_top').addClass('transparent');
+						$('#navigation_puces').hide();
+					}
+					
+				})
+			});
+			</script>
 		{% endblock %}
 
 	</body>

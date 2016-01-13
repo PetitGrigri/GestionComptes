@@ -48,7 +48,6 @@
 			<div style='line-height: 34px; vertical-align: middle;'>
 				{{ children.libelle }} 
 				<div class='pull-right' >
-
 					<a  href="{{ path('fgs_gestion_comptes_modifier_categorie', {"id":children.id}) }}" class="btn btn-info ">
 						<span class="glyphicon glyphicon-pencil"></span><span class='hidden-xs'> Modifier</span>
 					</a>
@@ -65,6 +64,7 @@
 					</div>
 					
 				</div>
+				<span class="clearfix" style="width: 0px;"></span>
 			</div>
 
 			{{ children.childrens is not empty  ? _self.generer_enfants(children.childrens) }}

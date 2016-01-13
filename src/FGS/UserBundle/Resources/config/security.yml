@@ -15,6 +15,8 @@ security:
             form_login:
                 login_path: fos_user_security_login
                 check_path: fos_user_security_check
+                always_use_default_target_path: true
+                default_target_path: fgs_gestion_comptes_homepage
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider             
             logout:       true

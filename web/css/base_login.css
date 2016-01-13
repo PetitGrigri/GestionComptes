@@ -1,20 +1,57 @@
-.footer{
-	background-color: transparent;
-  	color: #fff;
-}
-.navigation{
-	background-color: transparent;
-}
-.navigation{
-	background-color: transparent;
-}
-.navigation .container-fluid{
-	padding:10px 30px 0px 30px;
-}
-div {
+div,a,#menu_top {
   -webkit-transition: all 300ms ease;
 	 -moz-transition: all 300ms ease;
 	  -ms-transition: all 300ms ease;
 	   -o-transition: all 300ms ease;
 	      transition: all 300ms ease;
-  }
+}
+#logo
+{
+	height: 35px; 
+	width: auto;
+}
+
+#menu_top .navbar-header, #menu_top .navbar-brand > img {
+    display: inline-block;
+}
+#menu_top.transparent{
+	background:transparent;
+}
+
+.navbar-brand
+{
+	font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+}
+.ma-petite-tirelire {
+	font-family: 'Indie Flower', cursive;
+	font-weight: bold;
+	font-size: 120%;
+}
+
+#menu_top.transparent .navbar-brand, #menu_top.transparent .navbar-right
+{
+	color: #008cba !important;    
+}
+.icon-facebook{
+	font-size:18px;
+	text-decoration:none;
+	color:#fff;
+	background:#008cba;
+	text-decoration:none;
+	display: inline-block;
+	width: 20px; height:20px;
+	text-align: right;
+	        border-radius: 4px;
+	   -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	
+}
+.navbar-right{
+	float: right !important;
+	margin-right:5px;
+}
+html, body
+{
+	height:100%
+}

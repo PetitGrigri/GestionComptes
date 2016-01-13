@@ -1,27 +1,32 @@
-@CHARSET "UTF-8";
-#logo{
-	max-height: 50px;
-	width: auto;
-}
-h1 {
-	font-family: 'Indie Flower', cursive;
-	color: #fff; 
-	line-height: 40px; 
-	vertical-align: middle;
-	padding: 0px; 
-	margin:0px 0px 30px 0px;
-	
-}
 #_submit{
 	margin: 30px 0px 10px 0px;
 }
-html, body {
-    min-height: 100%;
-}
+
 body{
-	background: url('../img/picjumbo.com_HNCK8984_bis.jpg') no-repeat center center fixed; 
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+	background: url('../img/saisie-donnees.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;	
+}
+h1, h2{
+	color: #007196;
+	margin: 30px 0px 20px 0px
+}
+
+@media (max-width: 993px) {
+		.presentation, .form {
+		padding: 50px 15px 15px 15px;
+	}
+}
+
+@media (min-width: 992px) {
+	.presentation, .form {
+		padding: 80px 50px 50px 50px;
+	}
+}
+
+.presentation {
+	color: #666;
+	font-size:20px;
 }

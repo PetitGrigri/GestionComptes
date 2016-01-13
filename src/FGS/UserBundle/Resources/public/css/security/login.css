@@ -1,0 +1,147 @@
+h2{
+	color: #007196;
+	
+}
+/*
+ * Navigation puces
+ */
+#navigation_puces {
+	display: none;
+	position: fixed;
+	z-index: 9999;
+	right: 10px;
+	top: 50%;
+}
+#navigation_puces .nav {
+	margin: -30px 0px 0px 0px;
+	list-style-type: none;
+}
+#navigation_puces .nav li {
+	border: 1px solid #aaa;
+	padding:0px
+	display: block;
+	height: 10px;
+	width: 10px;
+	margin: 5px;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+	background-color:#fff;
+}
+#navigation_puces .nav li.active {
+	background-color:#008cba;
+}
+#navigation_puces .nav a {
+	background:transparent;
+}
+
+/*
+ * Flêches de navigations
+ */
+a.down, a.top {
+	font-size: 30px;
+	line-height:45px;
+    color: #fff;
+    width: 40px;
+    display: block;
+    margin: 0 auto;
+    height:40px;
+    margin-bottom:10px;
+    margin-left:-20px;
+    text-align:center;
+    vertical-align:middle;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    color: #008cba;
+    -webkit-border-radius: 30px;
+	   -moz-border-radius: 30px;
+	        border-radius: 30px;
+	animation-name: shake;
+    animation-duration: 2s;
+	animation-iteration-count: infinite;
+}
+@keyframes shake {
+	0%	{ background-color:rgba(255,255,255,0);margin-bottom:10px; }
+	50%	{ background-color:rgba(255,255,255,4);margin-bottom:0px; }
+}
+
+/*
+ * login
+ */
+#login { 
+    margin: 0; 
+    position: relative; 
+    min-height: 100vh;
+}
+#login .presentation {
+	font-size:20px;
+    color: #666;
+}
+
+
+/*
+ * Comptes
+ */
+#comptes { 
+    margin: 0 auto; 
+    position: relative; 
+    font-size:20px;
+    color: #aaa;
+    background: #f5f5f5;
+    min-height: 100%;
+}
+#comptes .image {
+	background: url('../../img/security/tablet-mockup.jpg') center center no-repeat; 
+}
+
+/* 
+ * Mouvements Financiers 
+ */
+#mouvements { 
+    margin: 0 auto; 
+    position: relative; 
+    font-size:20px;
+    color: #aaa;
+    background: #fff;
+}
+
+#mouvements .image
+{
+	background: url('../../img/security/smarphone-voiture.jpg') center center no-repeat; 
+}
+
+/*
+ * Visualisation
+ */
+#visualiser { 
+    margin: 0 auto; 
+    position: relative; 
+    font-size:20px;
+    color: #aaa;
+    background: #f5f5f5;
+}
+#visualiser .image { 
+	background: url('../../img/security/laptop-mockup-v2.jpg') center center no-repeat; 
+}
+
+@media (max-width: 993px) {
+	.image {
+		height: 300px;
+		width: 100%;
+	}
+}
+
+@media (min-width: 992px) {
+	.image {
+		min-height: 600px;
+		min-height: 100vh;
+		height: 100vh;
+	}
+}
+.image{
+	-webkit-background-size: cover;
+	   -moz-background-size: cover;
+	     -o-background-size: cover;
+	        background-size: cover;
+}

@@ -1,0 +1,108 @@
+.rond{
+	height: 60px;
+	width: 60px;
+	display: inline-block;
+	vertical-align:middle;
+	text-align:center;
+	line-height: 60px;
+	border: 2px solid #008cba;
+    -webkit-border-radius: 30px;
+	   -moz-border-radius: 30px;
+	        border-radius: 30px;
+	text-decoration:none !important;
+	font-size: 20px;
+	font-weight:bold;
+}
+.ma-petite-tirelire {
+	font-family: 'Indie Flower', cursive;
+	font-weight: bold;
+	font-size: 120%;
+}
+
+.intro-text {
+	font-size:20px;
+    color: #666;
+}
+		
+ul.etapes .description-etape h2{
+	color: #008cba
+}
+ul.etapes{
+	list-style: none;
+	margin:0px;
+	padding: 0px;
+}
+
+@media (min-width: 992px) {
+	ul.etapes {
+		list-style: none;
+	}
+	ul.etapes li {
+		display: inline-block;
+		position:relative;
+		margin:0px;
+		padding:0px;
+	}
+	
+	ul.etapes .description-etape {
+		position: absolute;
+		top: 40px;
+		left:-100px;
+		width: 280px;
+		padding: 30px 10px 10px 10px;
+	}
+	
+	ul.etapes li:not(:last-child):after {
+		border-top:1px dashed #aaa;
+		width: 220px;
+		display:block;
+		content:"";
+		display:inline-block;	
+	}
+}
+@media (max-width: 993px) {
+	ul.etapes {
+		text-align:center;
+	}
+	.rond{
+		display:block;
+		float: left;
+	}
+	
+	ul.etapes .description-etape {
+		padding: 0px 30px 0px 70px;
+		
+	}
+	ul.etapes .description-etape h2
+	{
+		margin: 0px;
+		padding: 14px 0px 15px 0px;
+		text-align: left;
+	}
+	
+	ul.etapes .description-etape:after {
+		content:"";
+		clear:both;
+	}
+	
+	ul.etapes .description-etape h3 {
+		
+		text-align:left;
+	}
+	
+	ul.etapes li {
+		display: block;
+		margin: 10px 0px 30px 0px;
+		padding:0px;
+		position:relative;
+	}
+
+	ul.etapes li:not(:last-child):before {
+		margin-left:30px;
+		position: absolute;
+		border-left:1px dashed #aaa;
+
+		content:"";
+		display:block;
+	}
+}
