@@ -1,5 +1,7 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% block title %}{{ parent() }} - Gérer vos comptes en lignes{% endblock %}
+
 {% block contenu %}
 
 <nav id="navigation_puces">
@@ -14,8 +16,8 @@
 	<div class="container-fluid">
 		<div class="col-sm-7 presentation">
 			<h1>Gérez facilement vos comptes</h1>
-			<p><span class="ma-petite-tirelire"> Ma petite tirelire</span> est une application web vous permettant de faire vos comptes en ligne.<p>
-			<p>Son but est de vous aider dans la gestion de vos finances et à terme : économiser.</p>
+			<p class='text-justify'><span class="ma-petite-tirelire"> Ma petite tirelire</span> est une application web vous permettant de faire vos comptes en ligne.<p>
+			<p class='text-justify'>Son but est de vous aider dans la gestion de vos finances et à terme : économiser.</p>
 			<p class='text-center' style='margin-top:50px;'><a href="#comptes" class='ma-petite-tirelire decouvrir'>Découvrez <i>Ma petite tirelire</i></a></p>
 		</div>
 		
