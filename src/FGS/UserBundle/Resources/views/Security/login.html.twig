@@ -154,12 +154,12 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<link rel="stylesheet" href="{{ asset('bundles/fgsuser/css/security/login.css') }}"  rel='stylesheet' type='text/css' />
+<link href="{{ asset('bundles/fgsuser/css/security/login.css') }}"  rel='stylesheet' type='text/css' />
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-<script language="javascript">
+<script>
 $(document).ready(function(){
 	$('body').scrollspy({target:"#navigation_puces", offset:50});
 	$('#navigation_puces a,a.top, a.down, a.decouvrir').on('click',function(e) {
