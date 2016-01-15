@@ -25,15 +25,15 @@
 		<title>{% block title %}{% endblock %}</title>
 
 		{% block stylesheets %}
-		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+		<link href='{{ asset('css/bootstrap.min.css') }}' rel='stylesheet' type='text/css' />
 		<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="{{ asset('css/social-icon.css') }}">
-		<link rel="stylesheet" href="{{ asset('css/base_login.css') }}">
+		<link href='{{ asset('css/social-icon.css') }}' rel='stylesheet' type='text/css' />
+		<link href='{{ asset('css/base_login.css') }}' rel='stylesheet' type='text/css' />
 		{% endblock %}
 	</head>
 
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top transparent" role="navigation" id="menu_top">
+		<nav class="navbar navbar-inverse navbar-fixed-top transparent" id="menu_top">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="{{ path('fgs_gestion_comptes_homepage') }}">
@@ -44,9 +44,7 @@
 
 
 				<a href="https://www.facebook.com/mapetitetirelirefr/" target="facebook" class="navbar-text navbar-right"><span class="icon icon-facebook"></span></a>
-				<p class="navbar-text navbar-right">
-					Suivez nous sur 
-				</p>	
+
 			</div>
 		</nav>
 

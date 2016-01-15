@@ -1,6 +1,5 @@
 h2{
 	color: #007196;
-	
 }
 /*
  * Navigation puces
@@ -127,7 +126,7 @@ a.down, a.top {
 
 @media (max-width: 993px) {
 	.image {
-		height: 300px;
+		height: 200px;
 		width: 100%;
 	}
 }
