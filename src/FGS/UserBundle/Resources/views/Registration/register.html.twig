@@ -1,5 +1,9 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
+{% block meta %}{{ parent() }}
+		<meta name="description" content="Enregistrez-vous sur &laquo;Ma petite tirelire&raquo; et commencez à faire vos comptes en ligne." />
+{% endblock %}
+
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% form_theme form 'bootstrap_3_layout.html.twig' %}

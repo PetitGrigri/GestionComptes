@@ -1,7 +1,12 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
-{% block title %}{{ parent() }} - Gérer vos comptes en lignes{% endblock %}
+{% block title %}{{ parent() }} : Gérer vos comptes en lignes{% endblock %}
 
+{% block meta %}{{ parent() }}
+		<meta name="description" content="Ma petite tirelire est une application web vous permettant de faire vos comptes en ligne. Son but : vous aider à économiser." />
+		<meta name="robots" content="index, follow" />
+{% endblock %}
+	
 {% block contenu %}
 
 <nav id="navigation_puces">

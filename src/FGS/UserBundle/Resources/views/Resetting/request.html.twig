@@ -4,6 +4,10 @@
 
 {% block title %}{{ parent() }} : Réinitialisation de votre mot de passe{% endblock %}
 
+{% block meta %}{{ parent() }}
+		<meta name="description" content="Vous avez oublié votre mot de passe sur &laquo;Ma petite tirelire&raquo; ? Ne vous inquiétez pas :  vous pouvez le réinitialiser." />
+{% endblock %}
+
 {% block panel_heading %}<h2>Réinitialisation <small>de votre mot de passe</small></h2>{% endblock %}
 
 {% block panel_body %}

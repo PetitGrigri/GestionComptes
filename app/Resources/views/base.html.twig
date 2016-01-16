@@ -2,8 +2,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		{% block meta %}
 		<meta charset="utf-8">
 	 	<meta name="viewport" content="width=320px, initial-scale=1, maximum-scale=1" />
+	 	<meta name="robots" content="noindex, nofollow" />
+	 	{% endblock %}
 
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ asset('img/favicon/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ asset('img/favicon/apple-icon-60x60.png') }}">
