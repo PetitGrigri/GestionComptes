@@ -121,7 +121,7 @@ a.down, a.top {
     background: #f5f5f5;
 }
 #visualiser .image { 
-	background: url('../../img/security/laptop-mockup-v2.jpg') center center no-repeat; 
+	background: url('../../img/security/laptop-mockup.jpg') center center no-repeat; 
 }
 
 @media (max-width: 993px) {
@@ -135,7 +135,6 @@ a.down, a.top {
 	.image {
 		min-height: 600px;
 		min-height: 100vh;
-		height: 100vh;
 	}
 }
 .image{
