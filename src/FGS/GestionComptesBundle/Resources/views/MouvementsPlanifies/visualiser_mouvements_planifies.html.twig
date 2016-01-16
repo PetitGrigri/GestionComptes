@@ -35,6 +35,12 @@
 {% block contenu %}
 	<h1 class="page-header">{% block titre_contenu %}Visualisations des planifications{% endblock %}</h1>
 
+	{% if liste_mouvements_financiers_planifies is empty %}
+	<div class="alert alert-warning alert-dismissible fade in" role="alert">
+		<p><span class="glyphicon glyphicon-warning-sign"></span> Vous n'avez pas encore ajouté de mouvement financier planifié.</p>
+	</div>
+	{% endif %}
+	
 	{% if liste_mouvements_financiers_planifies is not empty %}
 	
 		<table class="table table-striped ">
@@ -80,7 +86,20 @@
 			{% endfor %}
 			</tbody>
 		</table>
-	{% endif %}	
+	{% endif %}
+	<hr class="col-xs-12" style="margin-top: 10px; margin-bottom: 10px;"/>
+	<div class="row">
+		<div class="col-md-offset-3 col-md-3 col-xs-12">
+			<a href="{{ path('fgs_gestion_comptes_ajouter_depense_planifiee') }}" class="btn btn-warning btn-block">
+				<span class="glyphicon glyphicon-minus"></span> Ajouter une dépense planifiée
+			</a>
+		</div>
+		<div class="col-md-3 col-xs-12">
+			<a href="{{ path('fgs_gestion_comptes_ajouter_revenu_planifie') }}" class="btn btn-success btn-block">
+				<span class="glyphicon glyphicon-plus"></span> Ajouter un revenu planifiée
+			</a>
+		</div>
+	</div>	
 	{{- render(controller('FGSGestionComptesBundle:MouvementsPlanifies:genererFormDelete')) -}}
 {% endblock %}
 

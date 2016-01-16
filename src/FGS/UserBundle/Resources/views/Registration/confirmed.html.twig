@@ -9,6 +9,9 @@
 {% block panel_body %}
 	<p class="text-justify">
     	{{ 'registration.confirmed'|trans({'%username%': user.username}) }}
+    	<p class='text-center' style='margin-top:50px;'>
+    		<a href="{{ path('fgs_gestion_comptes_homepage') }}" class='ma-petite-tirelire'>Se rendre sur la page principale</a>
+    	</p>
     </p>
 {% endblock %}
 
