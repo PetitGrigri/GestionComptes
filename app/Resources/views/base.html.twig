@@ -1,6 +1,6 @@
 {% set page_courante = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		{% block meta %}
 		{%  include 'header/meta.html.twig' %}
@@ -23,23 +23,26 @@
 		{% endblock %}
 		  
 		<div class="container" style="margin-top: 50px;">
-		
-		{% for message in app.session.flashbag.get("success") %}
-			<div class="alert alert-success alert-dismissible fade in" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<span class="glyphicon glyphicon-ok"></span> {{ message }}
-			</div>
-		{% endfor %}
-		
-		{% for message in app.session.flashbag.get("error") %}
-			<div class="alert alert-danger alert-dismissible fade in" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<span class="glyphicon glyphicon-warning-sign"></span> {{ message }}
-			</div>
-		{% endfor %}
-		
-		{% block contenu %}
-		{% endblock %}
+				<noscript  class="text-justify alert alert-warning alert-dismissible fade in" role="alert">
+					<p>Oups il semblerait que vous n'avez pas activé <strong>JavaScript</strong> sur votre navigateur. Cela risque de dégrader votre expérience utilisateur</p>
+					<p>pour savoir comment activer JavaScript : <a href ='http://www.enable-javascript.com/fr/'>cliquez sur ce lien</a></p>
+				</noscript>	
+			{% for message in app.session.flashbag.get("success") %}
+				<div class="alert alert-success alert-dismissible fade in" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<span class="glyphicon glyphicon-ok"></span> {{ message }}
+				</div>
+			{% endfor %}
+			
+			{% for message in app.session.flashbag.get("error") %}
+				<div class="alert alert-danger alert-dismissible fade in" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<span class="glyphicon glyphicon-warning-sign"></span> {{ message }}
+				</div>
+			{% endfor %}
+			
+			{% block contenu %}
+			{% endblock %}
 		
 		</div>
 		{% block javascripts %}

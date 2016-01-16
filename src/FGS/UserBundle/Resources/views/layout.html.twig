@@ -19,6 +19,10 @@
 					{% block panel_heading %}{% endblock %}
 				</div>
 				<div class="panel-body">
+					<noscript  class="text-justify alert alert-warning alert-dismissible fade in" role="alert">
+						<p>Oups il semblerait que vous n'avez pas activé <strong>JavaScript</strong> sur votre navigateur. Cela risque de dégrader votre expérience utilisateur</p>
+						<p>pour savoir comment activer JavaScript : <a href ='http://www.enable-javascript.com/fr/'>cliquez sur ce lien</a></p>
+					</noscript>
 		    		{% block panel_body %}{% endblock %}
 		    		{% block fos_user_content %}{% endblock %}
 				</div>
