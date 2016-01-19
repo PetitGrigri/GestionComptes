@@ -3,4 +3,4 @@
 
 User-agent: *
 Allow: /
-Sitemap: http://www.ma-petite-tirelire.fr/sitemap.xml
+Sitemap: https://www.ma-petite-tirelire.fr/sitemap.xml
