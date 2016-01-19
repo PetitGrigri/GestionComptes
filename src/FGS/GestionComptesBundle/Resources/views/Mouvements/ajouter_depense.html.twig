@@ -23,23 +23,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
-<style>
-.modal-dialog {
-	z-index: 1050;
-}
-.datepicker.dropdown-menu th,
-.datepicker.datepicker-inline th,
-.datepicker.dropdown-menu td,
-.datepicker.datepicker-inline td {
-  padding: 4px 15px;
-}
-.modal-content
-{
-	margin-right: auto;
-	margin-left: auto;
-	width: 342px;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/mouvements/ajouter-depense-ou-revenu.css') }}">
 {% endblock %}
 
 
@@ -47,28 +31,5 @@
 {{ parent() }}
 <script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
-<script>
-$('#fgs_gestioncomptesbundle_mouvement_financier_type_date').datepicker({
-		orientation: "auto right",
-	    autoclose: true,
-	    todayHighlight: true,
-	    language: "fr",
-}).on('show',function(e){
-
-	if ($(document).width() < 480)
-	{	
-		$(this).datepicker('hide');
-		$('#date .modal-content').datepicker({
-			orientation: "auto right",
-		    autoclose: true,
-		    todayHighlight: true,
-		    language: "fr",
-		}).on('changeDate',function(e){
-			$('#fgs_gestioncomptesbundle_mouvement_financier_type_date').datepicker('setDate', $(this).datepicker('getDate'));
-			$('#date').modal('hide');
-		});
-		$('#date').modal('show');
-	}
-});
-</script>
+<script src='{{ asset('bundles/fgsgestioncomptes/js/mouvements/ajouter-depense-ou-revenu.js') }}'></script>
 {% endblock %}

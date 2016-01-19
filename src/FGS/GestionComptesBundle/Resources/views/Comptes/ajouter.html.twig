@@ -9,13 +9,3 @@
 	{{ form(form) }}
 
 {% endblock %}
-
-
-{% block javascripts %}
-{{ parent() }}
-<script>
-$('#fgs_gestioncomptesbundle_compte_type_effacer').click(function(){
-	$('form input[type="text"], form select').each(function(){$(this).val('')});
-})
-</script>
-{% endblock %}

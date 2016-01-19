@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% macro generer_enfants(enfants) %}
-<ul class='media-list' style='margin-top: 20px;'>
+<ul class='media-list'>
 	{% for children in enfants %}
 
 	<li class='media'>
@@ -43,9 +43,9 @@
 				<span class=' img-circle bg-primary text-center glyphicon {{ children.icone }}'> </span>
 			</div>
 		</div>
-		<div class='media-body' style='width: 10000px;'>
+		<div class='media-body'>
 			
-			<div style='line-height: 34px; vertical-align: middle;'>
+			<div>
 				{{ children.libelle }} 
 				<div class='pull-right' >
 					<a  href="{{ path('fgs_gestion_comptes_modifier_categorie', {"id":children.id}) }}" class="btn btn-info ">
@@ -64,7 +64,7 @@
 					</div>
 					
 				</div>
-				<span class="clearfix" style="width: 0px;"></span>
+				<span></span>
 			</div>
 
 			{{ children.childrens is not empty  ? _self.generer_enfants(children.childrens) }}
@@ -92,7 +92,7 @@
 	</div>
 
 </div>
-<hr class="col-md-10 col-md-offset-1" style="margin-top: 10px; margin-bottom: 10px;"/>
+<hr class="col-md-10 col-md-offset-1"/>
 	<div class="row">
 		<div class="col-md-offset-9 col-md-2 col-xs-12">
 			<a href="{{ path('fgs_gestion_comptes_ajouter_categorie') }}" class="btn btn-success btn-block">
@@ -107,21 +107,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
-<style>
-.media-left .glyphicon{
-	padding: 	10px;
-}
-.media-left{
-padding-right: 0px;
-}
-.media-left > div, .media-body > div{
-	/*border-bottom: 	1px solid #eee;*/
-	padding: 		0px 0px 15px 10px;
-}
-.modal-dialog {
-	z-index: 1050;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/categories/gerer.css') }}">
 {% endblock %}
 
 

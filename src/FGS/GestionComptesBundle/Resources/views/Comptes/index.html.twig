@@ -7,7 +7,7 @@
 		<div class='col-lg-6'>
 			<div class='panel panel-{{ compte.montantActuel < 0 ? 'danger':'primary' }}'>
 				<div class='panel-heading'>
-					<div class="btn-group pull-right" style="margin-top: 10.5px;">
+					<div class='btn-group pull-right menu-compte'>
 						<a type="button" class=" dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<span class="glyphicon glyphicon-option-vertical"></span>
 						</a>
@@ -18,7 +18,7 @@
 						</ul>
 					</div>
 					<h2>
-						<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style='height:32px; margin-bottom:10.5px;'/>
+						<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" class='logo-compte'/>
 						<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte', {'id':compte.id}) }}">
 							{{ compte.nom }}
 						</a>
@@ -48,19 +48,8 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
-<style>
-.categorie-mf {
-	font-size:90%; font-weight: normal;
-}
-.text-muted {
-	color: #999 !important;
-}
-.panel .panel-heading h1, .panel .panel-heading h2, .panel .panel-heading h3, 
-.panel .panel-footer h1, .panel .panel-footer h2, .panel .panel-footer h3
-{
-	margin: 0px;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/comptes/index.css') }}">
 {% endblock %}
 
 

@@ -2,6 +2,4 @@
 # www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156449
 
 User-agent: *
-Allow: /resetting/request
-Allow: /register/
 Sitemap: http://www.ma-petite-tirelire.fr/sitemap.xml

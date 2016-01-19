@@ -17,18 +17,24 @@
 	
 	<div class='row'>
 		<div class="col-md-1 col-xs-2" class="height: 38px;">
-			<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
+			<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" class='logo-compte' />
 		</div>
 		<div class="col-md-11 col-xs-10">
 			<h1>{{ compte.nom }}<span class="label {{ compte.montantActuel < 0 ? 'label-danger':'label-success' }} pull-right">{{ compte.montantActuel|number_format(2, ',', ' ') }} €</span></h1>
 		</div>
 	</div>
-	<div class='row'>
-		<div class='col-xs-12'>
-			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':id}) }}" class='btn btn-primary pull-right' style='margin-left: 10px;'><span class='glyphicon glyphicon-calendar'></span> Visualisation du mois en cours</a>
-			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee',{'id':id}) }}" class='btn btn-primary pull-right'><span class='glyphicon glyphicon-calendar'></span> Visualisation de l'année en cours</a>
+	<div class="row">
+		<div class="col-md-offset-6 col-md-3 col-xs-12">
+			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_mois',{'id':id}) }}" class="btn btn-primary btn-block">
+				<span class='glyphicon glyphicon-calendar'></span> Visualisation du mois en cours
+			</a>
 		</div>
-	</div>
+		<div class="col-md-3 col-xs-12">
+			<a href="{{ path('fgs_gestion_comptes_visualiser_mouvement_financier_compte_annee',{'id':id}) }}" class="btn btn-primary btn-block">
+				<span class='glyphicon glyphicon-calendar'></span> Visualisation de l'année en cours</a>
+		</div>
+	</div>	
+
 	{% if compte.mouvementFinanciers is not empty %}
 		{{ include('FGSGestionComptesBundle:Utils:tableau_mouvement_financier.html.twig', { 'liste_mouvement_financier' : compte.mouvementFinanciers, 'caption_top':'Visualisation de vos dernières opérations (page '~paginationAct~' / '~paginationMax~')' }) }}
 		
@@ -52,18 +58,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
-<style>
-.categorie-mf {
-	font-size:90%; font-weight: normal;
-}
-.text-muted {
-	color: #999 !important;
-}
-table
-{
-	border: 1px solid #ddd;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/mouvements/visualiser_mouvements_compte.css') }}">
 {% endblock %}
 
 {% block javascripts %}

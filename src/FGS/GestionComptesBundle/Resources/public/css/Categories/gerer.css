@@ -1,0 +1,33 @@
+.media-left .glyphicon{
+	padding: 	10px;
+}
+.media-left{
+padding-right: 0px;
+}
+.media-left > div, .media-body > div{
+	/*border-bottom: 	1px solid #eee;*/
+	padding: 		0px 0px 15px 10px;
+}
+.modal-dialog {
+	z-index: 1050;
+}
+hr{
+	margin-top: 10px; 
+	margin-bottom: 10px;
+}
+.media-list
+{
+	margin-top: 20px;
+}
+.media-body>div {
+	line-height: 34px; 
+	vertical-align: middle;
+	
+}
+.media-body{
+	width: 10000px;
+}
+
+.clearfix{
+	height: 0px;
+}

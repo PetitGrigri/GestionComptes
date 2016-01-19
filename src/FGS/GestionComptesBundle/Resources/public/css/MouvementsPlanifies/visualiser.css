@@ -1,0 +1,14 @@
+.modal-dialog {
+	z-index: 1050;
+}
+hr{
+	margin-top: 10px; 
+	margin-bottom: 10px;
+}
+.logo-compte{
+	height:20px;
+}
+tbody tr td{
+	line-height: 24px; 
+	vertical-align:middle;
+}

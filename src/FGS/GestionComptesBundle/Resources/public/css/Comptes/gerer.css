@@ -1,0 +1,11 @@
+.modal-dialog {
+	z-index: 1050;
+}
+.logo-compte{
+	height: 30px; 
+	margin: 4px;
+}
+hr {
+	margin-top: 10px; 
+	margin-bottom: 10px;
+}

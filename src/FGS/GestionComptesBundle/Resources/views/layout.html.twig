@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
-		<meta charset="utf-8">
-	 	<meta name="viewport" content="width=320px, initial-scale=1, maximum-scale=1" />
+		{% block meta %}
+		{%  include 'header/meta.html.twig' %}
+	 	{% endblock %}
+	 	
+	 	{%  include 'header/favicon.html.twig' %}
+	 	
 		<title>{% block title %}Gestion Comptes{% endblock %}</title>
 
 		{% block stylesheets %}
@@ -17,7 +21,7 @@
 		{% block modal %}
 		{% endblock %}
 		  
-		<div class="container-fluid" style="margin-top: 50px;">
+		<div class='container-fluid aeration'>
 			<noscript  class="text-justify alert alert-warning alert-dismissible fade in" role="alert">
 				<p>Oups il semblerait que vous n'avez pas activé <strong>JavaScript</strong> sur votre navigateur. Cela risque de dégrader votre expérience utilisateur</p>
 				<p>pour savoir comment activer JavaScript : <a href ='http://www.enable-javascript.com/fr/'>cliquez sur ce lien</a></p>

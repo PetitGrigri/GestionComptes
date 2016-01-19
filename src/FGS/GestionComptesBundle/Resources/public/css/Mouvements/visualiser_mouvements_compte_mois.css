@@ -114,3 +114,56 @@
 	background-color:	#e81d62;
 	text-align:			right;
 }
+
+.datepicker.dropdown-menu th,
+.datepicker.datepicker-inline th,
+.datepicker.dropdown-menu td,
+.datepicker.datepicker-inline td {
+  padding: 4px 15px;
+}
+.modal-content
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 342px;
+}
+#date .modal-dialog
+{
+	z-index:9999;
+}
+.table
+{
+	border: 1px solid #ddd;
+	border-top:0px;
+}
+
+.categorie-mf {
+	font-size:90%; font-weight: normal;
+}
+.text-muted {
+	color: #999 !important;
+}
+.logo-compte{
+	height: 32px; 
+	margin-top: 22px; 
+	margin-bottom:12px
+}
+caption{
+	caption-side: bottom; 
+	text-align:right;
+}
+.no-transaction{
+	border: 1px solid #ddd; 
+	border-top: 0px; 
+	background:#fff; 
+	padding: 10px;
+}
+#canvas-depense
+{
+	width: 100%; 
+	height: auto;
+}
+.list-group-depenses li
+{
+	border:none;
+}

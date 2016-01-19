@@ -1,0 +1,15 @@
+.modal-dialog {
+	z-index: 1050;
+}
+.datepicker.dropdown-menu th,
+.datepicker.datepicker-inline th,
+.datepicker.dropdown-menu td,
+.datepicker.datepicker-inline td {
+  padding: 4px 15px;
+}
+.modal-content
+{
+	margin-right: auto;
+	margin-left: auto;
+	width: 342px;
+}

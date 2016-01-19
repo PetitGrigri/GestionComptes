@@ -1,3 +1,8 @@
+html, body
+{
+	height:100%
+}
+
 div,a,#menu_top {
   -webkit-transition: all 300ms ease;
 	 -moz-transition: all 300ms ease;
@@ -49,7 +54,8 @@ div,a,#menu_top {
 	        border-radius: 4px;	
 }
 
-html, body
-{
-	height:100%
+
+
+.aeration{
+	margin-top: 50px;
 }

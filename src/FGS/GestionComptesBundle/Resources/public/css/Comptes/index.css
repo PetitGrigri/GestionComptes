@@ -1,0 +1,21 @@
+.categorie-mf {
+	font-size:90%; font-weight: normal;
+}
+.text-muted {
+	color: #999 !important;
+}
+.panel .panel-heading h1, .panel .panel-heading h2, .panel .panel-heading h3, 
+.panel .panel-footer h1, .panel .panel-footer h2, .panel .panel-footer h3
+{
+	margin: 0px;
+}
+.logo-compte{
+	height:32px; margin-bottom:10.5px;
+}
+.menu-compte{
+	margin-top:10.5px;
+}
+caption{
+	caption-side: bottom; 
+	text-align:right;
+}

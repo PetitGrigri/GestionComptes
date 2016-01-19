@@ -43,9 +43,9 @@
 	{% endif %}
 	
 	{% for compte in listeComptes %}
-		<div class="row" style="height:38px">
+		<div class="row">
 			<div class="col-md-offset-1 col-md-1 col-xs-2" class="height: 38px;">
-				<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 30px; margin: 4px;" />
+				<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" class='logo-compte' />
 			</div>
 			<div class="col-md-5 col-xs-10"><h4>{{ compte.nom }} <span class="label  {{ compte.montantActuel < 0 ? 'label-danger':'label-success' }} pull-right">{{ compte.montantActuel }} €</span></h4></div>
 			<div class="col-md-4 col-xs-12">
@@ -64,10 +64,10 @@
 		</div>
 		<div class="clearfix"></div>
 		{% if loop.last != true %}
-		<hr class="col-md-10 col-md-offset-1" style="margin-top: 10px; margin-bottom: 10px;"/>
+		<hr class="col-md-10 col-md-offset-1"/>
 		{% endif %}
 	{% endfor %}
-	<hr class="col-md-10 col-md-offset-1" style="margin-top: 10px; margin-bottom: 10px;"/>
+	<hr class="col-md-10 col-md-offset-1"/>
 	<div class="row">
 		<div class="col-md-offset-9 col-md-2 col-xs-12">
 			<a href="{{ path('fgs_gestion_comptes_ajouter_compte') }}" class="btn btn-success btn-block">
@@ -81,11 +81,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<style>
-.modal-dialog {
-	z-index: 1050;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/comptes/gerer.css') }}">
 {% endblock %}
 
 {% block javascripts %}

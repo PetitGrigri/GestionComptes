@@ -6,7 +6,7 @@
 {% block contenu %}
 <div class='row'>
 	<div class="col-md-1 col-xs-2" class="height: 38px;">
-		<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" style="height: 32px; margin-top: 22px; margin-bottom:12" />
+		<img src="{{ asset('bundles/fgsgestioncomptes/'~compte.banque.urlImage) }}" class='logo-compte' />
 	</div>
 	<div class="col-md-11 col-xs-10">
 		<h1>{{ compte.nom }} (Année : {{ date|date('Y') }})</h1>
@@ -19,11 +19,11 @@
 				<div class="panel-heading ">Graphique des mouvements financiers de l'année</div>
 				<div class="panel-body">
 					<div>
-						<canvas id="canvas-annee-type-bilan" style="width: 100%; height: auto;"/>
+						<canvas id="canvas-annee-type-bilan" />
 					</div>
 					<ul class='pager'>
-						<li><span class="badge" style="background-color: #83b845"><span class='text-center glyphicon icon-arrow-graph-up-right'></span></span> Revenus</li>
-						<li><span class="badge" style="background-color: #dc1c5d"><span class='text-center glyphicon icon-arrow-graph-down-right'></span></span> Dépenses</li>
+						<li class='revenus'><span class="badge"><span class='text-center glyphicon icon-arrow-graph-up-right'></span></span> Revenus</li>
+						<li class='depenses'><span class="badge"><span class='text-center glyphicon icon-arrow-graph-down-right'></span></span> Dépenses</li>
 					</ul>
 				</div>
 			</div>
@@ -86,15 +86,7 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/iconset/daily-life.css') }}">
 <link rel="stylesheet" href="{{ asset('bundles/fgsbootstrap/css/datepicker3.css') }}">
-<style>
-.categorie-mf {
-	font-size:90%; font-weight: normal;
-}
-.text-muted
-{
-	color: #999 !important;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('bundles/fgsgestioncomptes/css/Mouvements/visualiser_mouvements_compte_annee.css') }}">
 {% endblock %}
 
 
@@ -103,32 +95,8 @@
 <script src="{{ asset('bundles/fgsgestioncomptes/js/Chart.js') }}"></script>
 <script src="{{ asset('bundles/fgsbootstrap/js/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('bundles/fgsbootstrap/js/locales/bootstrap-datepicker.fr.js') }}"></script>
+<script src='{{ asset('bundles/fgsgestioncomptes/js/mouvements/visualiser_mouvements_compte_anee.js') }}'></script>
 <script>
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-})
-
-
-
-//sélection du mois à afficher
-$('#annee_choix').datepicker({
-    format: "yyyy",
-    minViewMode: 2,
-    language: "fr",
-    calendarWeeks: true,
-    autoclose: true,
-    orientation: "bottom"
-}).on('changeDate',function(e){
-	var date_selectionnee = $('#annee_choix').datepicker('getDate');
-	var page_lien = $('#annee_choix a').attr('href');
-	window.location = page_lien+'/'+date_selectionnee.getFullYear();
-});
-
-$('#annee_choix').click(function(event){
-	event.preventDefault();
-});
-
 
 //graphique
 var data = {

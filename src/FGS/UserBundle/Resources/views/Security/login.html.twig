@@ -4,7 +4,7 @@
 
 {% block meta %}{{ parent() }}
 		<meta name="description" content="Ma petite tirelire est une application web vous permettant de faire vos comptes en ligne. Son but : vous aider dans la gestion de vos finances et à terme, économiser." />
-		<meta name="robots" content="index, follow" />
+		<meta name="robots" content="index, nofollow" />
 {% endblock %}
 	
 {% block contenu %}
@@ -23,7 +23,7 @@
 			<h1>Faites vos comptes en ligne</h1>
 			<p class='text-justify'><span class="ma-petite-tirelire"> Ma petite tirelire</span> est une application web vous permettant de faire vos comptes en ligne.<p>
 			<p class='text-justify'>Son but est de vous aider dans la gestion de vos finances et à terme : économiser.</p>
-			<p class='text-center' style='margin-top:50px;'><a href="#comptes" class='ma-petite-tirelire decouvrir'>Découvrez <i>Ma petite tirelire</i></a></p>
+			<p class='text-center aeration'><a href="#comptes" class='ma-petite-tirelire decouvrir'>Découvrez <i>Ma petite tirelire</i></a></p>
 		</div>
 		
 		<div class="col-sm-5 form">
@@ -67,10 +67,10 @@
 							</div>
 						</form>
 					{% else %}
-						<div class="row text-center"  style="margin-top: 15px;">
+						<div class="row text-center">
 							{{ 'layout.logged_in_as'|trans({'%username%': app.user.username|title}, 'FOSUserBundle') }} 
 						</div>
-						<div style="margin-top: 15px;">
+						<div>
 							<a href="{{ path('fos_user_security_logout') }}" class="btn btn-primary btn-block">
 								{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
 							</a>
@@ -150,7 +150,7 @@
 				<p class='text-justify'>Vous n’aurez plus de mauvaises surprises à la fin du mois.</p>
 				<p class='text-justify'>De même, il vous sera aussi possible de visualiser les bilans annuels de vos comptes afin de comparer les dépenses et les revenus sur plusieurs mois. </p>
 
-			<p class='text-center' style='margin-top:50px;'><a href="{{ path('fos_user_registration_register') }}" class='ma-petite-tirelire'>Découvrez en plus : inscrivez vous !</a></p>
+			<p class='text-center aeration'><a href="{{ path('fos_user_registration_register') }}" class='ma-petite-tirelire'>Découvrez en plus : inscrivez vous !</a></p>
 			</div>	
 	    	<div class="col-md-5 image visible-sm-block visible-xs-block">
 	    	</div>
