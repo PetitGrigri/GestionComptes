@@ -11,14 +11,5 @@
   <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
-<url>
-  <loc>https://www.ma-petite-tirelire.fr/resetting/request</loc>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.ma-petite-tirelire.fr/register/</loc>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
+
 </urlset>
