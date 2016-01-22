@@ -61,7 +61,7 @@ class MouvementFinancierPlanifie
      * @var integer
      *
      * @ORM\Column(name="interval_valeur", type="integer", options={"unsigned"=true})
-     * @Assert\GreaterThan(value = 1, message = "Vous ne pouvez pas avoir un interval de 0 ou moins.")
+     * @Assert\GreaterThan(value = 0, message = "Vous ne pouvez pas avoir un interval de 0 ou moins.")
      */
     private $intervalValeur;
 
