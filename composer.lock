@@ -2260,16 +2260,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.6",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "8408816780215fae055599d100b5385d9a247151"
+                "reference": "f588c92c3e263b2eaa2f96a7b1359199eb209b3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/8408816780215fae055599d100b5385d9a247151",
-                "reference": "8408816780215fae055599d100b5385d9a247151",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/f588c92c3e263b2eaa2f96a7b1359199eb209b3d",
+                "reference": "f588c92c3e263b2eaa2f96a7b1359199eb209b3d",
                 "shasum": ""
             },
             "require": {
@@ -2343,7 +2343,7 @@
                 "doctrine/dbal": "~2.4",
                 "doctrine/doctrine-bundle": "~1.2",
                 "doctrine/orm": "~2.4,>=2.4.5",
-                "egulias/email-validator": "~1.2",
+                "egulias/email-validator": "~1.2,>=1.2.1",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
                 "phpdocumentor/reflection": "^1.0.7"
@@ -2390,7 +2390,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-05-09 21:45:54"
+            "time": "2016-09-07 02:04:25"
         },
         {
             "name": "twig/extensions",
