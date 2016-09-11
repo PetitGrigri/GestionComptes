@@ -9,6 +9,7 @@ use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancierPlanifie;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierPlanifieType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\MouvementFinancierVoter;
 
 
 class MouvementsPlanifiesController extends Controller
@@ -107,7 +108,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$mfp	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancierPlanifie')->find($id);
 		
-		$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de modifier cette planification');
+		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mfp, 'Vous n\'avez pas pas le droit de modifier cette planification');
 		
 		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
 		
@@ -156,7 +157,7 @@ class MouvementsPlanifiesController extends Controller
 		
 			$mfp = $em->find('FGSGestionComptesBundle:MouvementFinancierPlanifie', $id);
 		
-			$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
 			
 			if ($mfp !== null) {
 				$em->remove($mfp);

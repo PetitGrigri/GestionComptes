@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\Compte;
 use FGS\GestionComptesBundle\Form\Type\CompteType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\CompteOrCategorieVoter;
 
 
 class ComptesController extends Controller
@@ -87,7 +88,7 @@ class ComptesController extends Controller
 	    	
 	    	$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
 
-	    	$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
+	    	$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 	    	
 	    	if ($em->getRepository('FGSGestionComptesBundle:Compte')->deleteCompteById($id)	=== 1)
 	    	{
@@ -108,7 +109,7 @@ class ComptesController extends Controller
     	
 		$compte = $em->find('FGSGestionComptesBundle:Compte', $id);
 		
-		$this->denyAccessUnlessGranted('proprietaire', $compte, 'Vous n\'êtes pas propriétaire de ce compte');
+		$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 		
     	$form = $this->createForm(new CompteType(), $compte);
     	

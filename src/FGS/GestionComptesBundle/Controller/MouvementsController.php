@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\MouvementFinancierVoter;
 
 class MouvementsController extends Controller
 {
@@ -87,7 +88,7 @@ class MouvementsController extends Controller
 
 			$mf = $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 
-			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
 			
 			if ($mf !== null) {
 				$em->remove($mf);
@@ -111,7 +112,7 @@ class MouvementsController extends Controller
 		$cmf	= $mf->getCategorieMouvementFinancier();
 		$user	= $this->getUser();
 		
-		$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
+		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
 		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $user->getId()), $mf);
 	
@@ -241,7 +242,7 @@ class MouvementsController extends Controller
 			$em 	= $this->getDoctrine()->getEntityManager();
 			$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
 			
-			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
 			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
 			$em->flush();
