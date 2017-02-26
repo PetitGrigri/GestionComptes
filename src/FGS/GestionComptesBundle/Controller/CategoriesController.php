@@ -3,6 +3,7 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
@@ -31,9 +32,10 @@ class CategoriesController extends Controller
 	public function ajouterCategorieAction(Request $request)
 	{
 		$cmf			= new CategorieMouvementFinancier();
-		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()->getId()), $cmf);
-		
+
+		$form = $this->createForm(CategorieMouvementFinancierType::class, $cmf);
+
+
 		$form->handleRequest($request);
 
 		$cmf->setUtilisateur($this->getUser());
@@ -208,7 +210,7 @@ class CategoriesController extends Controller
 	{
 		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 			->setAction($this->generateUrl($route))
-			->add('id', 'hidden')
+			->add('id', HiddenType::class)
 			->setMethod('POST')
 			->getForm();
 	}

@@ -3,6 +3,7 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
@@ -285,7 +286,7 @@ class MouvementsController extends Controller
 	{
 		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 			->setAction($this->generateUrl($route))
-			->add('id', 'hidden')
+			->add('id', HiddenType::class)
 			->setMethod('POST')
 			->getForm();
 	}
