@@ -28,7 +28,9 @@ fos_user_security_login:
 fos_user_security_check:
     pattern:  /login_check
     defaults: { _controller: FOSUserBundle:Security:check }
+    methods:  [POST]
 
 fos_user_security_logout:
     pattern:  /logout
     defaults: { _controller: FOSUserBundle:Security:logout }
+    methods:  [GET, POST]
