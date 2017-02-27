@@ -82,7 +82,7 @@ class CategoriesController extends Controller
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 		}
 		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()), $cmf);
+		$form = $this->createForm(CategorieMouvementFinancierType::class, $cmf);
 		
 		$form->handleRequest($request);
 	

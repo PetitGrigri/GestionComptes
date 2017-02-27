@@ -2,6 +2,7 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\Compte;
@@ -34,7 +35,7 @@ class ComptesController extends Controller
     {
     	$compte	=	new Compte();
     	
-    	$form = $this->createForm(new CompteType(), $compte);
+    	$form = $this->createForm(CompteType::class, $compte);
     	
     	$form->handleRequest($request);
     	
@@ -111,7 +112,7 @@ class ComptesController extends Controller
 		
 		$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $compte, 'Vous n\'êtes pas propriétaire de ce compte');
 		
-    	$form = $this->createForm(new CompteType(), $compte);
+    	$form = $this->createForm(CompteType::class, $compte);
     	
     	$form->handleRequest($request);
     	 
@@ -146,7 +147,7 @@ class ComptesController extends Controller
     {
     	return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 	    	->setAction($this->generateUrl($route))
-	    	->add('id', 'hidden')
+	    	->add('id', HiddenType::class)
 	    	->setMethod('POST')
 	    	->getForm();
     }

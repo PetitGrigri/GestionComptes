@@ -22,7 +22,7 @@ class MouvementsController extends Controller
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 
 		$mf->setCategorieMouvementFinancier($cmf);
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 		
 		$form->handleRequest($request);
 		
@@ -53,7 +53,7 @@ class MouvementsController extends Controller
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mf->setCategorieMouvementFinancier($cmf);
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -115,7 +115,7 @@ class MouvementsController extends Controller
 		
 		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $user->getId()), $mf);
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 	
 		$form->handleRequest($request);
 	

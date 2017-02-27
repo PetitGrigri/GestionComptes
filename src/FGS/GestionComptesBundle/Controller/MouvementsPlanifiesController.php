@@ -2,7 +2,9 @@
 
 namespace FGS\GestionComptesBundle\Controller;
 
+use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
@@ -24,7 +26,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -61,7 +63,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -110,7 +112,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mfp, 'Vous n\'avez pas pas le droit de modifier cette planification');
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		
 		$form->handleRequest($request);
 		
@@ -216,7 +218,7 @@ class MouvementsPlanifiesController extends Controller
     {
     	return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 	    	->setAction($this->generateUrl($route))
-	    	->add('id', 'hidden')
+	    	->add('id', HiddenType::class)
 	    	->setMethod('POST')
 	    	->getForm();
     }
