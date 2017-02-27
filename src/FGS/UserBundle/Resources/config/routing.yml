@@ -9,10 +9,12 @@ fos_user_security:
 fos_user_register:
     resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
     prefix: /register
+    methods:  [GET, POST]
 
 fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /resetting
+    methods:  [GET, POST]
 
 #désactivé en attendant le 
 #fos_user_change_password:
@@ -23,11 +25,14 @@ fos_user_resetting:
 fos_user_security_login:
     pattern:  /
     defaults: { _controller: FOSUserBundle:Security:login }
+    methods:  [GET, POST]
 
 fos_user_security_check:
     pattern:  /login_check
     defaults: { _controller: FOSUserBundle:Security:check }
+    methods:  [GET, POST]
 
 fos_user_security_logout:
     pattern:  /logout
     defaults: { _controller: FOSUserBundle:Security:logout }
+    methods:  [GET]

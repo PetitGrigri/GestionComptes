@@ -2,7 +2,6 @@
 
 namespace FGS\GestionComptesBundle\Controller;
 
-use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -105,7 +104,6 @@ class MouvementsPlanifiesController extends Controller
 	
 	public function modifierMouvementFinancierPlanifieAction($id,Request $request)
 	{
-		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
 		$mfp	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancierPlanifie')->find($id);

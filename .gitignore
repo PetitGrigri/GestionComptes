@@ -37,3 +37,4 @@
 .buildpath
 .project
 /.settings
+.idea/*

@@ -111,8 +111,7 @@ class MouvementsController extends Controller
 		//récupération du mouvement financier que l'on veut modifier, et sa catégorie
 		$mf 	= $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 		$cmf	= $mf->getCategorieMouvementFinancier();
-		$user	= $this->getUser();
-		
+
 		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
 		$form = $this->createForm(MouvementFinancierType::class, $mf);
