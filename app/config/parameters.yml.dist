@@ -1,22 +1,24 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+# This file is auto-generated during the composer install
 parameters:
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfony
-    database_user:     root
+    #Database
+    database_host: 127.0.0.1
+    database_port: null
+    database_driver: pdo_mysql
+    database_name: database_name
+    database_user: ~
     database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
+    database_charset: UTF8
+    database_server_version: 5.5.42
 
-    mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
+    #mail
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: ~
+    mailer_password: ~
 
-    # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    #form
+    secret: '!!_Th1sIsTheB3stAwsomeP@ssw0rdEv3r_!!'
 
-    fos_user_bundle_from_adress: form-main@your-domain.com
+    #fos
+    fos_user_bundle_from_adress: do-not-reply@ma-petite-tirelire.fr
     fos_user_bundle_from_name: 'Do not reply'
