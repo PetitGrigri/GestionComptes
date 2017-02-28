@@ -22,3 +22,6 @@ parameters:
     #fos
     fos_user_bundle_from_adress: do-not-reply@ma-petite-tirelire.fr
     fos_user_bundle_from_name: 'Do not reply'
+
+    #global
+    my_locale: en
