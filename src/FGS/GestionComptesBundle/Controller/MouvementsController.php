@@ -100,7 +100,7 @@ class MouvementsController extends Controller
 			}
 		}
 		
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 	public function modifierMouvementFinancierAction($id,Request $request)
@@ -247,7 +247,7 @@ class MouvementsController extends Controller
 			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
 			$em->flush();
 		}
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 	private function checkCoherenceMouvementFinancier(MouvementFinancier $mf)

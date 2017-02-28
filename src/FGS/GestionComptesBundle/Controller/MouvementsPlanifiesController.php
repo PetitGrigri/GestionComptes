@@ -171,7 +171,7 @@ class MouvementsPlanifiesController extends Controller
 				$session->getFlashBag()->add('error', 'TODO.');
 			}
 		}
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 
