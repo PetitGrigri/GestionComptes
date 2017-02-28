@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="{{ _charset }}" />
+        <title>404</title>
+    </head>
+    <body>
+         <div class="container-fluid">
+        	<div class="row" style="margin-bottom: -30px;">
+	        	<div class="col-sm-4 text-center col-sm-offset-4">
+		        	<img alt="" src="{{ asset('img/logo_404.png') }}" id="logo" style="width: 90%; max-width: 400px;">
+	        	</div>
+	        </div>
+        	<div class="row second" style="border-top: 2px #006384 solid;">
+        		<div class="col-sm-12 text-center">
+		       		<h1 style="font-size: 500%;">Erreur 404</h1>
+		        	<p style="font-size: 200%;">Gentleman, la page que vous cherchez n'a pas été trouvée.</p> 
+		        	<p style="font-size: 200%;">Je vous invite à retourner à la <a href="{{ path('fgs_gestion_comptes_homepage') }}.">page principale</a>.</p> 
+				</div>
+			</div>
+		</div>
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <style>
+        .second{
+	       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#def2f8+0,ffffff+79&amp;1+0,0+79 */
+			background: -moz-linear-gradient(top,  rgba(222,242,248,1) 0%, rgba(255,255,255,0) 70%); /* FF3.6-15 */
+			background: -webkit-linear-gradient(top,  rgba(222,242,248,1) 0%,rgba(255,255,255,0) 70%); /* Chrome10-25,Safari5.1-6 */
+			background: linear-gradient(to bottom,  rgba(222,242,248,1) 0%,rgba(255,255,255,0) 70%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#def2f8', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+        }
+        </style>
+    </body>
+</html>
