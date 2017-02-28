@@ -1,6 +1,7 @@
 {
     "name": "fabibi/gestioncomptes",
     "license": "proprietary",
+    "description" : "https://github.com/PetitGrigri/GestionComptes/blob/master/README.md",
     "type": "project",
     "autoload": {
         "psr-4": {
