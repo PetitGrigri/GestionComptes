@@ -50,7 +50,7 @@ class Compte
     
     /**
      * @ORM\ManyToOne(targetEntity="FGS\GestionComptesBundle\Entity\TypeCompte")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, name="typeCompte_id")
      * @var unknown
      */
     private $typeCompte;

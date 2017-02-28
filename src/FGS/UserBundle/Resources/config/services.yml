@@ -1,11 +1,11 @@
 services:
     user.new_utilisateur:
         class: FGS\UserBundle\EventListener\NewUtilisateurListener
-        arguments: [@doctrine.orm.entity_manager]
+        arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: kernel.event_subscriber}
     user.utilisateur_resetting:
         class: FGS\UserBundle\EventListener\UtilisateurResettingListener
-        arguments: [@router]
+        arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber}

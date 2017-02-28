@@ -16,3 +16,21 @@ services:
         public:     false
         tags:
             - { name: security.voter }
+
+    fgs_gestion_compte.type.categorie_mouvement_financier:
+        class:      FGS\GestionComptesBundle\Form\Type\CategorieMouvementFinancierType
+        arguments: ["@doctrine.orm.entity_manager", "@security.token_storage"]
+        tags:
+            - { name: form.type}
+
+    fgs_gestion_compte.type.mouvement_financier:
+        class:      FGS\GestionComptesBundle\Form\Type\MouvementFinancierType
+        arguments: ["@doctrine.orm.entity_manager", "@security.token_storage"]
+        tags:
+            - { name: form.type}
+
+    fgs_gestion_compte.type.mouvement_financier_planifie:
+        class:      FGS\GestionComptesBundle\Form\Type\MouvementFinancierPlanifieType
+        arguments: ["@doctrine.orm.entity_manager", "@security.token_storage"]
+        tags:
+            - { name: form.type}

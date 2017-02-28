@@ -3,10 +3,12 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Form\Type\CategorieMouvementFinancierType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\CompteOrCategorieVoter;
 
 
 
@@ -30,9 +32,10 @@ class CategoriesController extends Controller
 	public function ajouterCategorieAction(Request $request)
 	{
 		$cmf			= new CategorieMouvementFinancier();
-		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()->getId()), $cmf);
-		
+
+		$form = $this->createForm(CategorieMouvementFinancierType::class, $cmf);
+
+
 		$form->handleRequest($request);
 
 		$cmf->setUtilisateur($this->getUser());
@@ -69,7 +72,7 @@ class CategoriesController extends Controller
 		 
 		$cmf = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
 	
-		$this->denyAccessUnlessGranted('proprietaire', $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+		$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
 		
 		if ($cmf->getUtilisateur()->getId() != $this->getUser()->getId())
 		{
@@ -79,7 +82,7 @@ class CategoriesController extends Controller
 			return $this->redirect($this->generateUrl("fgs_gestion_comptes_gerer_categories"));
 		}
 		
-		$form = $this->createForm(new CategorieMouvementFinancierType($this->getDoctrine(), $this->getUser()), $cmf);
+		$form = $this->createForm(CategorieMouvementFinancierType::class, $cmf);
 		
 		$form->handleRequest($request);
 	
@@ -118,7 +121,7 @@ class CategoriesController extends Controller
 			//récupération de la catégorie à supprimer
 			$cmfASupprimer = $em->find('FGSGestionComptesBundle:CategorieMouvementFinancier', $id);
 			
-			$this->denyAccessUnlessGranted('proprietaire', $cmfASupprimer, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+			$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $cmfASupprimer, 'Vous n\'êtes pas le propriétaire de cette catégorie');
 			
 			//Vérification de l'existance d'un parent (si pas de parent : catégorie mère non supprimable)
 			if (!$cmfASupprimer->hasParent()) {
@@ -182,7 +185,7 @@ class CategoriesController extends Controller
 	
 		$cmf 		= $repository->find($id);
 	
-		$this->denyAccessUnlessGranted('proprietaire', $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
+		$this->denyAccessUnlessGranted(CompteOrCategorieVoter::PROPRIETAIRE, $cmf, 'Vous n\'êtes pas le propriétaire de cette catégorie');
 	
 		$cmfPredecessorOrSuccessor	= $repository->findOneBy(array(
 				'ordre' 		=> $cmf->getOrdre()-$modification,
@@ -207,7 +210,7 @@ class CategoriesController extends Controller
 	{
 		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 			->setAction($this->generateUrl($route))
-			->add('id', 'hidden')
+			->add('id', HiddenType::class)
 			->setMethod('POST')
 			->getForm();
 	}

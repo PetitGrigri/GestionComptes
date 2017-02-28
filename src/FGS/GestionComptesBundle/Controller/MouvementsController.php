@@ -3,11 +3,13 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\MouvementFinancierVoter;
 
 class MouvementsController extends Controller
 {
@@ -20,7 +22,7 @@ class MouvementsController extends Controller
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_DEPENSE);
 
 		$mf->setCategorieMouvementFinancier($cmf);
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 		
 		$form->handleRequest($request);
 		
@@ -51,7 +53,7 @@ class MouvementsController extends Controller
 					->getRootCategorieMouvementFinancier($utilisateur, CategorieMouvementFinancier::TYPE_REVENU);
 		
 		$mf->setCategorieMouvementFinancier($cmf);
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $utilisateur->getId()), $mf);
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -87,7 +89,7 @@ class MouvementsController extends Controller
 
 			$mf = $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 
-			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de supprimer ce mouvement financier');
 			
 			if ($mf !== null) {
 				$em->remove($mf);
@@ -98,7 +100,7 @@ class MouvementsController extends Controller
 			}
 		}
 		
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 	public function modifierMouvementFinancierAction($id,Request $request)
@@ -109,11 +111,10 @@ class MouvementsController extends Controller
 		//récupération du mouvement financier que l'on veut modifier, et sa catégorie
 		$mf 	= $em->find('FGSGestionComptesBundle:MouvementFinancier', $id);
 		$cmf	= $mf->getCategorieMouvementFinancier();
-		$user	= $this->getUser();
-		
-		$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
-		$form = $this->createForm(new MouvementFinancierType($this->getDoctrine(), $user->getId()), $mf);
+		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
+
+		$form = $this->createForm(MouvementFinancierType::class, $mf);
 	
 		$form->handleRequest($request);
 	
@@ -241,12 +242,12 @@ class MouvementsController extends Controller
 			$em 	= $this->getDoctrine()->getEntityManager();
 			$mf 	= $em->getRepository('FGSGestionComptesBundle:MouvementFinancier')->find($id);
 			
-			$this->denyAccessUnlessGranted('proprietaire', $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mf, 'Vous n\'avez pas pas le droit de modifier ce mouvement financier');
 
 			$mf->setCheckBanque(($mf->getCheckBanque()) ? false : true);
 			$em->flush();
 		}
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 	private function checkCoherenceMouvementFinancier(MouvementFinancier $mf)
@@ -284,7 +285,7 @@ class MouvementsController extends Controller
 	{
 		return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 			->setAction($this->generateUrl($route))
-			->add('id', 'hidden')
+			->add('id', HiddenType::class)
 			->setMethod('POST')
 			->getForm();
 	}

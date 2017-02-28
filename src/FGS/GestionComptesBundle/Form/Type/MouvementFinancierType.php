@@ -2,41 +2,54 @@
 
 namespace FGS\GestionComptesBundle\Form\Type;
 
+use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class MouvementFinancierType extends AbstractType
 {
-	public function __construct(RegistryInterface $doctrine, $utilisateurId)
-	{
-		$this->doctrine				= $doctrine;
-		$this->utilisateurId		= $utilisateurId;
+    /**
+     * CategorieMouvementFinancierType constructor.
+     * Les paramètres sont transmis par injection de dépendance
+     * @param EntityManager $entityManager
+     * @param TokenStorage $token
+     */
+    public function __construct(EntityManager $entityManager, TokenStorage $token)
+    {
+		$this->entityManager	= $entityManager;
+		$this->utilisateurId    = $token->getToken()->getUser()->getId();
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) 
 	{
 		
 		$builder
-			->add('libelle', 'text', array())
-			->add('montant',  'money')
-			->add(	'date', 'date', array(
+			->add(  'libelle', TextType::class, array())
+			->add(  'montant',  MoneyType::class)
+			->add(	'date', DateType::class, array(
 					'widget'	=> 'single_text',
     				'format'	=> 'dd-MM-yyyy',
 					'attr'		=> array(
 						'autocomplete'	=> 'off',
 					), 
 			))
-			->add('compte', 	'entity', 	array(
+			->add(  'compte', 	EntityType::class, 	array(
 					'class'			=>	'FGSGestionComptesBundle:Compte',
-					'choices'		=>	$this->doctrine->getManager()
+					'choices'		=>	$this->entityManager
 											->getRepository('FGSGestionComptesBundle:Compte')
 											->getComptesForUtilisateur($this->utilisateurId),
-					'empty_value'	=>	'Selectionnez le compte cible',
+					'placeholder'	=>	'Selectionnez le compte cible',
 			))
 			->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event)
 			{
@@ -45,17 +58,17 @@ class MouvementFinancierType extends AbstractType
 				$mf		= $event->getData();
 				$cmf	= $mf->getCategorieMouvementFinancier();
 
-				$form->add(	'categorieMouvementFinancier', 'entity', array(
+				$form->add(	'categorieMouvementFinancier', EntityType::class, array(
 						'class'			=>	'FGSGestionComptesBundle:CategorieMouvementFinancier',
-						'choices'		=>	$this->doctrine->getManager()
+						'choices'		=>	$this->entityManager
 												->getRepository('FGSGestionComptesBundle:CategorieMouvementFinancier')
 												->getFlatTreeCategories($this->utilisateurId, $cmf, true),
 						'label'			=>	'Catégorie',
-						'empty_value'	=>	'Aucune catégorie',
+						'placeholder'	=>	'Aucune catégorie',
 						'required'		=>	true,
 								));
 				
-				$form->add(	'commentaire', 'textarea', array(
+				$form->add(	'commentaire', TextareaType::class, array(
 							'required'	=> false,
 				));
 				
@@ -63,38 +76,38 @@ class MouvementFinancierType extends AbstractType
 				{
 					if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
 					{
-						$form->add('sauver', 'submit', array('label'=>'Ajouter cette dépense'));
+						$form->add('sauver', SubmitType::class, array('label'=>'Ajouter cette dépense'));
 					}
 					else
 					{
-						$form->add('sauver', 'submit', array('label'=>'Ajouter ce revenu'));
+						$form->add('sauver', SubmitType::class, array('label'=>'Ajouter ce revenu'));
 					}
 				}
 				else
 				{
 					if ($mf->getCategorieMouvementFinancier()->getType() == CategorieMouvementFinancier::TYPE_DEPENSE)
 					{
-						$form->add('sauver', 'submit', array('label'=>'Modifier cette dépense'));
+						$form->add('sauver', SubmitType::class, array('label'=>'Modifier cette dépense'));
 					}
 					else
 					{
-						$form->add('sauver', 'submit', array('label'=>'Modifier ce revenu'));
+						$form->add('sauver', SubmitType::class, array('label'=>'Modifier ce revenu'));
 					}
 				}
 			})
 			;
 
 	}
-	
-	
-	public function setDefaultOptions(OptionsResolverInterface $resolver)
-	{
+
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
 		$resolver->setDefaults(array(
 				'data_class' => 'FGS\GestionComptesBundle\Entity\MouvementFinancier'
 		));
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return "fgs_gestioncomptesbundle_mouvement_financier_type";
 	}
 }

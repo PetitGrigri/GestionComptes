@@ -2,9 +2,13 @@
 
 namespace FGS\GestionComptesBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
@@ -14,18 +18,18 @@ class CompteType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options) 
 	{
 		$builder
-			->add('nom',			'text' )
-			->add('montantActuel', 	'money')
+			->add('nom',			TextType::class)
+			->add('montantActuel', 	MoneyType::class)
 			
-			->add('typeCompte', 	'entity', 	array(
+			->add('typeCompte', 	EntityType::class, 	array(
 				'class'			=>	'FGSGestionComptesBundle:TypeCompte',
-				'property'		=>	'libelleLong',
-				'empty_value'	=>	'Selectionnez un type de compte',
+				'choice_label'	=>	'libelleLong',
+				'placeholder'	=>	'Selectionnez un type de compte',
 			))
-			->add('banque', 		'entity', 	array(
-				'class'		=>	'FGSGestionComptesBundle:Banque',
-				'property'	=>	'nom',
-				'empty_value'	=>	'Selectionnez une banque',
+			->add('banque', 		EntityType::class, 	array(
+				'class'		    =>	'FGSGestionComptesBundle:Banque',
+				'choice_label'	=>	'nom',
+				'placeholder'	=>	'Selectionnez une banque',
 			))
 			->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event)
 			{	
@@ -34,22 +38,22 @@ class CompteType extends AbstractType
 				
 				if (null === $compte->getId())
 				{
-					$form->add('sauver', 'submit', array('label'=>'Ajouter ce compte'));
+					$form->add('sauver', SubmitType::class, array('label'=>'Ajouter ce compte'));
 				}
 				else {
-					$form->add('sauver', 'submit', array('label'=>'Modifier ce compte'));
+					$form->add('sauver', SubmitType::class, array('label'=>'Modifier ce compte'));
 				}
 			});
 	}
-	
-	public function setDefaultOptions(OptionsResolverInterface $resolver)
-	{
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
 		$resolver->setDefaults(array(
 				'data_class' => 'FGS\GestionComptesBundle\Entity\Compte'
 		));
 	}
 	
-	public function getName() {
+	public function getBlockPrefix() {
 		return "fgs_gestioncomptesbundle_compte_type";
 	}
 }

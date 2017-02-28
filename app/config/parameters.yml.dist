@@ -1,15 +1,12 @@
 # This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    session_name: ma_petite_tirelire
-    application_name: "Ma petite Tirelire"
-    database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
     database_name:     symfony
     database_user:     root
     database_password: ~
-    database_charset: UTF8
-    database_server_version: 5.5.42
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -18,14 +15,8 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
-    locale:            en
-
     # A secret key that's used to generate certain security-related tokens
-    secret:            Th1IsAnAws0meP@ssw0rd!
+    secret:            ThisTokenIsNotSoSecretChangeIt
 
-    debug_toolbar:          true
-    debug_redirects:        false
-    use_assetic_controller: true
-    
-    fos_user_bundle_from_adress:    "test@toto.com"
-    fos_user_bundle_from_name:      "test"
+    fos_user_bundle_from_adress: form-main@your-domain.com
+    fos_user_bundle_from_name: 'Do not reply'

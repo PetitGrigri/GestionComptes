@@ -91,4 +91,8 @@ class TypeCompte
     {
         return $this->libelleLong;
     }
+
+    public function __toString() {
+        return "".$this->id;
+    }
 }

@@ -3,12 +3,14 @@
 namespace FGS\GestionComptesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use FGS\GestionComptesBundle\Entity\CategorieMouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancier;
 use FGS\GestionComptesBundle\Entity\MouvementFinancierPlanifie;
 use FGS\GestionComptesBundle\Form\Type\MouvementFinancierPlanifieType;
+use FGS\GestionComptesBundle\Security\Authorization\Voter\MouvementFinancierVoter;
 
 
 class MouvementsPlanifiesController extends Controller
@@ -23,7 +25,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -60,7 +62,7 @@ class MouvementsPlanifiesController extends Controller
 		
 		$mfp->setCategorieMouvementFinancier($cmf);
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $this->getUser()->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
@@ -102,14 +104,13 @@ class MouvementsPlanifiesController extends Controller
 	
 	public function modifierMouvementFinancierPlanifieAction($id,Request $request)
 	{
-		$utilisateur	= $this->getUser();
 		$today			= new \DateTime('today');
 		
 		$mfp	= $this->getDoctrine()->getRepository('FGSGestionComptesBundle:MouvementFinancierPlanifie')->find($id);
 		
-		$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de modifier cette planification');
+		$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mfp, 'Vous n\'avez pas pas le droit de modifier cette planification');
 		
-		$form = $this->createForm(new MouvementFinancierPlanifieType($this->getDoctrine(), $utilisateur->getId()), $mfp);
+		$form = $this->createForm(MouvementFinancierPLanifieType::class, $mfp);
 		
 		$form->handleRequest($request);
 		
@@ -156,7 +157,7 @@ class MouvementsPlanifiesController extends Controller
 		
 			$mfp = $em->find('FGSGestionComptesBundle:MouvementFinancierPlanifie', $id);
 		
-			$this->denyAccessUnlessGranted('proprietaire', $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
+			$this->denyAccessUnlessGranted(MouvementFinancierVoter::PROPRIETAIRE, $mfp, 'Vous n\'avez pas pas le droit de supprimer cette planification');
 			
 			if ($mfp !== null) {
 				$em->remove($mfp);
@@ -170,7 +171,7 @@ class MouvementsPlanifiesController extends Controller
 				$session->getFlashBag()->add('error', 'TODO.');
 			}
 		}
-		return $this->redirect($this->getRequest()->headers->get('referer'));
+		return $this->redirect($request->headers->get('referer'));
 	}
 	
 
@@ -215,7 +216,7 @@ class MouvementsPlanifiesController extends Controller
     {
     	return $this->createFormBuilder(array('id'=>null), array('attr' => array('id'=>$idForm)))
 	    	->setAction($this->generateUrl($route))
-	    	->add('id', 'hidden')
+	    	->add('id', HiddenType::class)
 	    	->setMethod('POST')
 	    	->getForm();
     }
