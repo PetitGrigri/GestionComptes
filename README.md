@@ -2,7 +2,7 @@
 
 #Gestion Comptes
 ========================
-Gestion compte (nom non définitif) est une application de gestion de comptes bancaire en ligne utilisant symfony2.
+Gestion compte (nom non définitif) est une application de gestion de comptes bancaire en ligne utilisant symfony3.
 
 ##Action réalisables :
 * Ajouter ses comptes bancaires (de n'importe qu'elle banque Française) ;
