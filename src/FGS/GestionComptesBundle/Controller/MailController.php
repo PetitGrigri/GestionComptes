@@ -14,7 +14,7 @@ class MailController extends Controller
 		$mail = new \Swift_Message;
 		$mail->setSubject('It\'s Working')
 			->setFrom('do-not-reply@ma-petite-tirelire.fr')
-			->setTo('fgriselles@hotmail.fr')
+			->setTo('web-s8hft@mail-tester.com')
 			->setContentType('text/html')
 			->setBody('<h1>It\'s Working  ! ! !</h1><p>On peut envoyer des mails de test !  ! !</p>');
 		
